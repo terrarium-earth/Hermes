@@ -2,12 +2,7 @@ package earth.terrarium.hermes.api.defaults;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
-import com.teamresourceful.resourcefullib.common.color.Color;
-import com.teamresourceful.resourcefullib.common.color.ConstantColors;
-import earth.terrarium.hermes.api.TagElement;
-import earth.terrarium.hermes.utils.ElementParsingUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
@@ -15,7 +10,6 @@ import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;

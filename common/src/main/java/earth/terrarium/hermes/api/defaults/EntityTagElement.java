@@ -1,25 +1,15 @@
 package earth.terrarium.hermes.api.defaults;
 
-import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
-import com.teamresourceful.resourcefullib.common.color.Color;
-import com.teamresourceful.resourcefullib.common.color.ConstantColors;
 import earth.terrarium.hermes.api.TagElement;
 import earth.terrarium.hermes.utils.ElementParsingUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
-import net.minecraft.client.gui.screens.inventory.SmithingScreen;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import org.jetbrains.annotations.NotNull;
-import org.joml.Quaternionf;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class EntityTagElement implements TagElement {

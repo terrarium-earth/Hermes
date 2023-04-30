@@ -2,12 +2,10 @@ package earth.terrarium.hermes.api.defaults;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
-import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.color.ConstantColors;
 import earth.terrarium.hermes.api.TagElement;
 import earth.terrarium.hermes.utils.ElementParsingUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

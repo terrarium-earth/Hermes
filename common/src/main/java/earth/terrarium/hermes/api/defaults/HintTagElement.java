@@ -8,7 +8,6 @@ import earth.terrarium.hermes.api.TagElement;
 import earth.terrarium.hermes.utils.ElementParsingUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
