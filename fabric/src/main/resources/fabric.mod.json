@@ -1,0 +1,21 @@
+{
+    "schemaVersion": 1,
+    "id": "hermes",
+    "version": "${version}",
+    "name": "hermes",
+    "description": "",
+    "authors": [],
+    "contact": {},
+    "license": "MIT",
+    "icon": "icon.png",
+    "environment": "*",
+    "entrypoints": {
+        "client": [
+            "earth.terrarium.hermes.fabric.HermesFabricClient"
+        ]
+    },
+    "depends": {
+        "fabricloader": ">=0.14.19",
+        "minecraft": ">=1.19.4"
+    }
+}
