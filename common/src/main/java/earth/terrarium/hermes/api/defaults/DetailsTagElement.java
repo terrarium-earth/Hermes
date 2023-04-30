@@ -2,10 +2,9 @@ package earth.terrarium.hermes.api.defaults;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
-import com.teamresourceful.resourcefullib.common.color.ConstantColors;
 import earth.terrarium.hermes.api.TagElement;
+import earth.terrarium.hermes.api.themes.Theme;
 import earth.terrarium.hermes.utils.ElementParsingUtils;
-import net.minecraft.client.Minecraft;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -26,13 +25,14 @@ public class DetailsTagElement implements TagElement {
     }
 
     @Override
-    public void render(PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, float partialTicks) {
-        String text = (open ? "▼" : "▶") + (this.summary.isEmpty() ? "Details" : this.summary);
-        Minecraft.getInstance().font.draw(pose, text, x, y + 2, ConstantColors.white.getValue());
+    public void render(Theme theme, PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, float partialTicks) {
+        String text = (this.summary.isEmpty() ? "Details" : this.summary);
+        boolean hovered = mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + 22;
+        theme.drawDropdown(pose, x, y + 2, width, hovered, open, text);
         if (open) {
-            int height = 4 + Minecraft.getInstance().font.lineHeight;
+            int height = 24;
             for (TagElement element : this.children) {
-                element.render(pose, scissor, x + 7, y + height, width - 7, mouseX, mouseY, partialTicks);
+                element.render(theme, pose, scissor, x + 7, y + height, width - 7, mouseX, mouseY, partialTicks);
                 height += element.getHeight(width);
             }
         }
@@ -40,9 +40,8 @@ public class DetailsTagElement implements TagElement {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button, int width) {
-        String text = (open ? "▼" : "▶") + (this.summary.isEmpty() ? "Details" : this.summary);
-        if (mouseX < 0 || mouseX > Minecraft.getInstance().font.width(text) || mouseY < 0 || mouseY > 2 + Minecraft.getInstance().font.lineHeight) {
-            mouseY -= 2 + Minecraft.getInstance().font.lineHeight;
+        if (mouseX < 0 || mouseX > width || mouseY < 0 || mouseY > 22) {
+            mouseY -= 22;
             for (TagElement child : this.children) {
                 if (child.mouseClicked(mouseX, mouseY, button, width)) {
                     return true;
@@ -57,7 +56,7 @@ public class DetailsTagElement implements TagElement {
 
     @Override
     public int getHeight(int width) {
-        int height = 4 + Minecraft.getInstance().font.lineHeight;
+        int height = 24;
         if (!open) return height;
         for (TagElement element : this.children) {
             height += element.getHeight(width);

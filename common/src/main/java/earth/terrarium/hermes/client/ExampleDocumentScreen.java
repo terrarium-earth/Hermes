@@ -3,6 +3,7 @@ package earth.terrarium.hermes.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import earth.terrarium.hermes.api.TagProvider;
 import earth.terrarium.hermes.api.defaults.*;
+import earth.terrarium.hermes.api.themes.DefaultTheme;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import org.jetbrains.annotations.NotNull;
@@ -31,7 +32,7 @@ public class ExampleDocumentScreen extends Screen {
                 </details>
             </details>
             <crafting-recipe id="minecraft:acacia_fence"></crafting-recipe>
-            <crafting-recipe gridWidth="1" id="minecraft:coal_from_smelting_deepslate_coal_ore"></crafting-recipe>
+            <crafting-recipe grid-width="1" id="minecraft:coal_from_smelting_deepslate_coal_ore"></crafting-recipe>
             <gallery height="32">
                 <img width="16" height="16" src="minecraft:textures/gui/advancements/backgrounds/adventure.png">
                     <p centered="true" shadowed="true">captions and stuff</p>
@@ -67,7 +68,7 @@ public class ExampleDocumentScreen extends Screen {
         provider.addSerializer("details", DetailsTagElement::new);
         provider.addSerializer("entity", EntityTagElement::new);
         provider.addSerializer("hr", HorizontalRuleTagElement::new);
-        addRenderableWidget(new DocumentWidget(this.width / 2 - 100, 10, 200, 200, provider.parse(text)));
+        addRenderableWidget(new DocumentWidget(this.width / 2 - 100, 10, 200, 200, new DefaultTheme(), provider.parse(text)));
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import earth.terrarium.hermes.api.TagElement;
+import earth.terrarium.hermes.api.themes.Theme;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.AbstractContainerEventHandler;
@@ -19,6 +20,7 @@ import java.util.List;
 public class DocumentWidget extends AbstractContainerEventHandler implements Renderable, NarratableEntry {
 
     private final List<TagElement> elements = new ArrayList<>();
+    private final Theme theme;
 
     private final int x;
     private final int y;
@@ -30,12 +32,13 @@ public class DocumentWidget extends AbstractContainerEventHandler implements Ren
 
     private DocumentMouse mouse = null; //We have to defer the mouse click until during render because we don't know the height of the document until then.
 
-    public DocumentWidget(int x, int y, int width, int height, List<TagElement> elements) {
+    public DocumentWidget(int x, int y, int width, int height, Theme theme, List<TagElement> elements) {
         this.x = x;
         this.y = y;
         this.width = width - 6;
         this.height = height - 6;
         this.lastFullHeight = this.height;
+        this.theme = theme;
         this.elements.addAll(elements);
     }
 
@@ -50,7 +53,7 @@ public class DocumentWidget extends AbstractContainerEventHandler implements Ren
                 if (this.mouse != null && element.mouseClicked(this.mouse.x() - x, this.mouse.y() - (y - this.scrollAmount), this.mouse.button(), this.width)) {
                     this.mouse = null;
                 }
-                element.render(pose, scissor.stack(), x, y - (int) this.scrollAmount, this.width, mouseX, mouseY, partialTicks);
+                element.render(this.theme, pose, scissor.stack(), x, y - (int) this.scrollAmount, this.width, mouseX, mouseY, partialTicks);
                 var itemheight = element.getHeight(this.width);
                 y += itemheight;
                 fullHeight += itemheight;

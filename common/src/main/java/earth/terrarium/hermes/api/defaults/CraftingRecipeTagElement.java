@@ -3,14 +3,16 @@ package earth.terrarium.hermes.api.defaults;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
 import earth.terrarium.hermes.api.TagElement;
+import earth.terrarium.hermes.api.themes.Theme;
 import earth.terrarium.hermes.client.ClientUtils;
 import earth.terrarium.hermes.utils.ElementParsingUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
@@ -21,52 +23,87 @@ public class CraftingRecipeTagElement implements TagElement {
 
     public CraftingRecipeTagElement(Map<String, String> parameters) {
         this.id = ElementParsingUtils.parseResourceLocation(parameters, "id", null);
-        this.gridWidth = ElementParsingUtils.parseInt(parameters, "gridWidth", 3);
+        this.gridWidth = ElementParsingUtils.parseInt(parameters, "grid-width", 3);
     }
 
     @Override
-    public void render(PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, float partialTicks) {
+    public void render(Theme theme, PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, float partialTicks) {
         y += 1;
+
         int gridSize = this.gridWidth * 18;
-        int center = (gridSize / 2) - 9;
+        int actualWidth = 5 + gridSize + 5 + 22 + 5 + 18 + 5;
+        int actualHeight = gridSize + 10;
 
-        int startX = x + (width - 96) / 2;
-        Gui.fill(pose, startX, y, startX + gridSize, y + gridSize, 0x80000000);
-        Gui.renderOutline(pose, startX, y, gridSize, gridSize, 0xFFFFFFFF);
-        Gui.fill(pose, startX + gridSize + 24, y + center, startX + gridSize + 24 + 18, y + center + 18, 0x80000000);
-        Gui.renderOutline(pose, startX + gridSize + 24, y + center, 18, 18, 0xFFFFFFFF);
+        x = x + (width - actualWidth) / 2;
 
-        if (id != null && Minecraft.getInstance().level != null && Minecraft.getInstance().getConnection() != null) {
-            Recipe<?> recipe = Minecraft.getInstance().level.getRecipeManager().byKey(id).orElse(null);
-            if (recipe == null) return;
-            int xIndex = 0;
-            int yIndex = 0;
+        theme.drawCraftingBackground(pose, x, y, actualWidth, actualHeight);
 
-            for (int i = 0; i < Math.min(recipe.getIngredients().size(), this.gridWidth * this.gridWidth); i++) {
-                if (xIndex >= this.gridWidth) {
-                    xIndex = 0;
-                    yIndex++;
-                }
+        Recipe<?> recipe = getRecipe();
+        if (recipe == null) return;
+
+        int xIndex = 0;
+        int yIndex = 0;
+
+        for (int i = 0; i < this.gridWidth * this.gridWidth; i++) {
+            if (xIndex >= this.gridWidth) {
+                xIndex = 0;
+                yIndex++;
+            }
+
+            boolean hovered = mouseX >= x + 5 + xIndex * 18 && mouseX <= x + 21 + xIndex * 18 && mouseY >= y + 5 + yIndex * 18 && mouseY <= y + 21 + yIndex * 18;
+
+            theme.drawSlot(pose, x + 5 + xIndex * 18, y + 5 + yIndex * 18, hovered);
+
+            if (i < recipe.getIngredients().size()) {
                 Ingredient ingredient = recipe.getIngredients().get(i);
-                ItemStack stack = ingredient.getItems()[0].getItem().getDefaultInstance();
-                if (mouseX >= startX + 1 + xIndex * 18 && mouseX <= startX + 17 + xIndex * 18 && mouseY >= y + 1 + yIndex * 18 && mouseY <= y + 17 + yIndex * 18) {
-                    Gui.fill(pose, startX + 1 + xIndex * 18, y + 1 + yIndex * 18, startX + 17 + xIndex * 18, y + 17 + yIndex * 18, 0x80FFFFFF);
-                    ClientUtils.renderTooltip(stack);
-                }
-                ClientUtils.renderItemWithCount(pose, stack, startX + 1 + xIndex * 18, y + 1 + yIndex * 18);
-                xIndex++;
-            }
+                if (!ingredient.isEmpty()) {
+                    ItemStack[] stacks = ingredient.getItems();
+                    int index = Mth.floor(System.currentTimeMillis() / 1000f) % 100000;
+                    ItemStack stack = stacks[index % stacks.length];
 
-            if (mouseX >= startX + gridSize + 25 && mouseX <= startX + gridSize + 24 + 18 && mouseY >= y + center && mouseY < y + center + 18) {
-                Gui.fill(pose, startX + gridSize + 25, y + center, startX + gridSize + 24 + 18, y + center + 18, 0x80FFFFFF);
-                ClientUtils.renderTooltip(recipe.getResultItem(Minecraft.getInstance().getConnection().registryAccess()));
+                    int slotX = x + 6 + xIndex * 18;
+                    int slotY = y + 6 + yIndex * 18;
+                    if (hovered) {
+                        ClientUtils.renderTooltip(stack);
+                    }
+                    ClientUtils.renderItemWithCount(pose, stack, slotX, slotY);
+                }
             }
-            ClientUtils.renderItemWithCount(pose, recipe.getResultItem(Minecraft.getInstance().getConnection().registryAccess()), startX + gridSize + 25, y + center);
+            xIndex++;
         }
+
+        theme.drawArrow(pose, x + 5 + gridSize + 5, y + 5 + (gridSize / 2) - 9);
+
+        //noinspection DataFlowIssue
+        ItemStack output = recipe.getResultItem(Minecraft.getInstance().getConnection().registryAccess());
+
+        int slotX = x + 5 + gridSize + 5 + 22 + 5;
+        int slotY = y + 5 + (gridSize / 2) - 9;
+
+        boolean hovered = mouseX >= slotX + 1 && mouseX <= slotX + 1 + 16 && mouseY >= slotY + 1 && mouseY <= slotY + 1 + 16;
+
+        theme.drawSlot(pose, slotX, slotY, hovered);
+
+        slotY++;
+        slotX++;
+
+        if (hovered) {
+            ClientUtils.renderTooltip(output);
+        }
+
+        ClientUtils.renderItemWithCount(pose, output, slotX, slotY);
+    }
+
+    @Nullable
+    private Recipe<?> getRecipe() {
+        if (id != null && Minecraft.getInstance().level != null && Minecraft.getInstance().getConnection() != null) {
+            return Minecraft.getInstance().level.getRecipeManager().byKey(id).orElse(null);
+        }
+        return null;
     }
 
     @Override
     public int getHeight(int width) {
-        return (18 * this.gridWidth) + 2;
+        return (18 * this.gridWidth) + 12;
     }
 }

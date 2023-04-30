@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import earth.terrarium.hermes.api.TagElement;
+import earth.terrarium.hermes.api.themes.Theme;
 import earth.terrarium.hermes.utils.ElementParsingUtils;
 import net.minecraft.client.Minecraft;
 import org.jetbrains.annotations.NotNull;
@@ -25,14 +26,14 @@ public class GalleryTagElement implements TagElement {
     }
 
     @Override
-    public void render(PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, float partialTicks) {
+    public void render(Theme theme, PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, float partialTicks) {
         TagElement element = getCurrentChild();
         if (element != null) {
             if (this.height == -1) {
-                element.render(pose, scissor, x, y, width, mouseX, mouseY, partialTicks);
+                element.render(theme, pose, scissor, x, y, width, mouseX, mouseY, partialTicks);
             }
             try (var ignored = RenderUtils.createScissorBoxStack(scissor, Minecraft.getInstance(), pose, x, y, width, this.height)) {
-                element.render(pose, scissor, x, y, width, mouseX, mouseY, partialTicks);
+                element.render(theme, pose, scissor, x, y, width, mouseX, mouseY, partialTicks);
             }
         }
     }
