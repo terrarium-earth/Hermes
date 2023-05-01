@@ -23,7 +23,7 @@ public class EntityTagElement implements TagElement {
     }
 
     @Override
-    public void render(Theme theme, PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, float partialTicks) {
+    public void render(Theme theme, PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
         if (this.type != null) {
             if (entity == null && Minecraft.getInstance().level != null) {
                 entity = this.type.create(Minecraft.getInstance().level);

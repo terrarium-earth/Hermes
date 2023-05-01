@@ -26,14 +26,14 @@ public class GalleryTagElement implements TagElement {
     }
 
     @Override
-    public void render(Theme theme, PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, float partialTicks) {
+    public void render(Theme theme, PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
         TagElement element = getCurrentChild();
         if (element != null) {
             if (this.height == -1) {
-                element.render(theme, pose, scissor, x, y, width, mouseX, mouseY, partialTicks);
+                element.render(theme, pose, scissor, x, y, width, mouseX, mouseY, hovered, partialTicks);
             }
             try (var ignored = RenderUtils.createScissorBoxStack(scissor, Minecraft.getInstance(), pose, x, y, width, this.height)) {
-                element.render(theme, pose, scissor, x, y, width, mouseX, mouseY, partialTicks);
+                element.render(theme, pose, scissor, x, y, width, mouseX, mouseY, hovered, partialTicks);
             }
         }
     }

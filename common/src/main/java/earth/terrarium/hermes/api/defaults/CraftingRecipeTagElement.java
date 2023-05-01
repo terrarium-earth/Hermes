@@ -27,7 +27,7 @@ public class CraftingRecipeTagElement implements TagElement {
     }
 
     @Override
-    public void render(Theme theme, PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, float partialTicks) {
+    public void render(Theme theme, PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
         y += 1;
 
         int gridSize = this.gridWidth * 18;
@@ -50,9 +50,9 @@ public class CraftingRecipeTagElement implements TagElement {
                 yIndex++;
             }
 
-            boolean hovered = mouseX >= x + 5 + xIndex * 18 && mouseX <= x + 21 + xIndex * 18 && mouseY >= y + 5 + yIndex * 18 && mouseY <= y + 21 + yIndex * 18;
+            boolean slotHovered = hovered && mouseX >= x + 5 + xIndex * 18 && mouseX <= x + 21 + xIndex * 18 && mouseY >= y + 5 + yIndex * 18 && mouseY <= y + 21 + yIndex * 18;
 
-            theme.drawSlot(pose, x + 5 + xIndex * 18, y + 5 + yIndex * 18, hovered);
+            theme.drawSlot(pose, x + 5 + xIndex * 18, y + 5 + yIndex * 18, slotHovered);
 
             if (i < recipe.getIngredients().size()) {
                 Ingredient ingredient = recipe.getIngredients().get(i);
@@ -63,7 +63,7 @@ public class CraftingRecipeTagElement implements TagElement {
 
                     int slotX = x + 6 + xIndex * 18;
                     int slotY = y + 6 + yIndex * 18;
-                    if (hovered) {
+                    if (slotHovered) {
                         ClientUtils.renderTooltip(stack);
                     }
                     ClientUtils.renderItemWithCount(pose, stack, slotX, slotY);
@@ -80,14 +80,14 @@ public class CraftingRecipeTagElement implements TagElement {
         int slotX = x + 5 + gridSize + 5 + 22 + 5;
         int slotY = y + 5 + (gridSize / 2) - 9;
 
-        boolean hovered = mouseX >= slotX + 1 && mouseX <= slotX + 1 + 16 && mouseY >= slotY + 1 && mouseY <= slotY + 1 + 16;
+        boolean slotHovered = hovered && mouseX >= slotX + 1 && mouseX <= slotX + 1 + 16 && mouseY >= slotY + 1 && mouseY <= slotY + 1 + 16;
 
-        theme.drawSlot(pose, slotX, slotY, hovered);
+        theme.drawSlot(pose, slotX, slotY, slotHovered);
 
         slotY++;
         slotX++;
 
-        if (hovered) {
+        if (slotHovered) {
             ClientUtils.renderTooltip(output);
         }
 

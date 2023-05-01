@@ -12,6 +12,7 @@ public interface TagElement {
     /**
      * Renders the element.
      *
+     * @param theme        The theme.
      * @param pose         The pose stack.
      * @param scissor      The scissor box stack.
      * @param x            The x position.
@@ -19,9 +20,11 @@ public interface TagElement {
      * @param width        The width.
      * @param mouseX       The mouse x position.
      * @param mouseY       The mouse y position.
+     * @param hovered      Whether the element is hovered, use this along with mouse position to determine if the mouse is hovering over the element,
+     *                     as the mouse can be outside the screen space but have the correct position.
      * @param partialTicks The partial ticks.
      */
-    default void render(Theme theme, PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, float partialTicks) {
+    default void render(Theme theme, PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
 
     }
 

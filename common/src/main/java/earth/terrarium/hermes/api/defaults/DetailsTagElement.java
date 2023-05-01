@@ -25,14 +25,14 @@ public class DetailsTagElement implements TagElement {
     }
 
     @Override
-    public void render(Theme theme, PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, float partialTicks) {
+    public void render(Theme theme, PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
         String text = (this.summary.isEmpty() ? "Details" : this.summary);
-        boolean hovered = mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + 22;
-        theme.drawDropdown(pose, x, y + 2, width, hovered, open, text);
+        boolean dropdownHovered = hovered && mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + 22;
+        theme.drawDropdown(pose, x, y + 2, width, dropdownHovered, open, text);
         if (open) {
             int height = 24;
             for (TagElement element : this.children) {
-                element.render(theme, pose, scissor, x + 7, y + height, width - 7, mouseX, mouseY, partialTicks);
+                element.render(theme, pose, scissor, x + 7, y + height, width - 7, mouseX, mouseY, hovered, partialTicks);
                 height += element.getHeight(width);
             }
         }

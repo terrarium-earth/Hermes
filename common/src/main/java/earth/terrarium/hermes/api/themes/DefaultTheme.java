@@ -23,7 +23,7 @@ public class DefaultTheme implements Theme {
         if (open) {
             Gui.blit(pose, x + 4, y + 6, 0, 40, 11, 7);
         } else {
-            Gui.blit(pose, x + 4, y + 6, 11, 40, 11, 7);
+            Gui.blit(pose, x + 7, y + 4, 11, 40, 7, 11);
         }
         Minecraft.getInstance().font.draw(pose, text, x + 20, y + 6, ConstantColors.white.getValue());
     }

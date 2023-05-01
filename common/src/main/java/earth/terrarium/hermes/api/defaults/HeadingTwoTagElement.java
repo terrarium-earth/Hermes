@@ -16,7 +16,7 @@ public class HeadingTwoTagElement extends TextTagElement {
     }
 
     @Override
-    public void render(Theme theme, PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, float partialTicks) {
+    public void render(Theme theme, PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
         pose.pushPose();
         pose.scale(2, 2, 2);
         pose.translate(-x / 2f, -y / 2f, 0);

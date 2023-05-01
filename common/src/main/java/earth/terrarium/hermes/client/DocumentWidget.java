@@ -53,7 +53,7 @@ public class DocumentWidget extends AbstractContainerEventHandler implements Ren
                 if (this.mouse != null && element.mouseClicked(this.mouse.x() - x, this.mouse.y() - (y - this.scrollAmount), this.mouse.button(), this.width)) {
                     this.mouse = null;
                 }
-                element.render(this.theme, pose, scissor.stack(), x, y - (int) this.scrollAmount, this.width, mouseX, mouseY, partialTicks);
+                element.render(this.theme, pose, scissor.stack(), x, y - (int) this.scrollAmount, this.width, mouseX, mouseY, this.isMouseOver(mouseX, mouseY), partialTicks);
                 var itemheight = element.getHeight(this.width);
                 y += itemheight;
                 fullHeight += itemheight;

@@ -26,7 +26,7 @@ public class ComponentTagElement extends TextTagElement {
     }
 
     @Override
-    public void render(Theme theme, PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, float partialTicks) {
+    public void render(Theme theme, PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
         int height = 0;
         for (FormattedCharSequence sequence : Minecraft.getInstance().font.split(text, width - 10)) {
             if (this.shadowed) {
@@ -35,7 +35,7 @@ public class ComponentTagElement extends TextTagElement {
                 Minecraft.getInstance().font.draw(pose, sequence, getXOffset(x, width, sequence), y + height, this.color.getValue());
             }
             height += Minecraft.getInstance().font.lineHeight + 1;
-            if (mouseY >= y + height || mouseY < y) {
+            if (mouseY >= y + height || mouseY < y || !hovered) {
                 continue;
             }
             renderComponentHoverEffect(Minecraft.getInstance().font.getSplitter().componentStyleAtWidth(sequence, Mth.floor(x - mouseX)));

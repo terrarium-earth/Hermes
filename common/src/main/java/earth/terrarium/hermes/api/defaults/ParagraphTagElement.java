@@ -16,7 +16,7 @@ public class ParagraphTagElement extends TextTagElement {
     }
 
     @Override
-    public void render(Theme theme, PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, float partialTicks) {
+    public void render(Theme theme, PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
         Component text = Component.nullToEmpty(this.content);
         int height = 0;
         for (FormattedCharSequence sequence : Minecraft.getInstance().font.split(text, width - 10)) {

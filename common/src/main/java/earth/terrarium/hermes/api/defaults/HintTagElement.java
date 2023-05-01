@@ -32,14 +32,14 @@ public class HintTagElement implements TagElement {
     }
 
     @Override
-    public void render(Theme theme, PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, float partialTicks) {
+    public void render(Theme theme, PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
         Gui.fill(pose, x, y, x + width, y + 20, this.color.getValue() | 0x80000000);
         Gui.fill(pose, x, y + 20, x + width, y + getHeight(width), 0x80000000);
         Gui.renderOutline(pose, x, y, width, getHeight(width), this.color.getValue() | 0xFF000000);
         Minecraft.getInstance().font.draw(pose, this.title, x + 22, y + 6, 0xFFFFFF);
         int height = 23;
         for (TagElement element : this.children) {
-            element.render(theme, pose, scissor, x + 7, y + height, width - 7, mouseX, mouseY, partialTicks);
+            element.render(theme, pose, scissor, x + 7, y + height, width - 7, mouseX, mouseY, hovered, partialTicks);
             height += element.getHeight(width);
         }
         Minecraft.getInstance().getItemRenderer().renderGuiItem(pose, this.icon.getDefaultInstance(), x + 2, y + 2);

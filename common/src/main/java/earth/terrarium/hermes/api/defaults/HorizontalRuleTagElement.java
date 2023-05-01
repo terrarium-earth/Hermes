@@ -20,7 +20,7 @@ public class HorizontalRuleTagElement implements TagElement {
     }
 
     @Override
-    public void render(Theme theme, PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, float partialTicks) {
+    public void render(Theme theme, PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
         Gui.fill(pose, x, y + 4, x + width, y + 5, this.color.getValue() | 0xFF000000);
     }
 

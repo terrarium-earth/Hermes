@@ -25,12 +25,12 @@ public class BlockquoteTagElement implements TagElement {
     }
 
     @Override
-    public void render(Theme theme, PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, float partialTicks) {
+    public void render(Theme theme, PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
         Gui.fill(pose, x + 3, y, x + width, y + getHeight(width) - 2, 0x80000000);
         Gui.fill(pose, x, y, x + 3, y + getHeight(width) - 2, this.color.getValue() | 0xFF000000);
         int height = 2;
         for (TagElement element : this.children) {
-            element.render(theme, pose, scissor, x + 7, y + height, width - 7, mouseX, mouseY, partialTicks);
+            element.render(theme, pose, scissor, x + 7, y + height, width - 7, mouseX, mouseY, hovered, partialTicks);
             height += element.getHeight(width);
         }
     }
