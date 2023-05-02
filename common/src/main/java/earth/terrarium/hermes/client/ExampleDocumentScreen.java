@@ -3,6 +3,13 @@ package earth.terrarium.hermes.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import earth.terrarium.hermes.api.TagProvider;
 import earth.terrarium.hermes.api.defaults.*;
+import earth.terrarium.hermes.api.defaults.carousel.CarouselItemTagElement;
+import earth.terrarium.hermes.api.defaults.columns.ColumnTagElement;
+import earth.terrarium.hermes.api.defaults.columns.ColumnsTagElement;
+import earth.terrarium.hermes.api.defaults.carousel.CarouselTagElement;
+import earth.terrarium.hermes.api.defaults.lists.UnorderedListTagElement;
+import earth.terrarium.hermes.api.defaults.lists.ListItemTagElement;
+import earth.terrarium.hermes.api.defaults.lists.OrderedListTagElement;
 import earth.terrarium.hermes.api.themes.DefaultTheme;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
@@ -18,48 +25,23 @@ public class ExampleDocumentScreen extends Screen {
     protected void init() {
         super.init();
         String text = """
-            <h1 color="#FF0000">Hello World!</h1>
-            <p color="#00FF00">This is a test of the Hermes system.</p>
-            <h2 color="#0000FF">This is a heading 2</h2>
-            <p bold="true">Bold text!</p>
-            <details summary="This is a details tag">
-                <p>Crafting Recipe Spoiler!</p>
-                <details summary="Sub Details">
-                    <p>Crafting Recipe Spoiler!</p>
-                    <details summary="Details Details">
-                        <p>Crafting Recipe Spoiler!</p>
-                    </details>
-                </details>
-            </details>
-            <crafting-recipe id="minecraft:acacia_fence"></crafting-recipe>
-            <crafting-recipe grid-width="1" id="minecraft:coal_from_smelting_deepslate_coal_ore"></crafting-recipe>
-            <gallery height="32">
-                <img width="16" height="16" src="minecraft:textures/gui/advancements/backgrounds/adventure.png">
-                    <p centered="true" shadowed="true">captions and stuff</p>
-                </img>
-                <img width="16" height="16" src="minecraft:textures/gui/advancements/backgrounds/end.png">
-                    <p centered="true">End Caption</p>
-                </img>
-            </gallery>
-            <blockquote>
-                <p>This is a blockquote</p>
-                <p>This is another paragraph in the blockquote</p>
-            </blockquote>
-            <component>{"text":"Test","hoverEvent":{"action":"show_text","contents":"Your MOTHER IS VERY COOL!"}}</component>
-            <br></br>
-            <hint icon="minecraft:stick" title="This is a hint" color="#FF0000">
-                <p>This is a hint</p>
-                <p>This is another paragraph in the hint</p>
-            </hint>
-            <hr></hr>
-            <entity type="minecraft:zombie"></entity>
+            <p>Column Test</p>
+            <carousel height="100" index="1">
+                <carousel-item>
+                    <p>Test</p>
+                </carousel-item>
+                <carousel-item>
+                    <img src="minecraft:textures/block/stone.png" width="100" height="100" textureWidth="16" textureHeight="16"/>
+                </carousel-item>
+            </carousel>
             """;
         TagProvider provider = new TagProvider();
         provider.addSerializer("p", ParagraphTagElement::new);
         provider.addSerializer("h1", HeadingOneTagElement::new);
         provider.addSerializer("h2", HeadingTwoTagElement::new);
         provider.addSerializer("img", ImageTagElement::new);
-        provider.addSerializer("gallery", GalleryTagElement::new);
+        provider.addSerializer("carousel", CarouselTagElement::new);
+        provider.addSerializer("carousel-item", CarouselItemTagElement::new);
         provider.addSerializer("br", BreakLineTagElement::new);
         provider.addSerializer("blockquote", BlockquoteTagElement::new);
         provider.addSerializer("component", ComponentTagElement::new);
@@ -68,6 +50,11 @@ public class ExampleDocumentScreen extends Screen {
         provider.addSerializer("details", DetailsTagElement::new);
         provider.addSerializer("entity", EntityTagElement::new);
         provider.addSerializer("hr", HorizontalRuleTagElement::new);
+        provider.addSerializer("ul", UnorderedListTagElement::new);
+        provider.addSerializer("ol", OrderedListTagElement::new);
+        provider.addSerializer("li", ListItemTagElement::new);
+        provider.addSerializer("columns", ColumnsTagElement::new);
+        provider.addSerializer("column", ColumnTagElement::new);
         addRenderableWidget(new DocumentWidget(this.width / 2 - 100, 10, 200, 200, new DefaultTheme(), provider.parse(text)));
     }
 

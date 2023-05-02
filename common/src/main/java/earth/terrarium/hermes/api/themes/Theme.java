@@ -12,4 +12,6 @@ public interface Theme {
 
     void drawCraftingBackground(PoseStack pose, int x, int y, int width, int height);
 
+    void drawCarouselButton(PoseStack pose, int x, int y, boolean left, boolean hovered);
+
 }

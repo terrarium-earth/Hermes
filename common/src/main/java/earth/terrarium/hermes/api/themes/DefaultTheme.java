@@ -12,6 +12,7 @@ public class DefaultTheme implements Theme {
 
     private static final ResourceLocation DETAILS = new ResourceLocation(Hermes.MOD_ID, "textures/gui/details.png");
     private static final ResourceLocation CRAFTING = new ResourceLocation(Hermes.MOD_ID, "textures/gui/crafting.png");
+    private static final ResourceLocation CAROUSEL = new ResourceLocation(Hermes.MOD_ID, "textures/gui/carousel.png");
 
     @Override
     public void drawDropdown(PoseStack pose, int x, int y, int width, boolean hovered, boolean open, String text) {
@@ -47,5 +48,11 @@ public class DefaultTheme implements Theme {
     public void drawCraftingBackground(PoseStack pose, int x, int y, int width, int height) {
         RenderUtils.bindTexture(CRAFTING);
         Gui.blitNineSliced(pose, x, y, width, height, 4, 4, 4, 4, 24, 24, 0, 0);
+    }
+
+    @Override
+    public void drawCarouselButton(PoseStack pose, int x, int y, boolean left, boolean hovered) {
+        RenderUtils.bindTexture(CAROUSEL);
+        Gui.blit(pose, x, y, left ? 0 : 14, hovered ? 20 : 0, 14, 20);
     }
 }
