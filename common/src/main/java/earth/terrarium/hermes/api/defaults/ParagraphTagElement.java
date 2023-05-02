@@ -19,7 +19,7 @@ public class ParagraphTagElement extends TextTagElement {
     public void render(Theme theme, PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
         Component text = Component.nullToEmpty(this.content);
         int height = 0;
-        for (FormattedCharSequence sequence : Minecraft.getInstance().font.split(text, width - 10)) {
+        for (FormattedCharSequence sequence : Minecraft.getInstance().font.split(text, width - 5)) {
             if (this.shadowed) {
                 Minecraft.getInstance().font.drawShadow(pose, sequence, getXOffset(x, width, sequence), y + height, this.color.getValue());
             } else {
@@ -31,7 +31,7 @@ public class ParagraphTagElement extends TextTagElement {
 
     @Override
     public int getHeight(int width) {
-        int lines = Minecraft.getInstance().font.split(Component.nullToEmpty(this.content), width - 10).size();
+        int lines = Minecraft.getInstance().font.split(Component.nullToEmpty(this.content), width - 5).size();
         return lines * (Minecraft.getInstance().font.lineHeight + 1);
     }
 }

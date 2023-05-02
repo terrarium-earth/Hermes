@@ -50,11 +50,19 @@ public class TagProvider {
                     System.out.println(content);
                     throw new RuntimeException("Cannot have content before a tag");
                 }
+                boolean isSelfClosing = tag.endsWith("/");
+                if (isSelfClosing) {
+                    tag = tag.substring(0, tag.length() - 1);
+                }
                 Map<String, String> parameters = parseParameters(tag, tagName);
                 if (!this.serializers.containsKey(tagName)) {
                     throw new RuntimeException("Unknown tag: " + tagName);
                 }
                 stack.push(this.serializers.get(tagName).deserialize(parameters));
+                if (isSelfClosing) {
+                    var pop = stack.pop();
+                    stack.peek().addChild(pop);
+                }
             }
 
             index = closeIndex + 1;
