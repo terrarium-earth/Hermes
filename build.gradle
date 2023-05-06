@@ -7,19 +7,6 @@ architectury {
     minecraft = rootProject.minecraft_version
 }
 
-subprojects {
-    apply plugin: "dev.architectury.loom"
-
-    loom {
-        silentMojangMappingsLicense()
-    }
-
-    dependencies {
-        minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
-        mappings loom.officialMojangMappings()
-    }
-}
-
 allprojects {
     apply plugin: "java"
     apply plugin: "architectury-plugin"
@@ -42,5 +29,61 @@ allprojects {
 
     java {
         withSourcesJar()
+    }
+}
+
+subprojects {
+    apply plugin: "dev.architectury.loom"
+
+    loom {
+        silentMojangMappingsLicense()
+    }
+
+    dependencies {
+        minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+        mappings loom.officialMojangMappings()
+    }
+
+    var env = System.getenv()
+    var modLoader = name
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                artifact remapJar
+                artifact(sourcesJar) {
+                    builtBy remapSourcesJar
+                }
+
+                artifactId = "$rootProject.mod_id-$modLoader-$rootProject.minecraft_version"
+
+                pom {
+                    name = github_name
+                    description = ''
+                    url = "https://github.com/terrarium-earth/$github_name"
+
+                    scm {
+                        connection = "git:https://github.com/terrarium-earth/${github_name}.git"
+                        developerConnection = "git:https://github.com/terrarium-earth/${github_name}.git"
+                        url = "https://github.com/terrarium-earth/$github_name"
+                    }
+
+                    licenses {
+                        license {
+                            name = 'MIT'
+                        }
+                    }
+                }
+            }
+        }
+        repositories {
+            maven {
+                url = "https://maven.resourcefulbees.com/repository/terrarium/"
+                credentials {
+                    username env.MAVEN_USER
+                    password env.MAVEN_PASS
+                }
+            }
+        }
     }
 }

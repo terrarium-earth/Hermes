@@ -5,7 +5,5 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod(Hermes.MOD_ID)
 public class HermesForge {
-    public HermesForge() {
-
-    }
+    public HermesForge() {}
 }

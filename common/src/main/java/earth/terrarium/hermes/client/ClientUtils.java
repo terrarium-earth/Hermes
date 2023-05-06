@@ -21,12 +21,6 @@ public final class ClientUtils {
         ));
     }
 
-    public static void renderTooltip(Component component) {
-        if (Minecraft.getInstance().screen != null) {
-            Minecraft.getInstance().screen.setTooltipForNextRenderPass(List.of(component.getVisualOrderText()));
-        }
-    }
-
     public static void renderTooltip(List<Component> components) {
         if (Minecraft.getInstance().screen != null) {
             List<FormattedCharSequence> formatted = new ArrayList<>(components.size());

@@ -35,7 +35,9 @@ public class TagProvider {
                 content.append(text, index, openIndex);
                 var pop = stack.pop();
                 if (pop.getChildren().size() > 0 && isContentNotEmpty(content)) {
-                    throw new RuntimeException("Cannot have content and children");
+                    throw new TagParseException(
+                        "Cannot have content and children. Content: " + content
+                    );
                 }
                 if (isContentNotEmpty(content)) {
                     pop.setContent(formatContent(content.toString()));
@@ -47,8 +49,9 @@ public class TagProvider {
             } else {
                 content.append(text, index, openIndex);
                 if (isContentNotEmpty(content)) {
-                    System.out.println(content);
-                    throw new RuntimeException("Cannot have content before a tag");
+                    throw new TagParseException(
+                        "Cannot have content and children. Content: " + content
+                    );
                 }
                 boolean isSelfClosing = tag.endsWith("/");
                 if (isSelfClosing) {
@@ -56,7 +59,9 @@ public class TagProvider {
                 }
                 Map<String, String> parameters = parseParameters(tag, tagName);
                 if (!this.serializers.containsKey(tagName)) {
-                    throw new RuntimeException("Unknown tag: " + tagName);
+                    throw new TagParseException(
+                        "Unknown tag: " + tagName
+                    );
                 }
                 stack.push(this.serializers.get(tagName).deserialize(parameters));
                 if (isSelfClosing) {

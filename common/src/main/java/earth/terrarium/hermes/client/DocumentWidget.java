@@ -9,15 +9,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.AbstractContainerEventHandler;
 import net.minecraft.client.gui.components.events.GuiEventListener;
-import net.minecraft.client.gui.narration.NarratableEntry;
-import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DocumentWidget extends AbstractContainerEventHandler implements Renderable, NarratableEntry {
+public class DocumentWidget extends AbstractContainerEventHandler implements Renderable {
 
     private final List<TagElement> elements = new ArrayList<>();
     private final Theme theme;
@@ -30,7 +28,8 @@ public class DocumentWidget extends AbstractContainerEventHandler implements Ren
     private double scrollAmount;
     private int lastFullHeight;
 
-    private DocumentMouse mouse = null; //We have to defer the mouse click until during render because we don't know the height of the document until then.
+    //We have to defer the mouse click until during render because we don't know the height of the document until then.
+    private DocumentMouse mouse = null;
 
     public DocumentWidget(int x, int y, int width, int height, Theme theme, List<TagElement> elements) {
         this.x = x;
@@ -86,15 +85,5 @@ public class DocumentWidget extends AbstractContainerEventHandler implements Ren
     @Override
     public @NotNull List<? extends GuiEventListener> children() {
         return List.of();
-    }
-
-    @Override
-    public @NotNull NarrationPriority narrationPriority() {
-        return NarrationPriority.NONE;
-    }
-
-    @Override
-    public void updateNarration(@NotNull NarrationElementOutput output) {
-
     }
 }
