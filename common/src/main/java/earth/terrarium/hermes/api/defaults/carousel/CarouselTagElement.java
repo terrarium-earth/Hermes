@@ -1,12 +1,11 @@
 package earth.terrarium.hermes.api.defaults.carousel;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import earth.terrarium.hermes.api.TagElement;
 import earth.terrarium.hermes.api.themes.Theme;
 import earth.terrarium.hermes.utils.ElementParsingUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -27,22 +26,22 @@ public class CarouselTagElement implements TagElement {
     }
 
     @Override
-    public void render(Theme theme, PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
+    public void render(Theme theme, GuiGraphics graphics, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
         TagElement element = getCurrentChild();
         if (element != null) {
             if (this.height != -1) {
-                try (var ignored = RenderUtils.createScissorBoxStack(scissor, Minecraft.getInstance(), pose, x + 20, y, width - 40, this.height)) {
-                    element.render(theme, pose, scissor, x + 20, y, width - 40, mouseX, mouseY, hovered, partialTicks);
+                try (var ignored = RenderUtils.createScissor(Minecraft.getInstance(), graphics, x + 20, y, width - 40, this.height)) {
+                    element.render(theme, graphics, x + 20, y, width - 40, mouseX, mouseY, hovered, partialTicks);
                 }
             } else {
-                element.render(theme, pose, scissor, x + 20, y, width - 40, mouseX, mouseY, hovered, partialTicks);
+                element.render(theme, graphics, x + 20, y, width - 40, mouseX, mouseY, hovered, partialTicks);
             }
         }
         int middle = (getHeight(width - 40) / 2);
         int relativeX = mouseX - x;
         int relativeY = mouseY - y;
-        theme.drawCarouselButton(pose, x + 2, y + middle - 10, true, relativeX >= 2 && relativeX <= 16 && relativeY >= middle - 10 && relativeY <= middle + 10);
-        theme.drawCarouselButton(pose, x + width - 16, y + middle - 10, false, relativeX >= width - 16 && relativeX <= width - 2 && relativeY >= middle - 10 && relativeY <= middle + 10);
+        theme.drawCarouselButton(graphics, x + 2, y + middle - 10, true, relativeX >= 2 && relativeX <= 16 && relativeY >= middle - 10 && relativeY <= middle + 10);
+        theme.drawCarouselButton(graphics, x + width - 16, y + middle - 10, false, relativeX >= width - 16 && relativeX <= width - 2 && relativeY >= middle - 10 && relativeY <= middle + 10);
     }
 
     @Override

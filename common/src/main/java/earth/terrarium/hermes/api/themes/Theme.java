@@ -1,17 +1,17 @@
 package earth.terrarium.hermes.api.themes;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 
 public interface Theme {
 
-    void drawDropdown(PoseStack pose, int x, int y, int width, boolean hovered, boolean open, String text);
+    void drawDropdown(GuiGraphics graphics, int x, int y, int width, boolean hovered, boolean open, String text);
 
-    void drawSlot(PoseStack pose, int x, int y, boolean hovered);
+    void drawSlot(GuiGraphics graphics, int x, int y, boolean hovered);
 
-    void drawArrow(PoseStack pose, int x, int y);
+    void drawArrow(GuiGraphics graphics, int x, int y);
 
-    void drawCraftingBackground(PoseStack pose, int x, int y, int width, int height);
+    void drawCraftingBackground(GuiGraphics graphics, int x, int y, int width, int height);
 
-    void drawCarouselButton(PoseStack pose, int x, int y, boolean left, boolean hovered);
+    void drawCarouselButton(GuiGraphics graphics, int x, int y, boolean left, boolean hovered);
 
 }

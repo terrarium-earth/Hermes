@@ -1,13 +1,12 @@
 package earth.terrarium.hermes.api.defaults.lists;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.color.ConstantColors;
 import earth.terrarium.hermes.api.TagElement;
 import earth.terrarium.hermes.api.themes.Theme;
 import earth.terrarium.hermes.utils.ElementParsingUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 import org.jetbrains.annotations.NotNull;
@@ -27,17 +26,21 @@ public class ListItemTagElement implements TagElement {
     }
 
     @Override
-    public void render(Theme theme, PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
+    public void render(Theme theme, GuiGraphics graphics, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
         if (this.content != null) {
             Component text = Component.nullToEmpty(this.content);
             int height = 0;
             for (FormattedCharSequence sequence : Minecraft.getInstance().font.split(text, width)) {
-                Minecraft.getInstance().font.draw(pose, sequence, x, y + height, this.color.getValue());
+                graphics.drawString(
+                    Minecraft.getInstance().font,
+                    sequence, x, y + height, this.color.getValue(),
+                    false
+                );
                 height += Minecraft.getInstance().font.lineHeight + 1;
             }
         } else {
             for (TagElement element : this.children) {
-                element.render(theme, pose, scissor, x, y, width, mouseX, mouseY, hovered, partialTicks);
+                element.render(theme, graphics, x, y, width, mouseX, mouseY, hovered, partialTicks);
             }
         }
     }

@@ -1,12 +1,9 @@
 package earth.terrarium.hermes.api.defaults;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
-import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import earth.terrarium.hermes.api.TagElement;
 import earth.terrarium.hermes.api.themes.Theme;
 import earth.terrarium.hermes.utils.ElementParsingUtils;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.Map;
@@ -32,10 +29,9 @@ public class ImageTagElement implements TagElement {
     }
 
     @Override
-    public void render(Theme theme, PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
+    public void render(Theme theme, GuiGraphics graphics, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
         int xOffset = (width - this.imageWidth) / 2;
-        RenderUtils.bindTexture(this.image);
-        Gui.blit(pose, x + xOffset, y + 2, this.imageU, this.imageV, this.imageWidth, this.imageHeight, this.imageTextureWidth, this.imageTextureHeight);
+        graphics.blit(this.image, x + xOffset, y + 2, this.imageU, this.imageV, this.imageWidth, this.imageHeight, this.imageTextureWidth, this.imageTextureHeight);
     }
 
     @Override

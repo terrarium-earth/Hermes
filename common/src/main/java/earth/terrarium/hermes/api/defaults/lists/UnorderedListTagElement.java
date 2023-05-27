@@ -1,11 +1,10 @@
 package earth.terrarium.hermes.api.defaults.lists;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
 import earth.terrarium.hermes.api.TagElement;
 import earth.terrarium.hermes.api.themes.Theme;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 
 import java.util.Map;
 
@@ -16,13 +15,17 @@ public class UnorderedListTagElement extends ListTagElement {
     }
 
     @Override
-    public void render(Theme theme, PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
+    public void render(Theme theme, GuiGraphics graphics, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
         Font font = Minecraft.getInstance().font;
         int dotWidth = font.width("•");
         int height = 0;
         for (TagElement element : this.children) {
-            font.draw(pose, "•", x, y + height, this.color.getValue());
-            element.render(theme, pose, scissor, x + dotWidth + 2, y + height, width - dotWidth - 2, mouseX, mouseY, hovered, partialTicks);
+            graphics.drawString(
+                font,
+                "•", x, y + height, this.color.getValue(),
+                false
+            );
+            element.render(theme, graphics, x + dotWidth + 2, y + height, width - dotWidth - 2, mouseX, mouseY, hovered, partialTicks);
             height += Math.max(element.getHeight(width - dotWidth - 2), Minecraft.getInstance().font.lineHeight + 1);
         }
     }

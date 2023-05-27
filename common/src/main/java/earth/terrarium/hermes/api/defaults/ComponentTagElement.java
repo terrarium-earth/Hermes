@@ -1,9 +1,8 @@
 package earth.terrarium.hermes.api.defaults;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
 import earth.terrarium.hermes.api.themes.Theme;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
@@ -26,14 +25,14 @@ public class ComponentTagElement extends TextTagElement {
     }
 
     @Override
-    public void render(Theme theme, PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
+    public void render(Theme theme, GuiGraphics graphics, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
         int height = 0;
         for (FormattedCharSequence sequence : Minecraft.getInstance().font.split(text, width - 10)) {
-            if (this.shadowed) {
-                Minecraft.getInstance().font.drawShadow(pose, sequence, getXOffset(x, width, sequence), y + height, this.color.getValue());
-            } else {
-                Minecraft.getInstance().font.draw(pose, sequence, getXOffset(x, width, sequence), y + height, this.color.getValue());
-            }
+            graphics.drawString(
+                Minecraft.getInstance().font,
+                sequence, x, y + height, this.color.getValue(),
+                this.shadowed
+            );
             height += Minecraft.getInstance().font.lineHeight + 1;
             if (mouseY >= y + height || mouseY < y || !hovered) {
                 continue;
@@ -74,7 +73,7 @@ public class ComponentTagElement extends TextTagElement {
             HoverEvent event = style.getHoverEvent();
             var itemInfo = event.getValue(HoverEvent.Action.SHOW_ITEM);
             if (itemInfo != null) {
-                for (Component component : screen.getTooltipFromItem(itemInfo.getItemStack())) {
+                for (Component component : Screen.getTooltipFromItem(Minecraft.getInstance(), itemInfo.getItemStack())) {
                     tooltip.add(component.getVisualOrderText());
                 }
             } else {

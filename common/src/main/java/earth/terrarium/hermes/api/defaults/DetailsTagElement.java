@@ -1,10 +1,9 @@
 package earth.terrarium.hermes.api.defaults;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
 import earth.terrarium.hermes.api.TagElement;
 import earth.terrarium.hermes.api.themes.Theme;
 import earth.terrarium.hermes.utils.ElementParsingUtils;
+import net.minecraft.client.gui.GuiGraphics;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -25,14 +24,14 @@ public class DetailsTagElement implements TagElement {
     }
 
     @Override
-    public void render(Theme theme, PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
+    public void render(Theme theme, GuiGraphics graphics, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
         String text = (this.summary.isEmpty() ? "Details" : this.summary);
         boolean dropdownHovered = hovered && mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + 22;
-        theme.drawDropdown(pose, x, y + 2, width, dropdownHovered, open, text);
+        theme.drawDropdown(graphics, x, y + 2, width, dropdownHovered, open, text);
         if (open) {
             int height = 24;
             for (TagElement element : this.children) {
-                element.render(theme, pose, scissor, x + 7, y + height, width - 7, mouseX, mouseY, hovered, partialTicks);
+                element.render(theme, graphics, x + 7, y + height, width - 7, mouseX, mouseY, hovered, partialTicks);
                 height += element.getHeight(width);
             }
         }

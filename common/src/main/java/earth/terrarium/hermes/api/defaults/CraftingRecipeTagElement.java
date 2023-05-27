@@ -1,12 +1,11 @@
 package earth.terrarium.hermes.api.defaults;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
+import com.teamresourceful.resourcefullib.client.utils.ScreenUtils;
 import earth.terrarium.hermes.api.TagElement;
 import earth.terrarium.hermes.api.themes.Theme;
-import earth.terrarium.hermes.client.ClientUtils;
 import earth.terrarium.hermes.utils.ElementParsingUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
@@ -27,7 +26,7 @@ public class CraftingRecipeTagElement implements TagElement {
     }
 
     @Override
-    public void render(Theme theme, PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
+    public void render(Theme theme, GuiGraphics graphics, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
         y += 1;
 
         int gridSize = this.gridWidth * 18;
@@ -36,7 +35,7 @@ public class CraftingRecipeTagElement implements TagElement {
 
         x = x + (width - actualWidth) / 2;
 
-        theme.drawCraftingBackground(pose, x, y, actualWidth, actualHeight);
+        theme.drawCraftingBackground(graphics, x, y, actualWidth, actualHeight);
 
         Recipe<?> recipe = getRecipe();
         if (recipe == null) return;
@@ -52,7 +51,7 @@ public class CraftingRecipeTagElement implements TagElement {
 
             boolean slotHovered = hovered && mouseX >= x + 5 + xIndex * 18 && mouseX <= x + 21 + xIndex * 18 && mouseY >= y + 5 + yIndex * 18 && mouseY <= y + 21 + yIndex * 18;
 
-            theme.drawSlot(pose, x + 5 + xIndex * 18, y + 5 + yIndex * 18, slotHovered);
+            theme.drawSlot(graphics, x + 5 + xIndex * 18, y + 5 + yIndex * 18, slotHovered);
 
             if (i < recipe.getIngredients().size()) {
                 Ingredient ingredient = recipe.getIngredients().get(i);
@@ -64,15 +63,16 @@ public class CraftingRecipeTagElement implements TagElement {
                     int slotX = x + 6 + xIndex * 18;
                     int slotY = y + 6 + yIndex * 18;
                     if (slotHovered) {
-                        ClientUtils.renderTooltip(stack);
+                        ScreenUtils.setTooltip(stack);
                     }
-                    ClientUtils.renderItemWithCount(pose, stack, slotX, slotY);
+                    graphics.renderItem(stack, slotX, slotY);
+                    graphics.renderItemDecorations(Minecraft.getInstance().font, stack, slotX, slotY);
                 }
             }
             xIndex++;
         }
 
-        theme.drawArrow(pose, x + 5 + gridSize + 5, y + 5 + (gridSize / 2) - 9);
+        theme.drawArrow(graphics, x + 5 + gridSize + 5, y + 5 + (gridSize / 2) - 9);
 
         //noinspection DataFlowIssue
         ItemStack output = recipe.getResultItem(Minecraft.getInstance().getConnection().registryAccess());
@@ -82,16 +82,17 @@ public class CraftingRecipeTagElement implements TagElement {
 
         boolean slotHovered = hovered && mouseX >= slotX + 1 && mouseX <= slotX + 1 + 16 && mouseY >= slotY + 1 && mouseY <= slotY + 1 + 16;
 
-        theme.drawSlot(pose, slotX, slotY, slotHovered);
+        theme.drawSlot(graphics, slotX, slotY, slotHovered);
 
         slotY++;
         slotX++;
 
         if (slotHovered) {
-            ClientUtils.renderTooltip(output);
+            ScreenUtils.setTooltip(output);
         }
 
-        ClientUtils.renderItemWithCount(pose, output, slotX, slotY);
+        graphics.renderItem(output, slotX, slotY);
+        graphics.renderItemDecorations(Minecraft.getInstance().font, output, slotX, slotY);
     }
 
     @Nullable

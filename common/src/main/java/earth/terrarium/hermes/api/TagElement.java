@@ -1,8 +1,7 @@
 package earth.terrarium.hermes.api;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
 import earth.terrarium.hermes.api.themes.Theme;
+import net.minecraft.client.gui.GuiGraphics;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -13,8 +12,7 @@ public interface TagElement {
      * Renders the element.
      *
      * @param theme        The theme.
-     * @param pose         The pose stack.
-     * @param scissor      The scissor box stack.
+     * @param graphics     The graphics.
      * @param x            The x position.
      * @param y            The y position.
      * @param width        The width.
@@ -24,7 +22,7 @@ public interface TagElement {
      *                     as the mouse can be outside the screen space but have the correct position.
      * @param partialTicks The partial ticks.
      */
-    default void render(Theme theme, PoseStack pose, ScissorBoxStack scissor, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
+    default void render(Theme theme, GuiGraphics graphics, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
 
     }
 
