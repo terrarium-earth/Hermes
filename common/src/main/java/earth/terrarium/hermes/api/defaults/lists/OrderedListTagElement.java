@@ -22,7 +22,7 @@ public class OrderedListTagElement extends ListTagElement {
         for (TagElement element : this.children) {
             int indexWidth = font.width(i + ".");
             graphics.drawString(
-                    font,
+                font,
                 i + ".", x, y + height, this.color.getValue(),
                 false
             );

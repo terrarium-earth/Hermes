@@ -31,7 +31,7 @@ public class TagProvider {
             Node root = document.getChildNodes().item(0);
             root.normalize();
             return nodeToElements(root);
-        }catch (ParserConfigurationException | SAXException | IOException e) {
+        } catch (ParserConfigurationException | SAXException | IOException e) {
             throw new TagParseException("Failed to parse tag text", e);
         }
     }

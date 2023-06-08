@@ -23,9 +23,9 @@ public class ColumnsTagElement implements TagElement {
             for (int i = 0; i < columns.length; i++) {
                 widths[i] = columns[i].endsWith("%") ? Integer.parseInt(columns[i].substring(0, columns[i].length() - 1)) : Integer.parseInt(columns[i]);
             }
-            this.widthFunction = (index, width) -> index < 0 || index >= widths.length ? 0 : (int)(width * widths[index] / 100f);
+            this.widthFunction = (index, width) -> index < 0 || index >= widths.length ? 0 : (int) (width * widths[index] / 100f);
         } else {
-            this.widthFunction = (index, width) -> (int)(width / (float)this.elements.size());
+            this.widthFunction = (index, width) -> (int) (width / (float) this.elements.size());
         }
     }
 

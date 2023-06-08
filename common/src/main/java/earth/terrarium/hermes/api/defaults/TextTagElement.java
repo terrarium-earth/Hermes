@@ -30,7 +30,7 @@ public abstract class TextTagElement implements TagElement {
         if (parameters.containsKey("color")) {
             try {
                 this.color = Color.parse(parameters.get("color"));
-            }catch (Exception e) {
+            } catch (Exception e) {
                 this.color = Color.DEFAULT;
             }
         } else {

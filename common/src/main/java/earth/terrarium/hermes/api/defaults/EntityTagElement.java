@@ -28,7 +28,7 @@ public class EntityTagElement implements TagElement {
                 entity = this.type.create(Minecraft.getInstance().level);
             }
             if (entity instanceof LivingEntity living) {
-                InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, x + (int)(width / 2f), y + 47, 25, x + (int)(width / 2f) - mouseX, y + 47 - mouseY, living);
+                InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, x + (int) (width / 2f), y + 47, 25, x + (int) (width / 2f) - mouseX, y + 47 - mouseY, living);
             }
         }
     }
