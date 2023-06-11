@@ -5,12 +5,9 @@ import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import com.teamresourceful.resourcefullib.common.color.ConstantColors;
 import earth.terrarium.hermes.Hermes;
 import earth.terrarium.hermes.utils.BlitUtils;
-import earth.terrarium.hermes.utils.Divisor;
-import it.unimi.dsi.fastutil.ints.IntIterator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 
 public class DefaultTheme implements Theme {
 
