@@ -1,7 +1,7 @@
 package earth.terrarium.hermes.utils;
 
 import com.teamresourceful.resourcefullib.common.color.Color;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -35,7 +35,7 @@ public final class ElementParsingUtils {
     public static Item parseItem(Map<String, String> parameters, String key, Item defaultValue) {
         if (parameters.containsKey(key)) {
             try {
-                return BuiltInRegistries.ITEM.get(new ResourceLocation(parameters.get(key)));
+                return Registry.ITEM.get(new ResourceLocation(parameters.get(key)));
             } catch (Exception e) {
                 return defaultValue;
             }
@@ -46,7 +46,7 @@ public final class ElementParsingUtils {
     public static EntityType<?> parseEntityType(Map<String, String> parameters, String key, EntityType<?> defaultValue) {
         if (parameters.containsKey(key)) {
             try {
-                return BuiltInRegistries.ENTITY_TYPE.get(new ResourceLocation(parameters.get(key)));
+                return Registry.ENTITY_TYPE.get(new ResourceLocation(parameters.get(key)));
             } catch (Exception e) {
                 return defaultValue;
             }

@@ -74,8 +74,7 @@ public class CraftingRecipeTagElement implements TagElement {
 
         theme.drawArrow(pose, x + 5 + gridSize + 5, y + 5 + (gridSize / 2) - 9);
 
-        //noinspection DataFlowIssue
-        ItemStack output = recipe.getResultItem(Minecraft.getInstance().getConnection().registryAccess());
+        ItemStack output = recipe.getResultItem();
 
         int slotX = x + 5 + gridSize + 5 + 22 + 5;
         int slotY = y + 5 + (gridSize / 2) - 9;

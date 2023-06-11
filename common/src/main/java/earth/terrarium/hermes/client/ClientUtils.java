@@ -17,7 +17,7 @@ public final class ClientUtils {
         if (Minecraft.getInstance().player == null) return;
         renderTooltip(stack.getTooltipLines(
             Minecraft.getInstance().player,
-            Minecraft.getInstance().options.advancedItemTooltips ? TooltipFlag.ADVANCED : TooltipFlag.NORMAL
+            Minecraft.getInstance().options.advancedItemTooltips ? TooltipFlag.Default.ADVANCED : TooltipFlag.Default.NORMAL
         ));
     }
 
@@ -27,13 +27,13 @@ public final class ClientUtils {
             for (Component component : components) {
                 formatted.add(component.getVisualOrderText());
             }
-            Minecraft.getInstance().screen.setTooltipForNextRenderPass(formatted);
+            Minecraft.getInstance().screen.renderTooltip(new PoseStack(), formatted, 0, 0);
         }
     }
 
     public static void renderItemWithCount(PoseStack pose, ItemStack stack, int x, int y) {
         ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
-        renderer.renderAndDecorateItem(pose, stack, x, y);
-        renderer.renderGuiItemDecorations(pose, Minecraft.getInstance().font, stack, x, y);
+        renderer.renderAndDecorateItem(stack, x, y);
+        renderer.renderGuiItemDecorations(Minecraft.getInstance().font, stack, x, y);
     }
 }

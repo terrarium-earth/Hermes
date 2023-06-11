@@ -92,7 +92,7 @@ public class ComponentTagElement extends TextTagElement {
             }
 
             if (!tooltip.isEmpty()) {
-                screen.setTooltipForNextRenderPass(tooltip);
+                screen.renderTooltip(new PoseStack(), tooltip, 0, 0);
             }
         }
     }
