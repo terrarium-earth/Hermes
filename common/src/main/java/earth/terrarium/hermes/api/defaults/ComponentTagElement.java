@@ -92,7 +92,7 @@ public class ComponentTagElement extends TextTagElement {
             }
 
             if (!tooltip.isEmpty()) {
-                screen.renderTooltip(new PoseStack(), tooltip, 0, 0);
+                screen.renderTooltip(new PoseStack(), tooltip, (int) Minecraft.getInstance().mouseHandler.xpos(), (int) Minecraft.getInstance().mouseHandler.ypos());
             }
         }
     }

@@ -27,7 +27,7 @@ public final class ClientUtils {
             for (Component component : components) {
                 formatted.add(component.getVisualOrderText());
             }
-            Minecraft.getInstance().screen.renderTooltip(new PoseStack(), formatted, 0, 0);
+            Minecraft.getInstance().screen.renderTooltip(new PoseStack(), formatted, (int) Minecraft.getInstance().mouseHandler.xpos(), (int) Minecraft.getInstance().mouseHandler.ypos());
         }
     }
 
