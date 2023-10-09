@@ -27,10 +27,11 @@ public class ComponentTagElement extends TextTagElement {
     @Override
     public void render(Theme theme, GuiGraphics graphics, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
         int height = 0;
-        for (FormattedCharSequence sequence : Minecraft.getInstance().font.split(text, width - 10)) {
+        Component renderText = text.copy().setStyle(this.getStyle().applyTo(text.getStyle()));
+        for (FormattedCharSequence sequence : Minecraft.getInstance().font.split(renderText, width - 10)) {
             graphics.drawString(
                 Minecraft.getInstance().font,
-                sequence, x, y + height, this.color.getValue(),
+                sequence, getXOffset(x, width, sequence), y + height, this.color.getValue(),
                 this.shadowed
             );
             height += Minecraft.getInstance().font.lineHeight + 1;
