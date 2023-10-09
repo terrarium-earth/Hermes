@@ -23,6 +23,8 @@ public class DocumentWidget extends AbstractContainerEventHandler implements Ren
     private final int y;
     private final int width;
     private final int height;
+    private final double overscrollTop;
+    private final double overscrollBottom;
 
     private double scrollAmount;
     private int lastFullHeight;
@@ -30,14 +32,21 @@ public class DocumentWidget extends AbstractContainerEventHandler implements Ren
     //We have to defer the mouse click until during render because we don't know the height of the document until then.
     private DocumentMouse mouse = null;
 
-    public DocumentWidget(int x, int y, int width, int height, Theme theme, List<TagElement> elements) {
+    public DocumentWidget(int x, int y, int width, int height, double overscrollTop, double overscrollBottom, Theme theme, List<TagElement> elements) {
         this.x = x;
         this.y = y;
         this.width = width - 6;
         this.height = height - 6;
+        this.overscrollTop = overscrollTop;
+        this.overscrollBottom = overscrollBottom;
         this.lastFullHeight = this.height;
         this.theme = theme;
         this.elements.addAll(elements);
+        this.scrollAmount = -overscrollTop;
+    }
+
+    public DocumentWidget(int x, int y, int width, int height, Theme theme, List<TagElement> elements) {
+        this(x, y, width, height, 0.0D, 0.0D, theme, elements);
     }
 
     @Override
@@ -59,12 +68,11 @@ public class DocumentWidget extends AbstractContainerEventHandler implements Ren
             this.mouse = null;
             this.lastFullHeight = fullHeight;
         }
-        this.scrollAmount = Mth.clamp(this.scrollAmount, 0.0D, Math.max(0, this.lastFullHeight - this.height));
     }
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount) {
-        this.scrollAmount = Mth.clamp(this.scrollAmount - scrollAmount * 10, 0.0D, Math.max(0, this.lastFullHeight - this.height));
+        this.scrollAmount = Mth.clamp(this.scrollAmount - scrollAmount * 10, -overscrollTop, Math.max(-overscrollTop, this.lastFullHeight - this.height + overscrollBottom));
         return true;
     }
 
