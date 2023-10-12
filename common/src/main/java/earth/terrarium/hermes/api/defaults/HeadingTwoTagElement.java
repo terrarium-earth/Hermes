@@ -20,12 +20,12 @@ public class HeadingTwoTagElement extends TextTagElement {
         try (var ignored = new CloseablePoseStack(graphics)) {
             graphics.pose().scale(2, 2, 2);
             graphics.pose().translate(-x / 2f, -y / 2f, 0);
-            Component text = Component.nullToEmpty(this.content);
+            Component text = Component.nullToEmpty(this.content).copy().setStyle(this.getStyle());
             int height = 0;
             for (FormattedCharSequence sequence : Minecraft.getInstance().font.split(text, width - 10)) {
                 graphics.drawString(
                     Minecraft.getInstance().font,
-                    sequence, x + 2, y + height, this.color.getValue(),
+                    sequence, getXOffset(x + 2, width, sequence), y + height, this.color.getValue(),
                     false
                 );
                 height += Minecraft.getInstance().font.lineHeight + 1;
