@@ -22,7 +22,7 @@ public class HeadingOneTagElement extends TextTagElement {
             graphics.pose().translate(-x / 1.5f, -y / 1.5f, 0);
             Component text = Component.nullToEmpty(this.content).copy().setStyle(this.getStyle());
             int height = 0;
-            for (FormattedCharSequence sequence : Minecraft.getInstance().font.split(text, width - 10)) {
+            for (FormattedCharSequence sequence : Minecraft.getInstance().font.split(text, (width - 10) / 3)) {
                 graphics.drawString(
                     Minecraft.getInstance().font,
                     sequence, getXOffset(x + 2, width, sequence), y + height, this.color.getValue(),
@@ -35,7 +35,7 @@ public class HeadingOneTagElement extends TextTagElement {
 
     @Override
     public int getHeight(int width) {
-        int lines = Minecraft.getInstance().font.split(Component.nullToEmpty(this.content), width - 10).size();
+        int lines = Minecraft.getInstance().font.split(Component.nullToEmpty(this.content), (width - 10) / 3).size();
         return lines * (Minecraft.getInstance().font.lineHeight + 1) * 3;
     }
 }
