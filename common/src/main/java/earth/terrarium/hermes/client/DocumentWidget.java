@@ -55,7 +55,7 @@ public class DocumentWidget extends AbstractContainerEventHandler implements Ren
         int y = this.y;
 
         int fullHeight = 0;
-        try (var ignored = RenderUtils.createScissor(Minecraft.getInstance(), graphics, x, y, width, height)) {
+        try (var ignored = RenderUtils.createScissor(Minecraft.getInstance(), graphics, x - 5, y, width + 10, height)) {
             for (TagElement element : this.elements) {
                 if (this.mouse != null && element.mouseClicked(this.mouse.x() - x, this.mouse.y() - (y - this.scrollAmount), this.mouse.button(), this.width)) {
                     this.mouse = null;
