@@ -6,6 +6,7 @@ import earth.terrarium.hermes.utils.ElementParsingUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,10 +16,12 @@ import java.util.Map;
 public class EntityTagElement implements TagElement {
 
     private final EntityType<?> type;
+    private final CompoundTag tag;
     private Entity entity;
 
     public EntityTagElement(Map<String, String> parameters) {
         this.type = ElementParsingUtils.parseEntityType(parameters, "type", null);
+        this.tag = ElementParsingUtils.parseTag(parameters, "tag", null);
     }
 
     @Override
@@ -26,6 +29,9 @@ public class EntityTagElement implements TagElement {
         if (this.type != null) {
             if (entity == null && Minecraft.getInstance().level != null) {
                 entity = this.type.create(Minecraft.getInstance().level);
+                if (entity != null && tag != null) {
+                    entity.load(tag);
+                }
             }
             if (entity instanceof LivingEntity living) {
                 InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, x + (int) (width / 2f), y + 47, 25, x + (int) (width / 2f) - mouseX, y + 47 - mouseY, living);

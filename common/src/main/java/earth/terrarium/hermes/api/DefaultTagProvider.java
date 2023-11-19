@@ -25,6 +25,7 @@ public class DefaultTagProvider extends TagProvider {
         addSerializer("crafting-recipe", CraftingRecipeTagElement::new);
         addSerializer("details", DetailsTagElement::new);
         addSerializer("entity", EntityTagElement::new);
+        addSerializer("item", ItemTagElement::new);
         addSerializer("hr", HorizontalRuleTagElement::new);
         addSerializer("ul", UnorderedListTagElement::new);
         addSerializer("ol", OrderedListTagElement::new);

@@ -5,7 +5,6 @@ import com.teamresourceful.resourcefullib.common.color.ConstantColors;
 import earth.terrarium.hermes.api.TagElement;
 import earth.terrarium.hermes.api.themes.Theme;
 import earth.terrarium.hermes.utils.ElementParsingUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -34,10 +33,10 @@ public class HintTagElement implements TagElement {
         graphics.fill(x, y, x + width, y + 20, this.color.getValue() | 0x80000000);
         graphics.fill(x, y + 20, x + width, y + getHeight(width), 0x80000000);
         graphics.renderOutline(x, y, width, getHeight(width), this.color.getValue() | 0xFF000000);
-        graphics.drawString(
-            Minecraft.getInstance().font,
-            this.title, x + 22, y + 6, 0xFFFFFF,
-            false
+        theme.drawText(
+            graphics, this.title,
+            x + 22, y + 6,
+            ConstantColors.white, false
         );
         int height = 23;
         for (TagElement element : this.children) {

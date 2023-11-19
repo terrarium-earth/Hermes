@@ -19,10 +19,10 @@ public class ParagraphTagElement extends TextTagElement {
         Component text = Component.nullToEmpty(this.content).copy().setStyle(this.getStyle());
         int height = 0;
         for (FormattedCharSequence sequence : Minecraft.getInstance().font.split(text, width - 5)) {
-            graphics.drawString(
-                Minecraft.getInstance().font,
-                sequence, getXOffset(x, width, sequence), y + height, this.color.getValue(),
-                this.shadowed
+            theme.drawText(
+                graphics,
+                sequence, getXOffset(x, width, sequence), y + height,
+                this.color, this.shadowed
             );
             height += Minecraft.getInstance().font.lineHeight + 1;
         }

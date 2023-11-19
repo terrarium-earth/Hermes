@@ -23,10 +23,11 @@ public class HeadingOneTagElement extends TextTagElement {
             Component text = Component.nullToEmpty(this.content).copy().setStyle(this.getStyle());
             int height = 0;
             for (FormattedCharSequence sequence : Minecraft.getInstance().font.split(text, (width - 10) / 3)) {
-                graphics.drawString(
-                    Minecraft.getInstance().font,
-                    sequence, getXOffset(x + 2, width, sequence), y + height, this.color.getValue(),
-                    false
+                theme.drawText(
+                    graphics,
+                    sequence,
+                    getXOffset(x + 2, width, sequence), y + height,
+                    this.color, false
                 );
                 height += Minecraft.getInstance().font.lineHeight + 1;
             }

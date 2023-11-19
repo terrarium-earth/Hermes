@@ -1,10 +1,12 @@
 package earth.terrarium.hermes.api.themes;
 
+import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.color.ConstantColors;
 import earth.terrarium.hermes.Hermes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FormattedCharSequence;
 
 public class DefaultTheme implements Theme {
 
@@ -47,5 +49,15 @@ public class DefaultTheme implements Theme {
     @Override
     public void drawCarouselButton(GuiGraphics graphics, int x, int y, boolean left, boolean hovered) {
         graphics.blit(CAROUSEL, x, y, left ? 0 : 14, hovered ? 20 : 0, 14, 20);
+    }
+
+    @Override
+    public void drawText(GuiGraphics graphics, FormattedCharSequence text, int x, int y, Color color, boolean shadow) {
+        graphics.drawString(Minecraft.getInstance().font, text, x, y, color.getValue(), shadow);
+    }
+
+    @Override
+    public void drawText(GuiGraphics graphics, String text, int x, int y, Color color, boolean shadow) {
+        graphics.drawString(Minecraft.getInstance().font, text, x, y, color.getValue(), shadow);
     }
 }

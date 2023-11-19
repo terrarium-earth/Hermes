@@ -2,6 +2,8 @@ package earth.terrarium.hermes.utils;
 
 import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.TagParser;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -54,10 +56,32 @@ public final class ElementParsingUtils {
         return defaultValue;
     }
 
+    public static CompoundTag parseTag(Map<String, String> parameters, String key, CompoundTag defaultValue) {
+        if (parameters.containsKey(key)) {
+            try {
+                return TagParser.parseTag(parameters.get(key));
+            } catch (Exception e) {
+                return defaultValue;
+            }
+        }
+        return defaultValue;
+    }
+
     public static int parseInt(Map<String, String> parameters, String key, int defaultValue) {
         if (parameters.containsKey(key)) {
             try {
                 return Integer.parseInt(parameters.get(key));
+            } catch (Exception e) {
+                return defaultValue;
+            }
+        }
+        return defaultValue;
+    }
+
+    public static float parseFloat(Map<String, String> parameters, String key, float defaultValue) {
+        if (parameters.containsKey(key)) {
+            try {
+                return Float.parseFloat(parameters.get(key));
             } catch (Exception e) {
                 return defaultValue;
             }
@@ -75,4 +99,5 @@ public final class ElementParsingUtils {
         }
         return defaultValue;
     }
+
 }
