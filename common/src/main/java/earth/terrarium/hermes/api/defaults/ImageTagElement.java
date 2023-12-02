@@ -61,10 +61,11 @@ public class ImageTagElement implements TagElement {
         Matrix4f matrix4f = graphics.pose().last().pose();
         BufferBuilder bufferBuilder = Tesselator.getInstance().getBuilder();
         bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        bufferBuilder.vertex(matrix4f, (float)x, (float)y, 0f).uv(0f, 1f).endVertex();
-        bufferBuilder.vertex(matrix4f, (float)x, (float)y + height, 0f).uv(0f, 0f).endVertex();
-        bufferBuilder.vertex(matrix4f, (float)x + width, (float)y + height, 0f).uv(1f, 0f).endVertex();
-        bufferBuilder.vertex(matrix4f, (float)x + width, (float)y, 0f).uv(1f, 1f).endVertex();
+        bufferBuilder.vertex(matrix4f, (float)x, (float)y, 0f).uv(0f, 0f).endVertex();
+        bufferBuilder.vertex(matrix4f, (float)x, (float)y + height, 0f).uv(0f, 1f).endVertex();
+        bufferBuilder.vertex(matrix4f, (float)x + width, (float)y + height, 0f).uv(1f, 1f).endVertex();
+        bufferBuilder.vertex(matrix4f, (float)x + width, (float)y, 0f).uv(1f, 0f).endVertex();
+
         BufferUploader.drawWithShader(bufferBuilder.end());
     }
 
