@@ -30,7 +30,7 @@ public class ItemTagElement implements TagElement {
     @Override
     public void render(Theme theme, GuiGraphics graphics, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
         try (var pose = new CloseablePoseStack(graphics)) {
-            int actualX = x + (width / 2) - 8;
+            int actualX = x + (int) ((width / 2f) - (8 * scale));
             pose.translate(actualX, y + 1, 0);
             pose.scale(scale, scale, 1.0F);
             graphics.renderFakeItem(output, 0, 0);

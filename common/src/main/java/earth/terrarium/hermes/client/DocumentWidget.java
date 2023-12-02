@@ -26,6 +26,9 @@ public class DocumentWidget extends AbstractContainerEventHandler implements Ren
     private final double overscrollTop;
     private final double overscrollBottom;
 
+    // scrollBarUIWidth includes scrollbarWidth and space separating it from content
+    private static final int SCROLL_BAR_UI_WIDTH = 5;
+    private static final int SCROLL_BAR_WIDTH = 3;
     private boolean scrolling = false;
     private double scrollAmount;
     private int lastFullHeight;
@@ -36,8 +39,8 @@ public class DocumentWidget extends AbstractContainerEventHandler implements Ren
     public DocumentWidget(int x, int y, int width, int height, double overscrollTop, double overscrollBottom, Theme theme, List<TagElement> elements) {
         this.x = x;
         this.y = y;
-        this.width = width - 6;
-        this.height = height - 6;
+        this.width = width;
+        this.height = height;
         this.overscrollTop = overscrollTop;
         this.overscrollBottom = overscrollBottom;
         this.lastFullHeight = this.height;
@@ -56,28 +59,29 @@ public class DocumentWidget extends AbstractContainerEventHandler implements Ren
         int y = this.y;
 
         int fullHeight = 0;
-        int contentWidth = this.width - 5;
+        // Center content area leaving room for scrollbarUIWidth on both sides, though there is only one
+        int contentWidth = this.width - (2 * SCROLL_BAR_UI_WIDTH);
+        int contentX = this.x + SCROLL_BAR_UI_WIDTH;
         try (var ignored = RenderUtils.createScissor(Minecraft.getInstance(), graphics, x - 5, y, width + 10, height)) {
             for (TagElement element : this.elements) {
-                if (this.mouse != null && element.mouseClicked(this.mouse.x() - x, this.mouse.y() - (y - this.scrollAmount), this.mouse.button(), contentWidth)) {
+                if (this.mouse != null && element.mouseClicked(this.mouse.x() - contentX, this.mouse.y() - (y - this.scrollAmount), this.mouse.button(), contentWidth)) {
                     this.mouse = null;
                 }
-                element.render(this.theme, graphics, x, y - (int) this.scrollAmount, contentWidth, mouseX, mouseY, this.isMouseOver(mouseX, mouseY), partialTicks);
-                var itemheight = element.getHeight(contentWidth);
-                y += itemheight;
-                fullHeight += itemheight;
+                element.render(this.theme, graphics, contentX, y - (int) this.scrollAmount, contentWidth, mouseX, mouseY, this.isMouseOver(mouseX, mouseY), partialTicks);
+                var itemHeight = element.getHeight(contentWidth);
+                y += itemHeight;
+                fullHeight += itemHeight;
             }
             this.mouse = null;
             this.lastFullHeight = fullHeight;
         }
 
         if (this.lastFullHeight > this.height) {
-            int scrollBarWidth = 3;
             int scrollBarHeight = (int) ((this.height / (double) this.lastFullHeight) * this.height);
-            int scrollBarX = this.x + this.width - scrollBarWidth;
+            int scrollBarX = this.x + this.width - SCROLL_BAR_WIDTH;
             int scrollBarY = this.y + 4 + (int) ((this.scrollAmount / (double) this.lastFullHeight) * this.height);
-            int scrollBarColor = this.isMouseOver(mouseX, mouseY) && mouseX >= scrollBarX && mouseX <= scrollBarX + scrollBarWidth && mouseY >= scrollBarY && mouseY <= scrollBarY + scrollBarHeight ? 0xFFF0F0F0 : 0xFFC0C0C0;
-            graphics.fill(scrollBarX, scrollBarY, scrollBarX + scrollBarWidth, scrollBarY + scrollBarHeight, scrollBarColor);
+            int scrollBarColor = this.isMouseOver(mouseX, mouseY) && mouseX >= scrollBarX && mouseX <= scrollBarX + SCROLL_BAR_WIDTH && mouseY >= scrollBarY && mouseY <= scrollBarY + scrollBarHeight ? 0xFFF0F0F0 : 0xFFC0C0C0;
+            graphics.fill(scrollBarX, scrollBarY, scrollBarX + SCROLL_BAR_WIDTH, scrollBarY + scrollBarHeight, scrollBarColor);
         }
     }
 
@@ -135,7 +139,7 @@ public class DocumentWidget extends AbstractContainerEventHandler implements Ren
 
     private boolean isMouseOverScrollBar(double mouseX, double mouseY) {
         return this.lastFullHeight > this.height &&
-                mouseX >= this.x + this.width - 3 && mouseX <= this.x + this.width &&
+                mouseX >= this.x + this.width - SCROLL_BAR_WIDTH && mouseX <= this.x + this.width &&
                 mouseY >= this.y + 4 && mouseY <= this.y + this.height - 4;
     }
 }
