@@ -11,6 +11,7 @@ import java.util.Map;
 
 public class HeadingTwoTagElement extends TextTagElement {
 
+    private static final int SCALE = 2;
     public HeadingTwoTagElement(Map<String, String> parameters) {
         super(parameters);
     }
@@ -18,15 +19,15 @@ public class HeadingTwoTagElement extends TextTagElement {
     @Override
     public void render(Theme theme, GuiGraphics graphics, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
         try (var ignored = new CloseablePoseStack(graphics)) {
-            graphics.pose().scale(2, 2, 2);
+            graphics.pose().scale(SCALE, SCALE, SCALE);
             graphics.pose().translate(-x / 2f, -y / 2f, 0);
             Component text = Component.nullToEmpty(this.content).copy().setStyle(this.getStyle());
             int height = 0;
-            for (FormattedCharSequence sequence : Minecraft.getInstance().font.split(text, (width - 10) / 2)) {
+            for (FormattedCharSequence sequence : Minecraft.getInstance().font.split(text, (width - 10) / SCALE)) {
                 theme.drawText(
                     graphics,
                     sequence,
-                    getXOffset(x + 2, width, 2, sequence), y + height,
+                    getXOffset(x + 2, width, SCALE, sequence), y + height,
                     this.color, false
                 );
                 height += Minecraft.getInstance().font.lineHeight + 1;
@@ -36,7 +37,7 @@ public class HeadingTwoTagElement extends TextTagElement {
 
     @Override
     public int getHeight(int width) {
-        int lines = Minecraft.getInstance().font.split(Component.nullToEmpty(this.content), (width - 10) / 2).size();
-        return lines * (Minecraft.getInstance().font.lineHeight + 1) * 2;
+        int lines = Minecraft.getInstance().font.split(Component.nullToEmpty(this.content), (width - 10) / SCALE).size();
+        return lines * (Minecraft.getInstance().font.lineHeight + 1) * SCALE;
     }
 }
