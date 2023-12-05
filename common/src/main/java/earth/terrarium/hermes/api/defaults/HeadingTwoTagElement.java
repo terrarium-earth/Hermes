@@ -27,7 +27,7 @@ public class HeadingTwoTagElement extends TextTagElement {
                 theme.drawText(
                     graphics,
                     sequence,
-                    getXOffset(x + 2, width, SCALE, sequence), y + height,
+                    getXOffset(x, width, SCALE, sequence), y + height,
                     this.color, false
                 );
                 height += Minecraft.getInstance().font.lineHeight + 1;
