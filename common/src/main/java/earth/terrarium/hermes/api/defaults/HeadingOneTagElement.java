@@ -29,7 +29,7 @@ public class HeadingOneTagElement extends TextTagElement {
                     graphics,
                     sequence,
                     getXOffset(x, width, SCALE, sequence), y + height,
-                    this.color, false
+                    this.color, this.shadowed
                 );
                 height += Minecraft.getInstance().font.lineHeight + 1;
             }
