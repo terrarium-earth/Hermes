@@ -28,7 +28,7 @@ public class HeadingOneTagElement extends TextTagElement {
                 theme.drawText(
                     graphics,
                     sequence,
-                    getXOffset(x, width, SCALE, sequence), y + height,
+                    getXOffset(x, width, sequence), y + height,
                     this.color, this.shadowed
                 );
                 height += Minecraft.getInstance().font.lineHeight + 1;
@@ -40,5 +40,11 @@ public class HeadingOneTagElement extends TextTagElement {
     public int getHeight(int width) {
         int lines = Minecraft.getInstance().font.split(Component.nullToEmpty(this.content), (width - 10) / SCALE).size();
         return lines * (Minecraft.getInstance().font.lineHeight + 1) * SCALE;
+    }
+
+    @Override
+    public int getXOffset(int x, int width, FormattedCharSequence text) {
+        int textWidth = SCALE * Minecraft.getInstance().font.width(text);
+        return Boolean.TRUE.equals(this.centered) ? x + (int) ((((width - textWidth) / 2f) / SCALE) + 0.5f) : x;
     }
 }

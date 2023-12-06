@@ -49,11 +49,6 @@ public abstract class TextTagElement implements TagElement {
         return Boolean.TRUE.equals(this.centered) ? x + (width - Minecraft.getInstance().font.width(text)) / 2 : x;
     }
 
-    public int getXOffset(int x, int width, int scale, FormattedCharSequence text) {
-        int textWidth = scale * Minecraft.getInstance().font.width(text);
-        return Boolean.TRUE.equals(this.centered) ? x + (int) ((((width - textWidth) / 2f) / scale) + 0.5f) : x;
-    }
-
     public Style getStyle() {
         return Style.EMPTY
                 .withBold(bold)
