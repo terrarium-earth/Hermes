@@ -17,11 +17,13 @@ public class EntityTagElement implements TagElement {
 
     private final EntityType<?> type;
     private final CompoundTag tag;
+    private final float scale;
     private Entity entity;
 
     public EntityTagElement(Map<String, String> parameters) {
         this.type = ElementParsingUtils.parseEntityType(parameters, "type", null);
         this.tag = ElementParsingUtils.parseTag(parameters, "tag", null);
+        this.scale = ElementParsingUtils.parseFloat(parameters, "scale", 1.0f);
     }
 
     @Override
@@ -33,14 +35,16 @@ public class EntityTagElement implements TagElement {
                     entity.load(tag);
                 }
             }
+            int renderHeight = (int) (25 * scale);
+            int offsetY = getHeight(width) - (int) (3 * scale);
             if (entity instanceof LivingEntity living) {
-                InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, x + (int) (width / 2f), y + 47, 25, x + (int) (width / 2f) - mouseX, y + 47 - mouseY, living);
+                InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, x + (int) (width / 2f), y + offsetY, renderHeight, x + (int) (width / 2f) - mouseX, y + 47 - mouseY, living);
             }
         }
     }
 
     @Override
     public int getHeight(int width) {
-        return 50;
+        return (int) (50 * scale);
     }
 }
