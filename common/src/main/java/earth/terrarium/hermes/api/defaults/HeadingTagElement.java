@@ -21,7 +21,7 @@ public abstract class HeadingTagElement extends TextTagElement {
     public void render(Theme theme, GuiGraphics graphics, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
         try (var ignored = new CloseablePoseStack(graphics)) {
             graphics.pose().scale(SCALE, SCALE, SCALE);
-            float translationFactor = 1 - (1f / SCALE);
+            float translationFactor = 1 + (1f / (SCALE - 1));
             graphics.pose().translate(-x / translationFactor, -y / translationFactor, 0);
             Component text = Component.nullToEmpty(this.content).copy().setStyle(this.getStyle());
             int height = 0;
