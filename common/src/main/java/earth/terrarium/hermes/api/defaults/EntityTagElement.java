@@ -17,11 +17,16 @@ public class EntityTagElement implements TagElement {
 
     private final EntityType<?> type;
     private final CompoundTag tag;
+    private final static int BLOCK_HEIGHT = 25;
+    private final float scale;
+    private float height;
     private Entity entity;
 
     public EntityTagElement(Map<String, String> parameters) {
         this.type = ElementParsingUtils.parseEntityType(parameters, "type", null);
         this.tag = ElementParsingUtils.parseTag(parameters, "tag", null);
+        this.scale = ElementParsingUtils.parseFloat(parameters, "scale", 1.0f);
+        this.height = ElementParsingUtils.parseFloat(parameters, "height", 0.0f);
     }
 
     @Override
@@ -34,13 +39,20 @@ public class EntityTagElement implements TagElement {
                 }
             }
             if (entity instanceof LivingEntity living) {
-                InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, x + (int) (width / 2f), y + 47, 25, x + (int) (width / 2f) - mouseX, y + 47 - mouseY, living);
+                if (height == 0.0f) {
+                    height = living.getBbHeight();
+                }
+                int blockScale = (int) ((BLOCK_HEIGHT * scale) + 0.5f);
+                int offsetX = x + (int) ((width / 2f) + 0.5f);
+                int offsetY = y + (int) ((height * blockScale) + 0.5f);
+                int eyeOffset = offsetY - (int) ((living.getEyeHeight() * blockScale) + 0.5f);
+                InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, offsetX, offsetY, blockScale, offsetX - mouseX, eyeOffset - mouseY, living);
             }
         }
     }
 
     @Override
     public int getHeight(int width) {
-        return 50;
+        return (int) ((height * BLOCK_HEIGHT * scale) + 3 + 0.5f);
     }
 }
