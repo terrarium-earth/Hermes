@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -11,6 +12,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,14 +28,20 @@ public class TagProvider {
 
     public List<TagElement> parse(String text) {
         try {
-            InputStream stream = new ByteArrayInputStream(("<root>" + text + "</root>").getBytes());
-            Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(stream);
-            Node root = document.getChildNodes().item(0);
+            InputStream stream = new ByteArrayInputStream(createRoot(text).getBytes(StandardCharsets.UTF_8));
+            InputSource in = new InputSource(stream);
+            in.setEncoding("UTF-8");
+            Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in);
+            Node root = document.getDocumentElement();
             root.normalize();
             return nodeToElements(root);
         } catch (ParserConfigurationException | SAXException | IOException e) {
             throw new TagParseException("Failed to parse tag text", e);
         }
+    }
+
+    private static String createRoot(String input) {
+        return "<?xml version=\"1.0\" encoding=\"UTF-8\"?><root>" + input + "</root>";
     }
 
     private List<TagElement> nodeToElements(Node node) {
