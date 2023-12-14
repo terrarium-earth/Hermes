@@ -55,9 +55,9 @@ public class EntityTagElement implements TagElement {
 
                 int offsetX = switch (align) {
                     // At default width and scale tag parameters, ((entityWidth * blockScale) == bbWidth), which gives x
-                    case LEFT -> (int) (x + (((entityWidth * blockScale) - bbWidth) / 2f) + 0.5f);
+                    case LEFT -> x + (int) ((((entityWidth * blockScale) - bbWidth) / 2f) + 0.5f);
+                    case CENTER -> x + (int) ((width / 2f) + 0.5f);
                     case RIGHT -> (int) ((x + width) - (entityWidth * blockScale) + 0.5f);
-                    default -> x + (int) ((width / 2f) + 0.5f);
                 };
 
                 int offsetY = y + (int) ((height * blockScale) + 0.5f);
