@@ -47,6 +47,11 @@ public abstract class HeadingTagElement extends TextTagElement {
     @Override
     public int getXOffset(int x, int width, FormattedCharSequence text) {
         int textWidth = scale * Minecraft.getInstance().font.width(text);
-        return Boolean.TRUE.equals(this.centered) ? x + (int) ((((width - textWidth) / 2f) / scale) + 0.5f) : x;
+        //return Boolean.TRUE.equals(this.centered) ? x + (int) ((((width - textWidth) / 2f) / scale) + 0.5f) : x;
+        return switch (align) {
+            case LEFT -> x;
+            case CENTER -> x + (int) ((((width - textWidth) / 2f) / scale) + 0.5f);
+            case RIGHT -> x + (int) (((width - textWidth) / scale) + 0.5f);
+        };
     }
 }
