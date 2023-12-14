@@ -3,7 +3,7 @@ package earth.terrarium.hermes.api.defaults;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import earth.terrarium.hermes.api.Alignable.Alignment;
+import earth.terrarium.hermes.api.Alignable;
 import earth.terrarium.hermes.api.TagElement;
 import earth.terrarium.hermes.api.themes.Theme;
 import earth.terrarium.hermes.utils.ElementParsingUtils;
@@ -17,7 +17,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.Map;
 
-public class ImageTagElement implements TagElement {
+public class ImageTagElement implements TagElement, Alignable {
 
     private final ResourceLocation image;
     private final int imageWidth;

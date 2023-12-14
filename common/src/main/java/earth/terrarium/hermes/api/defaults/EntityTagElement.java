@@ -1,6 +1,6 @@
 package earth.terrarium.hermes.api.defaults;
 
-import earth.terrarium.hermes.api.Alignable.Alignment;
+import earth.terrarium.hermes.api.Alignable;
 import earth.terrarium.hermes.api.TagElement;
 import earth.terrarium.hermes.api.themes.Theme;
 import earth.terrarium.hermes.utils.ElementParsingUtils;
@@ -14,7 +14,7 @@ import net.minecraft.world.entity.LivingEntity;
 
 import java.util.Map;
 
-public class EntityTagElement implements TagElement {
+public class EntityTagElement implements TagElement, Alignable {
 
     private final EntityType<?> type;
     private final CompoundTag tag;
