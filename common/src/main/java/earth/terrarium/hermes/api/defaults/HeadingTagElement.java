@@ -22,16 +22,18 @@ public abstract class HeadingTagElement extends TextTagElement {
     public void render(Theme theme, GuiGraphics graphics, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
         try (var ignored = new CloseablePoseStack(graphics)) {
             graphics.pose().scale(scale, scale, scale);
-            float translationFactor = 1 + (1f / (scale - 1));
-            graphics.pose().translate(-x / translationFactor, -y / translationFactor, 0);
+            float translationFactor = (float) (scale - 1) / scale;
+            graphics.pose().translate(-x * translationFactor, -y * translationFactor, 0);
             Component text = Component.nullToEmpty(this.content).copy().setStyle(this.getStyle());
             int height = 0;
             for (FormattedCharSequence sequence : Minecraft.getInstance().font.split(text, (width - 10) / scale)) {
                 theme.drawText(
                         graphics,
                         sequence,
-                        getXOffset(x, width, sequence), y + height,
-                        this.color, this.shadowed
+                        x + this.getOffsetForTextTag(width, sequence),
+                        y + height,
+                        this.color,
+                        this.shadowed
                 );
                 height += Minecraft.getInstance().font.lineHeight + 1;
             }
@@ -41,17 +43,13 @@ public abstract class HeadingTagElement extends TextTagElement {
     @Override
     public int getHeight(int width) {
         int lines = Minecraft.getInstance().font.split(Component.nullToEmpty(this.content), (width - 10) / scale).size();
-        return lines * (Minecraft.getInstance().font.lineHeight + 1) * scale;
+        return scale * lines * (Minecraft.getInstance().font.lineHeight + 1);
     }
 
     @Override
-    public int getXOffset(int x, int width, FormattedCharSequence text) {
-        int textWidth = scale * Minecraft.getInstance().font.width(text);
-        //return Boolean.TRUE.equals(this.centered) ? x + (int) ((((width - textWidth) / 2f) / scale) + 0.5f) : x;
-        return switch (align) {
-            case LEFT -> x;
-            case CENTER -> x + (int) ((((width - textWidth) / 2f) / scale) + 0.5f);
-            case RIGHT -> x + (int) (((width - textWidth) / scale) + 0.5f);
-        };
+    public int getOffsetForTextTag(int width, FormattedCharSequence text) {
+        int scaledTextWidth = scale * Minecraft.getInstance().font.width(text);
+        return getOffset(width, scaledTextWidth, align) / scale;
     }
+
 }
