@@ -20,9 +20,9 @@ public abstract class TextTagElement implements TagElement, Alignable {
     protected @Nullable Boolean strikethrough;
     protected @Nullable Boolean obfuscated;
     protected boolean centered;
+    protected Alignment align;
     protected boolean shadowed;
     protected Color color;
-    protected final Alignment align;
 
     protected TextTagElement(Map<String, String> parameters) {
         this.bold = parameters.containsKey("bold") ? Boolean.parseBoolean(parameters.get("bold")) : null;
@@ -49,12 +49,9 @@ public abstract class TextTagElement implements TagElement, Alignable {
         this.content = content;
     }
 
-    public int getXOffset(int x, int width, FormattedCharSequence text) {
-        return switch (align) {
-            case LEFT -> x;
-            case CENTER -> x + (int) (((width - Minecraft.getInstance().font.width(text)) / 2f) + 0.5f);
-            case RIGHT -> x + width - Minecraft.getInstance().font.width(text);
-        };
+    public int getOffsetForTextTag(int width, FormattedCharSequence text) {
+        int textWidth = Minecraft.getInstance().font.width(text);
+        return getOffset(width, textWidth, align);
     }
 
     public Style getStyle() {

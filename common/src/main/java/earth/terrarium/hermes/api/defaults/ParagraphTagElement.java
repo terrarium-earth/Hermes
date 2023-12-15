@@ -21,8 +21,11 @@ public class ParagraphTagElement extends TextTagElement {
         for (FormattedCharSequence sequence : Minecraft.getInstance().font.split(text, width - 5)) {
             theme.drawText(
                 graphics,
-                sequence, getXOffset(x, width, sequence), y + height,
-                this.color, this.shadowed
+                sequence,
+                x + getOffsetForTextTag(width, sequence),
+                y + height,
+                this.color,
+                this.shadowed
             );
             height += Minecraft.getInstance().font.lineHeight + 1;
         }

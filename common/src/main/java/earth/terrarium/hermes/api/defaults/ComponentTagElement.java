@@ -31,7 +31,10 @@ public class ComponentTagElement extends TextTagElement {
         for (FormattedCharSequence sequence : Minecraft.getInstance().font.split(renderText, width - 10)) {
             graphics.drawString(
                 Minecraft.getInstance().font,
-                sequence, getXOffset(x, width, sequence), y + height, this.color.getValue(),
+                sequence,
+                x + getOffsetForTextTag(width, sequence),
+                y + height,
+                this.color.getValue(),
                 this.shadowed
             );
             height += Minecraft.getInstance().font.lineHeight + 1;
