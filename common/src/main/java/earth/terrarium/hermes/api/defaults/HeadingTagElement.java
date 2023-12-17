@@ -48,8 +48,8 @@ public abstract class HeadingTagElement extends TextTagElement {
 
     @Override
     public int getOffsetForTextTag(int width, FormattedCharSequence text) {
-        int scaledTextWidth = scale * Minecraft.getInstance().font.width(text);
-        return getOffset(width, scaledTextWidth, align) / scale;
+        float scaledTextWidth = scale * (Minecraft.getInstance().font.width(text) - 1);
+        return Math.round((float) getOffset(width, scaledTextWidth, align) / scale);
     }
 
 }

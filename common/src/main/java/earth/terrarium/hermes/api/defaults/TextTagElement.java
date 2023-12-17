@@ -50,7 +50,7 @@ public abstract class TextTagElement implements TagElement, Alignable {
     }
 
     public int getOffsetForTextTag(int width, FormattedCharSequence text) {
-        int textWidth = Minecraft.getInstance().font.width(text);
+        int textWidth = Minecraft.getInstance().font.width(text) - 1;
         return getOffset(width, textWidth, align);
     }
 
