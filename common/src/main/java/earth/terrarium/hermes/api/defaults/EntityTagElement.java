@@ -18,20 +18,20 @@ public class EntityTagElement implements TagElement, Alignable {
 
     private final EntityType<?> type;
     private final CompoundTag tag;
-    private final static int BLOCK_HEIGHT = 25;
+    private final static int BLOCK_HEIGHT = 24;
     private final float scale;
-    private float height;
+    private float entityBlocksHigh;
     private final Alignment align;
-    private float entityWidth;
+    private float entityBlocksWide;
     private Entity entity;
 
     public EntityTagElement(Map<String, String> parameters) {
         this.type = ElementParsingUtils.parseEntityType(parameters, "type", null);
         this.tag = ElementParsingUtils.parseTag(parameters, "tag", null);
         this.scale = ElementParsingUtils.parseFloat(parameters, "scale", 1.0f);
-        this.height = ElementParsingUtils.parseFloat(parameters, "height", 0.0f);
+        this.entityBlocksHigh = ElementParsingUtils.parseFloat(parameters, "height", 0.0f);
         this.align = ElementParsingUtils.parseAlignment(parameters, "align", Alignment.CENTER);
-        this.entityWidth = ElementParsingUtils.parseFloat(parameters, "width", 0.0f);
+        this.entityBlocksWide = ElementParsingUtils.parseFloat(parameters, "width", 0.0f);
     }
 
     @Override
@@ -43,32 +43,40 @@ public class EntityTagElement implements TagElement, Alignable {
                     entity.load(tag);
                 }
             }
+
             if (entity instanceof LivingEntity living) {
-                if (height == 0.0f) {
-                    height = living.getBbHeight();
-                }
-                float bbWidth = living.getBbWidth();
-                if (entityWidth == 0.0f) {
-                    entityWidth = bbWidth;
-                }
-                int blockScale = (int) ((BLOCK_HEIGHT * scale) + 0.5f);
 
-                int offsetX = switch (align) {
-                    // At default width and scale tag parameters, ((entityWidth * blockScale) == bbWidth), which gives x
-                    case LEFT -> x + (int) ((((entityWidth * blockScale) - bbWidth) / 2f) + 0.5f);
-                    case CENTER -> x + (int) ((width / 2f) + 0.5f);
-                    case RIGHT -> (int) ((x + width) - (entityWidth * blockScale) + 0.5f);
-                };
+                if (entityBlocksHigh == 0.0f) {
+                    entityBlocksHigh = living.getBbHeight();
+                }
+                if (entityBlocksWide == 0.0f) {
+                    entityBlocksWide = living.getBbWidth();
+                }
 
-                int offsetY = y + (int) ((height * blockScale) + 0.5f);
-                int eyeOffset = offsetY - (int) ((living.getEyeHeight() * blockScale) + 0.5f);
-                InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, offsetX, offsetY, blockScale, offsetX - mouseX, eyeOffset - mouseY, living);
+                int blockScale = Math.round(scale * BLOCK_HEIGHT);
+                float entityHeight = blockScale * entityBlocksHigh;
+                float entityWidth = blockScale * entityBlocksWide;
+
+                int offsetX = this.getEntityOffset(width, entityWidth, align);
+                int offsetY = Math.round(entityHeight);
+                int eyeOffset = Math.round(entityHeight - (living.getEyeHeight() * blockScale));
+
+                InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, x + offsetX, y + offsetY + 1, blockScale, x + offsetX - mouseX, y + eyeOffset - mouseY, living);
             }
         }
     }
 
+    public int getEntityOffset(int areaWidth, float elementWidth, Alignment align) {
+        // Offset for alignment, with the assumption (x + result) will be the _center_ of the element
+        return switch (align) {
+            case LEFT -> Math.round(elementWidth / 2f);
+            case RIGHT -> Math.round(areaWidth - (elementWidth / 2f));
+            case CENTER -> Math.round(areaWidth / 2f);
+        };
+    }
+
     @Override
     public int getHeight(int width) {
-        return (int) ((height * BLOCK_HEIGHT * scale) + 3 + 0.5f);
+        return Math.round((entityBlocksHigh * scale * BLOCK_HEIGHT) + 2);
     }
 }
