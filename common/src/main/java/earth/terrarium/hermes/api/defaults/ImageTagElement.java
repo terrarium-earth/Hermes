@@ -50,15 +50,12 @@ public class ImageTagElement implements TagElement, Alignable {
             int fullWidth = this.imageWidth == -1 ? imageWidth : this.imageWidth;
             int fullHeight = this.imageHeight == -1 ? imageHeight : this.imageHeight;
 
-            int xOffset = switch (align) {
-                case LEFT -> (fullWidth / 2);
-                case CENTER -> (width - fullWidth) / 2;
-                case RIGHT -> (width - fullWidth);
-            };
+            int xOffset = getOffset(width, fullWidth, align);
 
             blit(graphics, x + xOffset, y + 2, fullWidth, fullHeight, texture.getId());
         } else {
-            int xOffset = (width - this.imageWidth) / 2;
+            int xOffset = getOffset(width, this.imageWidth, align);
+            //int xOffset = (width - this.imageWidth) / 2;
             graphics.blit(this.image, x + xOffset, y + 2, this.imageU, this.imageV, this.imageWidth, this.imageHeight, this.imageTextureWidth, this.imageTextureHeight);
         }
     }

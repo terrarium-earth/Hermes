@@ -33,14 +33,9 @@ public class ItemTagElement implements TagElement, Alignable {
     @Override
     public void render(Theme theme, GuiGraphics graphics, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
         try (var pose = new CloseablePoseStack(graphics)) {
-
-            int actualX = switch (align) {
-                case LEFT -> x;
-                case CENTER -> x + (int) (((width / 2f) - (8 * scale)) + 0.5f);
-                case RIGHT -> x + (int) (width - (16 * scale) + 0.5f);
-            };
-
-            pose.translate(actualX, y + 1, 0);
+            float scaleWidth = scale * 16;
+            int offsetX = getOffset(width, scaleWidth, align);
+            pose.translate(x + offsetX, y + 1, 0);
             pose.scale(scale, scale, 1.0F);
             graphics.renderFakeItem(output, 0, 0);
         }
