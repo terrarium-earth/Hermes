@@ -1,6 +1,6 @@
 package earth.terrarium.hermes.api.defaults.columns;
 
-import earth.terrarium.hermes.api.Alignable;
+import earth.terrarium.hermes.api.Alignment;
 import earth.terrarium.hermes.api.TagElement;
 import earth.terrarium.hermes.api.themes.Theme;
 import earth.terrarium.hermes.utils.ElementParsingUtils;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ColumnTagElement implements TagElement, Alignable {
+public class ColumnTagElement implements TagElement {
 
     protected List<TagElement> children = new ArrayList<>();
     protected Alignment vAlign;

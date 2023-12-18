@@ -3,7 +3,7 @@ package earth.terrarium.hermes.api.defaults;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import earth.terrarium.hermes.api.Alignable;
+import earth.terrarium.hermes.api.Alignment;
 import earth.terrarium.hermes.api.TagElement;
 import earth.terrarium.hermes.api.themes.Theme;
 import earth.terrarium.hermes.utils.ElementParsingUtils;
@@ -17,7 +17,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.Map;
 
-public class ImageTagElement implements TagElement, Alignable {
+public class ImageTagElement implements TagElement {
 
     private final ResourceLocation image;
     private final int imageWidth;
@@ -50,12 +50,11 @@ public class ImageTagElement implements TagElement, Alignable {
             int fullWidth = this.imageWidth == -1 ? imageWidth : this.imageWidth;
             int fullHeight = this.imageHeight == -1 ? imageHeight : this.imageHeight;
 
-            int xOffset = getOffset(width, fullWidth, align);
+            int xOffset = Alignment.getOffset(width, fullWidth, align);
 
             blit(graphics, x + xOffset, y + 2, fullWidth, fullHeight, texture.getId());
         } else {
-            int xOffset = getOffset(width, this.imageWidth, align);
-            //int xOffset = (width - this.imageWidth) / 2;
+            int xOffset = Alignment.getOffset(width, this.imageWidth, align);
             graphics.blit(this.image, x + xOffset, y + 2, this.imageU, this.imageV, this.imageWidth, this.imageHeight, this.imageTextureWidth, this.imageTextureHeight);
         }
     }

@@ -1,6 +1,7 @@
 package earth.terrarium.hermes.api.defaults;
 
 import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
+import earth.terrarium.hermes.api.Alignment;
 import earth.terrarium.hermes.api.themes.Theme;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -49,7 +50,7 @@ public abstract class HeadingTagElement extends TextTagElement {
     @Override
     public int getOffsetForTextTag(int width, FormattedCharSequence text) {
         float scaledTextWidth = scale * (Minecraft.getInstance().font.width(text) - 1);
-        return Math.round((float) getOffset(width, scaledTextWidth, align) / scale);
+        return Math.round((float) Alignment.getOffset(width, scaledTextWidth, align) / scale);
     }
 
 }

@@ -1,7 +1,7 @@
 package earth.terrarium.hermes.utils;
 
 import com.teamresourceful.resourcefullib.common.color.Color;
-import earth.terrarium.hermes.api.Alignable;
+import earth.terrarium.hermes.api.Alignment;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
@@ -12,7 +12,7 @@ import net.minecraft.world.item.Item;
 import java.util.Locale;
 import java.util.Map;
 
-public final class ElementParsingUtils implements Alignable {
+public final class ElementParsingUtils {
 
     public static ResourceLocation parseResourceLocation(Map<String, String> parameters, String key, ResourceLocation defaultValue) {
         if (parameters.containsKey(key)) {
@@ -105,7 +105,7 @@ public final class ElementParsingUtils implements Alignable {
     public static Alignment parseAlignment(Map<String, String> parameters, String key, Alignment defaultValue) {
         if (parameters.containsKey(key)) {
             try {
-                return Alignable.alignmentFromString(parameters.get(key).toUpperCase(Locale.ROOT));
+                return Alignment.fromString(parameters.get(key).toUpperCase(Locale.ROOT));
             } catch (Exception e) {
                 return defaultValue;
             }

@@ -1,7 +1,7 @@
 package earth.terrarium.hermes.api.defaults;
 
 import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
-import earth.terrarium.hermes.api.Alignable;
+import earth.terrarium.hermes.api.Alignment;
 import earth.terrarium.hermes.api.TagElement;
 import earth.terrarium.hermes.api.themes.Theme;
 import earth.terrarium.hermes.utils.ElementParsingUtils;
@@ -14,7 +14,7 @@ import net.minecraft.world.item.Items;
 
 import java.util.Map;
 
-public class ItemTagElement implements TagElement, Alignable {
+public class ItemTagElement implements TagElement {
 
     protected final ItemStack output;
     protected final float scale;
@@ -34,7 +34,7 @@ public class ItemTagElement implements TagElement, Alignable {
     public void render(Theme theme, GuiGraphics graphics, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
         try (var pose = new CloseablePoseStack(graphics)) {
             float scaleWidth = scale * 16;
-            int offsetX = getOffset(width, scaleWidth, align);
+            int offsetX = Alignment.getOffset(width, scaleWidth, align);
             pose.translate(x + offsetX, y + 1, 0);
             pose.scale(scale, scale, 1.0F);
             graphics.renderFakeItem(output, 0, 0);

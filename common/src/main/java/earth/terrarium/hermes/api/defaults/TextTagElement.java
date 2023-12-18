@@ -1,7 +1,7 @@
 package earth.terrarium.hermes.api.defaults;
 
 import com.teamresourceful.resourcefullib.common.color.Color;
-import earth.terrarium.hermes.api.Alignable;
+import earth.terrarium.hermes.api.Alignment;
 import earth.terrarium.hermes.api.TagElement;
 import earth.terrarium.hermes.utils.ElementParsingUtils;
 import net.minecraft.client.Minecraft;
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
-public abstract class TextTagElement implements TagElement, Alignable {
+public abstract class TextTagElement implements TagElement {
 
     protected String content = "";
     protected @Nullable Boolean bold;
@@ -55,7 +55,7 @@ public abstract class TextTagElement implements TagElement, Alignable {
 
     public int getOffsetForTextTag(int width, FormattedCharSequence text) {
         int textWidth = Minecraft.getInstance().font.width(text) - 1;
-        return getOffset(width, textWidth, align);
+        return Alignment.getOffset(width, textWidth, align);
     }
 
     public Style getStyle() {
