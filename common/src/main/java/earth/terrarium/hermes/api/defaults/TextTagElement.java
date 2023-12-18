@@ -1,7 +1,9 @@
 package earth.terrarium.hermes.api.defaults;
 
 import com.teamresourceful.resourcefullib.common.color.Color;
+import earth.terrarium.hermes.api.Alignment;
 import earth.terrarium.hermes.api.TagElement;
+import earth.terrarium.hermes.utils.ElementParsingUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.FormattedCharSequence;
@@ -17,7 +19,8 @@ public abstract class TextTagElement implements TagElement {
     protected @Nullable Boolean underline;
     protected @Nullable Boolean strikethrough;
     protected @Nullable Boolean obfuscated;
-    protected boolean centered;
+    @Deprecated protected boolean centered;
+    protected Alignment align;
     protected boolean shadowed;
     protected Color color;
 
@@ -27,8 +30,10 @@ public abstract class TextTagElement implements TagElement {
         this.underline = parameters.containsKey("underline") ? Boolean.parseBoolean(parameters.get("underline")) : null;
         this.strikethrough = parameters.containsKey("strikethrough") ? Boolean.parseBoolean(parameters.get("strikethrough")) : null;
         this.obfuscated = parameters.containsKey("obfuscated") ? Boolean.parseBoolean(parameters.get("obfuscated")) : null;
+        // 'centered' is DEPRECATED
         this.centered = parameters.containsKey("centered") && Boolean.parseBoolean(parameters.get("centered"));
         this.shadowed = parameters.containsKey("shadowed") && Boolean.parseBoolean(parameters.get("shadowed"));
+        this.align = ElementParsingUtils.parseAlignment(parameters, "align", Alignment.MIN);
         if (parameters.containsKey("color")) {
             try {
                 this.color = Color.parse(parameters.get("color"));
@@ -38,6 +43,10 @@ public abstract class TextTagElement implements TagElement {
         } else {
             this.color = Color.DEFAULT;
         }
+        // 'centered' is now DEPRECATED; for now, 'centered="true"' parameter over-rides the align parameter
+        if (this.centered) {
+            align = Alignment.MIDDLE;
+        }
     }
 
     @Override
@@ -45,8 +54,9 @@ public abstract class TextTagElement implements TagElement {
         this.content = content;
     }
 
-    public int getXOffset(int x, int width, FormattedCharSequence text) {
-        return Boolean.TRUE.equals(this.centered) ? x + (width - Minecraft.getInstance().font.width(text)) / 2 : x;
+    public int getOffsetForTextTag(int width, FormattedCharSequence text) {
+        int textWidth = Minecraft.getInstance().font.width(text) - 1;
+        return Alignment.getOffset(width, textWidth, align);
     }
 
     public Style getStyle() {

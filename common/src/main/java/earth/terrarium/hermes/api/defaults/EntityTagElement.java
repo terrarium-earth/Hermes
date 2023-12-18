@@ -1,5 +1,6 @@
 package earth.terrarium.hermes.api.defaults;
 
+import earth.terrarium.hermes.api.Alignment;
 import earth.terrarium.hermes.api.TagElement;
 import earth.terrarium.hermes.api.themes.Theme;
 import earth.terrarium.hermes.utils.ElementParsingUtils;
@@ -17,16 +18,20 @@ public class EntityTagElement implements TagElement {
 
     private final EntityType<?> type;
     private final CompoundTag tag;
-    private final static int BLOCK_HEIGHT = 25;
+    private final static int BLOCK_HEIGHT = 24;
     private final float scale;
-    private float height;
+    private float entityBlocksHigh;
+    private final Alignment align;
+    private float entityBlocksWide;
     private Entity entity;
 
     public EntityTagElement(Map<String, String> parameters) {
         this.type = ElementParsingUtils.parseEntityType(parameters, "type", null);
         this.tag = ElementParsingUtils.parseTag(parameters, "tag", null);
         this.scale = ElementParsingUtils.parseFloat(parameters, "scale", 1.0f);
-        this.height = ElementParsingUtils.parseFloat(parameters, "height", 0.0f);
+        this.entityBlocksHigh = ElementParsingUtils.parseFloat(parameters, "height", 0.0f);
+        this.align = ElementParsingUtils.parseAlignment(parameters, "align", Alignment.MIDDLE);
+        this.entityBlocksWide = ElementParsingUtils.parseFloat(parameters, "width", 0.0f);
     }
 
     @Override
@@ -38,21 +43,31 @@ public class EntityTagElement implements TagElement {
                     entity.load(tag);
                 }
             }
+
             if (entity instanceof LivingEntity living) {
-                if (height == 0.0f) {
-                    height = living.getBbHeight();
+
+                if (entityBlocksHigh == 0.0f) {
+                    entityBlocksHigh = living.getBbHeight();
                 }
-                int blockScale = (int) ((BLOCK_HEIGHT * scale) + 0.5f);
-                int offsetX = x + (int) ((width / 2f) + 0.5f);
-                int offsetY = y + (int) ((height * blockScale) + 0.5f);
-                int eyeOffset = offsetY - (int) ((living.getEyeHeight() * blockScale) + 0.5f);
-                InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, offsetX, offsetY, blockScale, offsetX - mouseX, eyeOffset - mouseY, living);
+                if (entityBlocksWide == 0.0f) {
+                    entityBlocksWide = living.getBbWidth();
+                }
+
+                int blockScale = Math.round(scale * BLOCK_HEIGHT);
+                float entityHeight = blockScale * entityBlocksHigh;
+                float entityWidth = blockScale * entityBlocksWide;
+
+                int offsetX = Alignment.getOffsetCenterDrawnElement(width, entityWidth, align);
+                int offsetY = Math.round(entityHeight);
+                int eyeOffset = Math.round(entityHeight - (living.getEyeHeight() * blockScale));
+
+                InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, x + offsetX, y + offsetY + 1, blockScale, x + offsetX - mouseX, y + eyeOffset - mouseY, living);
             }
         }
     }
 
     @Override
     public int getHeight(int width) {
-        return (int) ((height * BLOCK_HEIGHT * scale) + 3 + 0.5f);
+        return Math.round((entityBlocksHigh * scale * BLOCK_HEIGHT) + 2);
     }
 }

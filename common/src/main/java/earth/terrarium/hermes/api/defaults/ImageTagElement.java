@@ -3,6 +3,7 @@ package earth.terrarium.hermes.api.defaults;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import earth.terrarium.hermes.api.Alignment;
 import earth.terrarium.hermes.api.TagElement;
 import earth.terrarium.hermes.api.themes.Theme;
 import earth.terrarium.hermes.utils.ElementParsingUtils;
@@ -25,6 +26,7 @@ public class ImageTagElement implements TagElement {
     private final int imageV;
     private final int imageTextureWidth;
     private final int imageTextureHeight;
+    private final Alignment align;
 
     public ImageTagElement(Map<String, String> parameters) {
         this.image = ElementParsingUtils.parseResourceLocation(parameters, "src", new ResourceLocation("textures/missing_no.png"));
@@ -34,6 +36,7 @@ public class ImageTagElement implements TagElement {
         this.imageV = ElementParsingUtils.parseInt(parameters, "v", 0);
         this.imageTextureWidth = ElementParsingUtils.parseInt(parameters, "textureWidth", -1);
         this.imageTextureHeight = ElementParsingUtils.parseInt(parameters, "textureHeight", -1);
+        this.align = ElementParsingUtils.parseAlignment(parameters, "align", Alignment.MIDDLE);
     }
 
     @Override
@@ -46,11 +49,12 @@ public class ImageTagElement implements TagElement {
 
             int fullWidth = this.imageWidth == -1 ? imageWidth : this.imageWidth;
             int fullHeight = this.imageHeight == -1 ? imageHeight : this.imageHeight;
-            int xOffset = (width - fullWidth) / 2;
+
+            int xOffset = Alignment.getOffset(width, fullWidth, align);
 
             blit(graphics, x + xOffset, y + 2, fullWidth, fullHeight, texture.getId());
         } else {
-            int xOffset = (width - this.imageWidth) / 2;
+            int xOffset = Alignment.getOffset(width, this.imageWidth, align);
             graphics.blit(this.image, x + xOffset, y + 2, this.imageU, this.imageV, this.imageWidth, this.imageHeight, this.imageTextureWidth, this.imageTextureHeight);
         }
     }
