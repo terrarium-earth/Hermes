@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 
+import java.util.Locale;
 import java.util.Map;
 
 public final class ElementParsingUtils implements Alignable {
@@ -104,7 +105,7 @@ public final class ElementParsingUtils implements Alignable {
     public static Alignment parseAlignment(Map<String, String> parameters, String key, Alignment defaultValue) {
         if (parameters.containsKey(key)) {
             try {
-                return Alignable.alignmentFromString(parameters.get(key).toUpperCase());
+                return Alignable.alignmentFromString(parameters.get(key).toUpperCase(Locale.ROOT));
             } catch (Exception e) {
                 return defaultValue;
             }
