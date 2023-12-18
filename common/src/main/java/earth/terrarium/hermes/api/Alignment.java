@@ -25,4 +25,13 @@ package earth.terrarium.hermes.api;
         };
     }
 
+     public static int getOffsetCenterDrawnElement(int areaWidth, float elementWidth, Alignment align) {
+         // Offset for alignment, with the assumption (x + result) will be the _center_ of the element
+         return switch (align) {
+             case MIN -> Math.round(elementWidth / 2f);
+             case MAX -> Math.round(areaWidth - (elementWidth / 2f));
+             case MIDDLE -> Math.round(areaWidth / 2f);
+         };
+     }
+
 }

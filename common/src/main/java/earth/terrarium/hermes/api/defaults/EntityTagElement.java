@@ -57,22 +57,13 @@ public class EntityTagElement implements TagElement {
                 float entityHeight = blockScale * entityBlocksHigh;
                 float entityWidth = blockScale * entityBlocksWide;
 
-                int offsetX = this.getEntityOffset(width, entityWidth, align);
+                int offsetX = Alignment.getOffsetCenterDrawnElement(width, entityWidth, align);
                 int offsetY = Math.round(entityHeight);
                 int eyeOffset = Math.round(entityHeight - (living.getEyeHeight() * blockScale));
 
                 InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, x + offsetX, y + offsetY + 1, blockScale, x + offsetX - mouseX, y + eyeOffset - mouseY, living);
             }
         }
-    }
-
-    public int getEntityOffset(int areaWidth, float elementWidth, Alignment align) {
-        // Offset for alignment, with the assumption (x + result) will be the _center_ of the element
-        return switch (align) {
-            case MIN -> Math.round(elementWidth / 2f);
-            case MAX -> Math.round(areaWidth - (elementWidth / 2f));
-            case MIDDLE -> Math.round(areaWidth / 2f);
-        };
     }
 
     @Override
