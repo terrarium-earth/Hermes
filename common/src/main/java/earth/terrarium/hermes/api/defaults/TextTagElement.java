@@ -19,7 +19,7 @@ public abstract class TextTagElement implements TagElement {
     protected @Nullable Boolean underline;
     protected @Nullable Boolean strikethrough;
     protected @Nullable Boolean obfuscated;
-    protected boolean centered;
+    @Deprecated protected boolean centered;
     protected Alignment align;
     protected boolean shadowed;
     protected Color color;
@@ -30,6 +30,7 @@ public abstract class TextTagElement implements TagElement {
         this.underline = parameters.containsKey("underline") ? Boolean.parseBoolean(parameters.get("underline")) : null;
         this.strikethrough = parameters.containsKey("strikethrough") ? Boolean.parseBoolean(parameters.get("strikethrough")) : null;
         this.obfuscated = parameters.containsKey("obfuscated") ? Boolean.parseBoolean(parameters.get("obfuscated")) : null;
+        // 'centered' is DEPRECATED
         this.centered = parameters.containsKey("centered") && Boolean.parseBoolean(parameters.get("centered"));
         this.shadowed = parameters.containsKey("shadowed") && Boolean.parseBoolean(parameters.get("shadowed"));
         this.align = ElementParsingUtils.parseAlignment(parameters, "align", Alignment.MIN);
@@ -42,7 +43,7 @@ public abstract class TextTagElement implements TagElement {
         } else {
             this.color = Color.DEFAULT;
         }
-        // 'centered="true"' parameter over-rides the align parameter
+        // 'centered' is now DEPRECATED; for now, 'centered="true"' parameter over-rides the align parameter
         if (this.centered) {
             align = Alignment.MIDDLE;
         }

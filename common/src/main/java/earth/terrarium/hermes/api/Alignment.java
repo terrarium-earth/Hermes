@@ -1,13 +1,14 @@
 package earth.terrarium.hermes.api;
 
-//public interface Alignable {
+import java.util.Locale;
 
- public enum Alignment {
+public enum Alignment {
         MIN,
         MIDDLE,
         MAX;
 
-    public static Alignment fromString(String name) {
+    public static Alignment fromString(String input) {
+        String name = input.toUpperCase(Locale.ROOT);
         return switch (name) {
             case "LEFT", "TOP" -> Alignment.MIN;
             case "RIGHT", "BOTTOM" -> Alignment.MAX;
