@@ -42,6 +42,10 @@ public abstract class TextTagElement implements TagElement, Alignable {
         } else {
             this.color = Color.DEFAULT;
         }
+        // 'centered="true"' parameter over-rides the align parameter
+        if (this.centered) {
+            align = Alignment.MIDDLE;
+        }
     }
 
     @Override
