@@ -32,7 +32,7 @@ public abstract class TextTagElement implements TagElement, Alignable {
         this.obfuscated = parameters.containsKey("obfuscated") ? Boolean.parseBoolean(parameters.get("obfuscated")) : null;
         this.centered = parameters.containsKey("centered") && Boolean.parseBoolean(parameters.get("centered"));
         this.shadowed = parameters.containsKey("shadowed") && Boolean.parseBoolean(parameters.get("shadowed"));
-        this.align = ElementParsingUtils.parseAlignment(parameters, "align", Alignment.LEFT);
+        this.align = ElementParsingUtils.parseAlignment(parameters, "align", Alignment.MIN);
         if (parameters.containsKey("color")) {
             try {
                 this.color = Color.parse(parameters.get("color"));

@@ -27,7 +27,7 @@ public class ItemTagElement implements TagElement, Alignable {
         if (tag != null) stack.setTag(tag);
         this.output = stack;
         this.scale = ElementParsingUtils.parseFloat(parameters, "scale", 1.0F);
-        this.align = ElementParsingUtils.parseAlignment(parameters, "align", Alignment.CENTER);
+        this.align = ElementParsingUtils.parseAlignment(parameters, "align", Alignment.MIDDLE);
     }
 
     @Override

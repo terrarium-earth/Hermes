@@ -38,7 +38,7 @@ public class ColumnsTagElement implements TagElement, Alignable {
             int columnWidth = this.widthFunction.apply(index, width);
             int offsetY = 0;
             if (element instanceof ColumnTagElement column) {
-                offsetY = getOffsetV(areaHeight, element.getHeight(columnWidth), column.vAlign);
+                offsetY = getOffset(areaHeight, element.getHeight(columnWidth), column.vAlign);
             }
             element.render(theme, graphics, x, y + offsetY, columnWidth, mouseX, mouseY, hovered, partialTicks);
             index++;

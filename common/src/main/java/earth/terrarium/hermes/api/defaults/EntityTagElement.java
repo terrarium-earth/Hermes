@@ -30,7 +30,7 @@ public class EntityTagElement implements TagElement, Alignable {
         this.tag = ElementParsingUtils.parseTag(parameters, "tag", null);
         this.scale = ElementParsingUtils.parseFloat(parameters, "scale", 1.0f);
         this.entityBlocksHigh = ElementParsingUtils.parseFloat(parameters, "height", 0.0f);
-        this.align = ElementParsingUtils.parseAlignment(parameters, "align", Alignment.CENTER);
+        this.align = ElementParsingUtils.parseAlignment(parameters, "align", Alignment.MIDDLE);
         this.entityBlocksWide = ElementParsingUtils.parseFloat(parameters, "width", 0.0f);
     }
 
@@ -69,9 +69,9 @@ public class EntityTagElement implements TagElement, Alignable {
     public int getEntityOffset(int areaWidth, float elementWidth, Alignment align) {
         // Offset for alignment, with the assumption (x + result) will be the _center_ of the element
         return switch (align) {
-            case LEFT -> Math.round(elementWidth / 2f);
-            case RIGHT -> Math.round(areaWidth - (elementWidth / 2f));
-            case CENTER -> Math.round(areaWidth / 2f);
+            case MIN -> Math.round(elementWidth / 2f);
+            case MAX -> Math.round(areaWidth - (elementWidth / 2f));
+            case MIDDLE -> Math.round(areaWidth / 2f);
         };
     }
 

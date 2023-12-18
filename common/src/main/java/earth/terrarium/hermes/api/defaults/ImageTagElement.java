@@ -36,7 +36,7 @@ public class ImageTagElement implements TagElement, Alignable {
         this.imageV = ElementParsingUtils.parseInt(parameters, "v", 0);
         this.imageTextureWidth = ElementParsingUtils.parseInt(parameters, "textureWidth", -1);
         this.imageTextureHeight = ElementParsingUtils.parseInt(parameters, "textureHeight", -1);
-        this.align = ElementParsingUtils.parseAlignment(parameters, "align", Alignment.CENTER);
+        this.align = ElementParsingUtils.parseAlignment(parameters, "align", Alignment.MIDDLE);
     }
 
     @Override

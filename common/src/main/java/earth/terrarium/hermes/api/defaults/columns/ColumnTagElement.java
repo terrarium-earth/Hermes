@@ -14,10 +14,10 @@ import java.util.Map;
 public class ColumnTagElement implements TagElement, Alignable {
 
     protected List<TagElement> children = new ArrayList<>();
-    protected vAlignment vAlign;
+    protected Alignment vAlign;
 
     public ColumnTagElement(Map<String, String> parameters) {
-        this.vAlign = ElementParsingUtils.parseAlignmentV(parameters, "valign", vAlignment.MIDDLE);
+        this.vAlign = ElementParsingUtils.parseAlignment(parameters, "valign", Alignment.MIDDLE);
     }
 
     @Override
