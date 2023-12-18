@@ -112,4 +112,15 @@ public final class ElementParsingUtils implements Alignable {
         return defaultValue;
     }
 
+    public static vAlignment parseAlignmentV(Map<String, String> parameters, String key, vAlignment defaultValue) {
+        if (parameters.containsKey(key)) {
+            try {
+                return vAlignment.valueOf(parameters.get(key).toUpperCase());
+            } catch (Exception e) {
+                return defaultValue;
+            }
+        }
+        return defaultValue;
+    }
+
 }

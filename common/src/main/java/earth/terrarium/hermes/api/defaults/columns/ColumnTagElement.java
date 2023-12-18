@@ -1,7 +1,9 @@
 package earth.terrarium.hermes.api.defaults.columns;
 
+import earth.terrarium.hermes.api.Alignable;
 import earth.terrarium.hermes.api.TagElement;
 import earth.terrarium.hermes.api.themes.Theme;
+import earth.terrarium.hermes.utils.ElementParsingUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,11 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ColumnTagElement implements TagElement {
+public class ColumnTagElement implements TagElement, Alignable {
 
     protected List<TagElement> children = new ArrayList<>();
+    protected vAlignment vAlign;
 
-    public ColumnTagElement(Map<String, String> ignored) {}
+    public ColumnTagElement(Map<String, String> parameters) {
+        this.vAlign = ElementParsingUtils.parseAlignmentV(parameters, "valign", vAlignment.MIDDLE);
+    }
 
     @Override
     public void render(Theme theme, GuiGraphics graphics, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
