@@ -10,6 +10,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 
 import java.util.Map;
+import java.util.function.Function;
 
 public final class ElementParsingUtils {
 
@@ -110,6 +111,14 @@ public final class ElementParsingUtils {
             }
         }
         return defaultValue;
+    }
+
+    public static <R> R tryParse(String input, Function<String, R> parseFunc, R defaultResult) {
+        try {
+            return parseFunc.apply(input);
+        } catch (Exception e) {
+            return defaultResult;
+        }
     }
 
 }
