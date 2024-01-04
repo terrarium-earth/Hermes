@@ -17,9 +17,10 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.Map;
 
-public class ImageTagElement implements TagElement {
+public class ImageTagElement extends FillAndBorderElement implements TagElement {
 
     private final ResourceLocation image;
+    private final AbstractTexture texture;
     private final int imageWidth;
     private final int imageHeight;
     private final int imageU;
@@ -29,9 +30,15 @@ public class ImageTagElement implements TagElement {
     private final Alignment align;
 
     public ImageTagElement(Map<String, String> parameters) {
+        super(parameters);
+
         this.image = ElementParsingUtils.parseResourceLocation(parameters, "src", new ResourceLocation("textures/missing_no.png"));
-        this.imageWidth = ElementParsingUtils.parseInt(parameters, "width", -1);
-        this.imageHeight = ElementParsingUtils.parseInt(parameters, "height", -1);
+        this.texture = Minecraft.getInstance().getTextureManager().getTexture(this.image);
+        GlStateManager._bindTexture(texture.getId());
+        int imageWidthGL = GlStateManager._getTexLevelParameter(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH);
+        int imageHeightGL = GlStateManager._getTexLevelParameter(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT);
+        this.imageWidth = ElementParsingUtils.parseInt(parameters, "width", imageWidthGL);
+        this.imageHeight = ElementParsingUtils.parseInt(parameters, "height", imageHeightGL);
         this.imageU = ElementParsingUtils.parseInt(parameters, "u", 0);
         this.imageV = ElementParsingUtils.parseInt(parameters, "v", 0);
         this.imageTextureWidth = ElementParsingUtils.parseInt(parameters, "textureWidth", -1);
@@ -41,26 +48,23 @@ public class ImageTagElement implements TagElement {
 
     @Override
     public void render(Theme theme, GuiGraphics graphics, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
+        int xOffset = Alignment.getOffset(width, this.imageWidth, align);
+        int yOffset = verticalSpacing;
+        drawBackground(graphics, x + xOffset, y + yOffset, imageWidth, imageHeight);
+
         if (this.imageTextureWidth == -1 && this.imageTextureHeight == -1) {
-            AbstractTexture texture = Minecraft.getInstance().getTextureManager().getTexture(this.image);
-            GlStateManager._bindTexture(texture.getId());
-            int imageWidth = GlStateManager._getTexLevelParameter(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH);
-            int imageHeight = GlStateManager._getTexLevelParameter(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT);
-
-            int fullWidth = this.imageWidth == -1 ? imageWidth : this.imageWidth;
-            int fullHeight = this.imageHeight == -1 ? imageHeight : this.imageHeight;
-
-            int xOffset = Alignment.getOffset(width, fullWidth, align);
-
-            blit(graphics, x + xOffset, y + 2, fullWidth, fullHeight, texture.getId());
+            blit(graphics, x + xOffset, y + yOffset, imageWidth, imageHeight);
         } else {
-            int xOffset = Alignment.getOffset(width, this.imageWidth, align);
-            graphics.blit(this.image, x + xOffset, y + 2, this.imageU, this.imageV, this.imageWidth, this.imageHeight, this.imageTextureWidth, this.imageTextureHeight);
+            graphics.blit(this.image,
+                    x + xOffset, y + yOffset,
+                    this.imageU, this.imageV,
+                    this.imageWidth, this.imageHeight,
+                    imageTextureWidth, imageTextureHeight);
         }
     }
 
-    private static void blit(GuiGraphics graphics, int x, int y, int width, int height, int texture) {
-        RenderSystem.setShaderTexture(0, texture);
+    private void blit(GuiGraphics graphics, int x, int y, int width, int height) {
+        RenderSystem.setShaderTexture(0, texture.getId());
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         Matrix4f matrix4f = graphics.pose().last().pose();
         BufferBuilder bufferBuilder = Tesselator.getInstance().getBuilder();
@@ -75,6 +79,6 @@ public class ImageTagElement implements TagElement {
 
     @Override
     public int getHeight(int width) {
-        return this.imageHeight + 4;
+        return this.imageHeight + (2 * verticalSpacing);
     }
 }
