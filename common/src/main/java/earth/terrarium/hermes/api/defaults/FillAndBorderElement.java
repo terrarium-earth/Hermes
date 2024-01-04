@@ -11,16 +11,19 @@ import java.util.function.IntFunction;
 
 public abstract class FillAndBorderElement implements TagElement {
 
-    /* Only for background fills, not layout—though terms are borrowed from CSS's Box Model.
+    /* For background fills and borders.
+    Though terms are borrowed from CSS's Box Model, does not change Hermes' layout model.
+    Does allow inheriting elements to be set taller and/or wider.
     The area behind the element, plus any padding, may be filled with background color
     A border may surround the padding area, with its own width and color. */
 
     protected int backgroundPadding = 0;
     protected Color backgroundColor = ConstantColors.gray;
     protected boolean hasBackground = false;
-    protected int borderWidth = 1;
+    protected int borderWidth = 0;
     protected Color borderColor = ConstantColors.whitesmoke;
     protected boolean hasBorder = false;
+    protected int verticalSpacing;
 
     protected FillAndBorderElement(Map<String, String> parameters) {
         if (parameters.containsKey("background")) {
@@ -35,6 +38,7 @@ public abstract class FillAndBorderElement implements TagElement {
         }
         if (parameters.containsKey("border")) {
             this.hasBorder = true;
+            this.borderWidth = 1; // Set a default value when the tag has a border attribute.
             String[] borderSpecs = parameters.get("border").split(" ");
             switch (borderSpecs.length) {
                 case 2:
@@ -43,6 +47,7 @@ public abstract class FillAndBorderElement implements TagElement {
                     this.borderWidth = ElementParsingUtils.tryParse(borderSpecs[0], Integer::parseInt, borderWidth);
             }
         }
+        this.verticalSpacing = Math.max(1, (backgroundPadding + borderWidth));
     }
 
     public void drawBackground(GuiGraphics graphics, int x, int y, float width, float height) {
