@@ -14,13 +14,14 @@ import net.minecraft.world.item.Items;
 
 import java.util.Map;
 
-public class ItemTagElement implements TagElement {
+public class ItemTagElement extends FillAndBorderElement implements TagElement {
 
     protected final ItemStack output;
     protected final float scale;
     protected final Alignment align;
 
     public ItemTagElement(Map<String, String> parameters) {
+        super(parameters);
         Item item = ElementParsingUtils.parseItem(parameters, "id", Items.AIR);
         CompoundTag tag = ElementParsingUtils.parseTag(parameters, "tag", null);
         ItemStack stack = new ItemStack(item);
@@ -33,9 +34,11 @@ public class ItemTagElement implements TagElement {
     @Override
     public void render(Theme theme, GuiGraphics graphics, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
         try (var pose = new CloseablePoseStack(graphics)) {
-            float scaleWidth = scale * 16;
-            int offsetX = Alignment.getOffset(width, scaleWidth, align);
-            pose.translate(x + offsetX, y + 1, 0);
+            float scaleSize = scale * 16;
+            int offsetX = Alignment.getOffset(width, scaleSize, align);
+            final int offsetY = verticalSpacing;
+            drawBackground(graphics, x + offsetX, y + offsetY, scaleSize, scaleSize);
+            pose.translate(x + offsetX, y + offsetY, 0);
             pose.scale(scale, scale, 1.0F);
             graphics.renderFakeItem(output, 0, 0);
         }
@@ -43,6 +46,6 @@ public class ItemTagElement implements TagElement {
 
     @Override
     public int getHeight(int width) {
-        return Mth.ceil(18 * scale);
+        return Mth.ceil(16 * scale) + (2 * verticalSpacing);
     }
 }
