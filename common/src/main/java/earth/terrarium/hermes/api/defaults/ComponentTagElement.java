@@ -24,10 +24,9 @@ public class ComponentTagElement extends TextTagElement {
 
     @Override
     public void render(Theme theme, GuiGraphics graphics, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
-
         Component renderText = text.copy().setStyle(this.getStyle().applyTo(text.getStyle()));
         var font = Minecraft.getInstance().font;
-        var lines = font.split(renderText, width - 10);
+        var lines = font.split(renderText, width - (10 + (2 * hSpacing)));
 
         var contentWidth = lines.stream().mapToInt((line) -> font.width(line) - 1).max().orElse(0);
         // from top of top row capitals, to bottom of bottom row letters with descenders (eg: "y")
@@ -66,7 +65,7 @@ public class ComponentTagElement extends TextTagElement {
 
     @Override
     public int getHeight(int width) {
-        int lines = Minecraft.getInstance().font.split(this.text, width - 10).size();
+        int lines = Minecraft.getInstance().font.split(this.text, width - (10 + (2 * hSpacing))).size();
         int lineHeight = Minecraft.getInstance().font.lineHeight;
         return ((lines * lineHeight) + (lines - 2)) + (2 * vSpacing); // element height + vertical spacing
     }

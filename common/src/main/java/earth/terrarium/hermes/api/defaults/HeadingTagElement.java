@@ -55,7 +55,7 @@ public abstract class HeadingTagElement extends TextTagElement {
 
     @Override
     public int getHeight(int width) {
-        int lines = Minecraft.getInstance().font.split(Component.nullToEmpty(this.content), (width - 10) / scale).size();
+        int lines = Minecraft.getInstance().font.split(Component.nullToEmpty(this.content), (width - (10 + (2 * hSpacing))) / scale).size();
         int lineHeight = Minecraft.getInstance().font.lineHeight;
         // scale * (element height + vertical spacing)
         return scale * (((lines * lineHeight) + (lines - 2)) + (2 * vSpacing));

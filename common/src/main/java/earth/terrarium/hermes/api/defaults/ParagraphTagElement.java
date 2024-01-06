@@ -17,7 +17,7 @@ public class ParagraphTagElement extends TextTagElement {
 
         Component text = Component.nullToEmpty(this.content).copy().setStyle(this.getStyle());
         var font = Minecraft.getInstance().font;
-        var lines = font.split(text, width - 5);
+        var lines = font.split(text, width - (5 + (2 * hSpacing)));
 
         var contentWidth = lines.stream().mapToInt((line) -> font.width(line) - 1).max().orElse(0);
         // from top of top row capitals, to bottom of bottom row letters with descenders (eg: "y")
@@ -42,7 +42,7 @@ public class ParagraphTagElement extends TextTagElement {
 
     @Override
     public int getHeight(int width) {
-        int lines = Minecraft.getInstance().font.split(Component.nullToEmpty(this.content), width - 5).size();
+        int lines = Minecraft.getInstance().font.split(Component.nullToEmpty(this.content), width - (5 + (2 * hSpacing))).size();
         int lineHeight = Minecraft.getInstance().font.lineHeight;
         return ((lines * lineHeight) + (lines - 2)) + (2 * vSpacing); // element height + vertical spacing
     }
