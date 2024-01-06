@@ -54,13 +54,14 @@ public class TagProvider {
                     TagElement element = serializer.deserialize(mapAttributes(child.getAttributes()));
                     if (element != null) {
                         elements.add(element);
-                        int elementNodes = getLengthOfType(child, Node.ELEMENT_NODE);
-                        if (elementNodes > 0) {
-                            nodeToElements(child).forEach(element::addChild);
+                        if (hasChildOf(child, Node.ELEMENT_NODE)) {
+                            element.getChildTagProvider(this)
+                                .nodeToElements(child)
+                                .forEach(element::addChild);
                         } else {
                             String text = child.getTextContent();
                             if (StringUtils.isNotBlank(text)) {
-                                element.setContent(text);
+                                element.addText(text);
                             }
                         }
                     }
@@ -72,15 +73,14 @@ public class TagProvider {
         return elements;
     }
 
-    private int getLengthOfType(Node node, short type) {
-        int length = 0;
+    private boolean hasChildOf(Node node, short type) {
         for (int i = 0; i < node.getChildNodes().getLength(); i++) {
             Node child = node.getChildNodes().item(i);
-            if (child.getNodeType() == type) {
-                length += child.getTextContent().length();
+            if (child.getNodeType() == type && !child.getTextContent().isEmpty()) {
+                return true;
             }
         }
-        return length;
+        return false;
     }
 
     private Map<String, String> mapAttributes(NamedNodeMap map) {
