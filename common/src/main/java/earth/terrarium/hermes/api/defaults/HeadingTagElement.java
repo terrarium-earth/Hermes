@@ -8,6 +8,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 
+import java.util.Arrays;
 import java.util.Map;
 
 public abstract class HeadingTagElement extends TextTagElement {
@@ -25,18 +26,29 @@ public abstract class HeadingTagElement extends TextTagElement {
             graphics.pose().scale(scale, scale, scale);
             float translationFactor = (float) (scale - 1) / scale;
             graphics.pose().translate(-x * translationFactor, -y * translationFactor, 0);
+
             Component text = Component.nullToEmpty(this.content).copy().setStyle(this.getStyle());
-            int height = 0;
-            for (FormattedCharSequence sequence : Minecraft.getInstance().font.split(text, (width - 10) / scale)) {
+            var font = Minecraft.getInstance().font;
+            var lines = font.split(text, (width - (10 + (2 * hSpacing))) / scale);
+
+            var contentWidth = lines.stream().mapToInt((line) -> font.width(line) - 1).max().orElse(0);
+            // from top of top row capitals, to bottom of bottom row letters with descenders (eg: "y")
+            int contentHeight = (lines.size() * font.lineHeight) + (lines.size() - 2);
+            int[] lineOffsets = lines.stream().mapToInt((line) -> getOffsetForTextTag(width, line)).toArray();
+            int contentOffset = Arrays.stream(lineOffsets).min().orElse(width);
+
+            drawBackground(graphics, x + hSpacing + contentOffset, y + vSpacing, contentWidth, contentHeight);
+
+            int lineHeight = font.lineHeight;
+            for (int i = 0; i < lines.size(); i++) {
                 theme.drawText(
                         graphics,
-                        sequence,
-                        x + this.getOffsetForTextTag(width, sequence),
-                        y + height,
+                        lines.get(i),
+                        x + hSpacing + lineOffsets[i],
+                        y + vSpacing + (i * (lineHeight + 1)),
                         this.color,
                         this.shadowed
                 );
-                height += Minecraft.getInstance().font.lineHeight + 1;
             }
         }
     }
@@ -44,12 +56,15 @@ public abstract class HeadingTagElement extends TextTagElement {
     @Override
     public int getHeight(int width) {
         int lines = Minecraft.getInstance().font.split(Component.nullToEmpty(this.content), (width - 10) / scale).size();
-        return scale * lines * (Minecraft.getInstance().font.lineHeight + 1);
+        int lineHeight = Minecraft.getInstance().font.lineHeight;
+        // scale * (element height + vertical spacing)
+        return scale * (((lines * lineHeight) + (lines - 2)) + (2 * vSpacing));
     }
 
     @Override
     public int getOffsetForTextTag(int width, FormattedCharSequence text) {
-        float scaledTextWidth = scale * (Minecraft.getInstance().font.width(text) - 1);
+        int textWidth = ((Minecraft.getInstance().font.width(text) - 1) + (2 * hSpacing)); // -1 to trim trailing empty space
+        float scaledTextWidth = scale * textWidth;
         return Math.round((float) Alignment.getOffset(width, scaledTextWidth, align) / scale);
     }
 
