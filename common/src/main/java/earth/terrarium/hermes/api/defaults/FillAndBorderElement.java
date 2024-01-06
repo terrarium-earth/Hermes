@@ -23,7 +23,7 @@ public abstract class FillAndBorderElement implements TagElement {
     protected int borderWidth = 0;
     protected Color borderColor = ConstantColors.whitesmoke;
     protected boolean hasBorder = false;
-    protected int verticalSpacing;
+    protected int spacing; // 1 or (backgroundPadding + borderWidth)
 
     protected FillAndBorderElement(Map<String, String> parameters) {
         if (parameters.containsKey("background")) {
@@ -47,7 +47,7 @@ public abstract class FillAndBorderElement implements TagElement {
                     this.borderWidth = ElementParsingUtils.tryParse(borderSpecs[0], Integer::parseInt, borderWidth);
             }
         }
-        this.verticalSpacing = Math.max(1, (backgroundPadding + borderWidth));
+        this.spacing = Math.max(1, (backgroundPadding + borderWidth));
     }
 
     public void drawBackground(GuiGraphics graphics, int x, int y, float width, float height) {
