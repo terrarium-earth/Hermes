@@ -48,8 +48,8 @@ public class ImageTagElement extends FillAndBorderElement implements TagElement 
 
     @Override
     public void render(Theme theme, GuiGraphics graphics, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
-        int xOffset = spacing + Alignment.getOffset(width, this.imageWidth + (2 * spacing), align);
-        int yOffset = spacing;
+        int xOffset = hSpacing + Alignment.getOffset(width, this.imageWidth + (2 * hSpacing), align);
+        int yOffset = vSpacing;
         drawBackground(graphics, x + xOffset, y + yOffset, imageWidth, imageHeight);
 
         if (this.imageTextureWidth == -1 && this.imageTextureHeight == -1) {
@@ -79,6 +79,6 @@ public class ImageTagElement extends FillAndBorderElement implements TagElement 
 
     @Override
     public int getHeight(int width) {
-        return this.imageHeight + (2 * spacing);
+        return this.imageHeight + (2 * vSpacing);
     }
 }
