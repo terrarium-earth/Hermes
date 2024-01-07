@@ -52,9 +52,11 @@ public abstract class FillAndBorderElement implements TagElement {
         this.yMargin = Math.max(1, (backgroundPadding + borderWidth));
     }
 
-    public void drawFillAndBorder(GuiGraphics graphics, int x, int y, float width, float height) {
+    static int highPassAlpha(int color) {
+        return (color >> 24) != 0 ? color : color + (0xFF << 24);
+    };
 
-        IntFunction<Integer> no00Alpha = (c) -> (c >> 24) != 0 ? c : c + (0xFF << 24);
+    public void drawFillAndBorder(GuiGraphics graphics, int x, int y, float width, float height) {
 
         int xA = x - backgroundPadding;
         int yA = y - backgroundPadding;
@@ -62,10 +64,10 @@ public abstract class FillAndBorderElement implements TagElement {
         int yB = Math.round(y + height + backgroundPadding);
 
         if (hasBackground) {
-            graphics.fill(xA, yA, xB, yB, no00Alpha.apply(backgroundColor.getValue()));
+            graphics.fill(xA, yA, xB, yB, highPassAlpha(backgroundColor.getValue()));
         }
         if (hasBorder) {
-            int color = no00Alpha.apply(borderColor.getValue());
+            int color = highPassAlpha(borderColor.getValue());
 
             xA -= borderWidth; yA -= borderWidth;
             xB += borderWidth; yB += borderWidth;
