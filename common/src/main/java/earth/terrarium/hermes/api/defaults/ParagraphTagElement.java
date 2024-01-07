@@ -10,7 +10,9 @@ import java.util.Arrays;
 
 public class ParagraphTagElement extends TextTagElement {
 
-    public ParagraphTagElement(Map<String, String> parameters) { super(parameters); }
+    public ParagraphTagElement(Map<String, String> parameters) {
+        super(parameters);
+    }
 
     @Override
     public void render(Theme theme, GuiGraphics graphics, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
