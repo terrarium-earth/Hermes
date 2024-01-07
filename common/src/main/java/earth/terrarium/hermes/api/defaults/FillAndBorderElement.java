@@ -48,29 +48,27 @@ public abstract class FillAndBorderElement implements TagElement {
                     this.borderWidth = ElementParsingUtils.tryParse(borderSpecs[0], Integer::parseInt, borderWidth);
             }
         }
-        this.xSurround = backgroundPadding + borderWidth;
-        this.ySurround = Math.max(1, (backgroundPadding + borderWidth));
     }
 
     static int highPassAlpha(int color) {
         return (color >> 24) != 0 ? color : color + (0xFF << 24);
-    };
+    }
 
     public void drawFillAndBorder(GuiGraphics graphics, int x, int y, float width, float height) {
 
-        int xA = x - backgroundPadding;
-        int yA = y - backgroundPadding;
-        int xB = Math.round(x + width + backgroundPadding);
-        int yB = Math.round(y + height + backgroundPadding);
+        int x0 = x - backgroundPadding;
+        int y0 = y - backgroundPadding;
+        int x1 = Math.round(x + width + backgroundPadding);
+        int y1 = Math.round(y + height + backgroundPadding);
 
         if (hasBackground) {
-            graphics.fill(xA, yA, xB, yB, highPassAlpha(backgroundColor.getValue()));
+            graphics.fill(x0, y0, x1, y1, highPassAlpha(backgroundColor.getValue()));
         }
         if (hasBorder) {
             int color = highPassAlpha(borderColor.getValue());
-            xA -= borderWidth; yA -= borderWidth;
-            xB += borderWidth; yB += borderWidth;
-            RenderUtils.renderOutline(graphics, xA, yA, xB - xA, yB - yA, color, borderWidth);
+            x0 -= borderWidth; y0 -= borderWidth;
+            x1 += borderWidth; y1 += borderWidth;
+            RenderUtils.renderOutline(graphics, x0, y0, x1 - x0, y1 - y0, borderWidth, color);
         }
     }
 
