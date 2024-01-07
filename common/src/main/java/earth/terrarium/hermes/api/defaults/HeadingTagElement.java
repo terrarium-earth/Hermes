@@ -37,7 +37,7 @@ public abstract class HeadingTagElement extends TextTagElement {
             int[] lineOffsets = lines.stream().mapToInt((line) -> getOffsetForTextTag(width, line)).toArray();
             int contentOffset = Arrays.stream(lineOffsets).min().orElse(width);
 
-            drawBackground(graphics, x + xMargin + contentOffset, y + yMargin, contentWidth, contentHeight);;
+            drawFillAndBorder(graphics, x + xMargin + contentOffset, y + yMargin, contentWidth, contentHeight);;
 
             int lineHeight = font.lineHeight;
             for (int i = 0; i < lines.size(); i++) {

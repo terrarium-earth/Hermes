@@ -79,7 +79,7 @@ public class EntityTagElement extends FillAndBorderElement implements TagElement
                 int lookX = renderX - mouseX;
                 int lookY = eyeY - mouseY;
 
-                drawBackground(graphics, layoutX, layoutY, layoutWidth, layoutHeight);
+                drawFillAndBorder(graphics, layoutX, layoutY, layoutWidth, layoutHeight);
                 InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, renderX, renderY, blockScale, lookX, lookY, living);
             }
         }

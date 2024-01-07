@@ -50,7 +50,7 @@ public class ImageTagElement extends FillAndBorderElement implements TagElement 
     public void render(Theme theme, GuiGraphics graphics, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
         int xOffset = xMargin + Alignment.getOffset(width, this.imageWidth + (2 * xMargin), align);
         int yOffset = yMargin;
-        drawBackground(graphics, x + xOffset, y + yOffset, imageWidth, imageHeight);
+        drawFillAndBorder(graphics, x + xOffset, y + yOffset, imageWidth, imageHeight);
 
         if (this.imageTextureWidth == -1 && this.imageTextureHeight == -1) {
             blit(graphics, x + xOffset, y + yOffset, imageWidth, imageHeight);

@@ -52,7 +52,7 @@ public abstract class FillAndBorderElement implements TagElement {
         this.yMargin = Math.max(1, (backgroundPadding + borderWidth));
     }
 
-    public void drawBackground(GuiGraphics graphics, int x, int y, float width, float height) {
+    public void drawFillAndBorder(GuiGraphics graphics, int x, int y, float width, float height) {
 
         IntFunction<Integer> no00Alpha = (c) -> (c >> 24) != 0 ? c : c + (0xFF << 24);
 

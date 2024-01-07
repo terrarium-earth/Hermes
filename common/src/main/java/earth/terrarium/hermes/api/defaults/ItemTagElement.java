@@ -37,7 +37,7 @@ public class ItemTagElement extends FillAndBorderElement implements TagElement {
             float scaleSize = scale * 16;
             int offsetX = xMargin + Alignment.getOffset(width, scaleSize + (2 * xMargin), align);
             final int offsetY = yMargin;
-            drawBackground(graphics, x + offsetX, y + offsetY, scaleSize, scaleSize);
+            drawFillAndBorder(graphics, x + offsetX, y + offsetY, scaleSize, scaleSize);
             pose.translate(x + offsetX, y + offsetY, 0);
             pose.scale(scale, scale, 1.0F);
             graphics.renderFakeItem(output, 0, 0);
