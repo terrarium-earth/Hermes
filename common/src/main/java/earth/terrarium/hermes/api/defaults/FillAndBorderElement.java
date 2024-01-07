@@ -4,10 +4,10 @@ import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.color.ConstantColors;
 import earth.terrarium.hermes.api.TagElement;
 import earth.terrarium.hermes.utils.ElementParsingUtils;
+import earth.terrarium.hermes.utils.RenderUtils;
 import net.minecraft.client.gui.GuiGraphics;
 
 import java.util.Map;
-import java.util.function.IntFunction;
 
 public abstract class FillAndBorderElement implements TagElement {
 
@@ -68,15 +68,9 @@ public abstract class FillAndBorderElement implements TagElement {
         }
         if (hasBorder) {
             int color = highPassAlpha(borderColor.getValue());
-
             xA -= borderWidth; yA -= borderWidth;
             xB += borderWidth; yB += borderWidth;
-            graphics.fill(xA, yA, xB, yA + borderWidth, color); // top
-            graphics.fill(xA, yB, xB, yB - borderWidth, color); // bottom
-
-            yA += borderWidth; yB -= borderWidth; // avoid over-lap in case color's alpha < 0xFF
-            graphics.fill(xA, yA, xA + borderWidth, yB, color); // left
-            graphics.fill(xB, yA, xB - borderWidth, yB, color); // right
+            RenderUtils.renderOutline(graphics, xA, yA, xB - xA, yB - yA, color, borderWidth);
         }
     }
 
