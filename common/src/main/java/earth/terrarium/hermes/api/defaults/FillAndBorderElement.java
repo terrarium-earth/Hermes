@@ -23,8 +23,8 @@ public abstract class FillAndBorderElement implements TagElement {
     protected int borderWidth = 0;
     protected Color borderColor = ConstantColors.whitesmoke;
     protected boolean hasBorder = false;
-    protected int xMargin; // (background + borderWidth);
-    protected int yMargin; // 1 or (backgroundPadding + borderWidth)
+    protected int xSurround; // (background + borderWidth);
+    protected int ySurround; // 1 or (backgroundPadding + borderWidth)
 
     protected FillAndBorderElement(Map<String, String> parameters) {
         if (parameters.containsKey("background")) {
@@ -48,8 +48,8 @@ public abstract class FillAndBorderElement implements TagElement {
                     this.borderWidth = ElementParsingUtils.tryParse(borderSpecs[0], Integer::parseInt, borderWidth);
             }
         }
-        this.xMargin = backgroundPadding + borderWidth;
-        this.yMargin = Math.max(1, (backgroundPadding + borderWidth));
+        this.xSurround = backgroundPadding + borderWidth;
+        this.ySurround = Math.max(1, (backgroundPadding + borderWidth));
     }
 
     static int highPassAlpha(int color) {

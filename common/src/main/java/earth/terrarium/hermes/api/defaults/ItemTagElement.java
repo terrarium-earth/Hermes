@@ -35,8 +35,8 @@ public class ItemTagElement extends FillAndBorderElement implements TagElement {
     public void render(Theme theme, GuiGraphics graphics, int x, int y, int width, int mouseX, int mouseY, boolean hovered, float partialTicks) {
         try (var pose = new CloseablePoseStack(graphics)) {
             float scaleSize = scale * 16;
-            int offsetX = xMargin + Alignment.getOffset(width, scaleSize + (2 * xMargin), align);
-            final int offsetY = yMargin;
+            int offsetX = xSurround + Alignment.getOffset(width, scaleSize + (2 * xSurround), align);
+            final int offsetY = ySurround;
             drawFillAndBorder(graphics, x + offsetX, y + offsetY, scaleSize, scaleSize);
             pose.translate(x + offsetX, y + offsetY, 0);
             pose.scale(scale, scale, 1.0F);
@@ -46,6 +46,6 @@ public class ItemTagElement extends FillAndBorderElement implements TagElement {
 
     @Override
     public int getHeight(int width) {
-        return Mth.ceil(16 * scale) + (2 * yMargin);
+        return Mth.ceil(16 * scale) + (2 * ySurround);
     }
 }
