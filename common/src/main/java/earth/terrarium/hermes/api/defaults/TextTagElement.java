@@ -57,7 +57,7 @@ public abstract class TextTagElement extends FillAndBorderElement implements Tag
 
     public int getOffsetForTextTag(int width, FormattedCharSequence text) {
         int textWidth = Minecraft.getInstance().font.width(text) - 1; // -1 to trim trailing empty space
-        return Alignment.getOffset(width, textWidth + (2 * hSpacing), align);
+        return Alignment.getOffset(width, textWidth + (2 * xMargin), align);
     }
 
     public Style getStyle() {

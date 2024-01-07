@@ -69,10 +69,10 @@ public class EntityTagElement extends FillAndBorderElement implements TagElement
                 float layoutHeight = blockScale * layoutBlocksHigh;
                 float layoutWidth = blockScale * layoutBlocksWide;
 
-                int layoutX = x + hSpacing + Alignment.getOffset(width, layoutWidth + (2 * hSpacing), align);
+                int layoutX = x + xMargin + Alignment.getOffset(width, layoutWidth + (2 * xMargin), align);
                 int renderX = Math.round(layoutX + (layoutWidth / 2f));
 
-                int layoutY = y + vSpacing;
+                int layoutY = y + yMargin;
                 int renderY = Math.round(layoutY + layoutHeight - (vShift * blockScale));
 
                 int eyeY = layoutY + Math.round(layoutHeight - (living.getEyeHeight() * blockScale));
@@ -87,7 +87,7 @@ public class EntityTagElement extends FillAndBorderElement implements TagElement
 
     @Override
     public int getHeight(int width) {
-        return Math.round((layoutBlocksHigh * scale * BLOCK_HEIGHT)) + (2 * vSpacing); // (layoutHeight) + verticalPadding
+        return Math.round((layoutBlocksHigh * scale * BLOCK_HEIGHT)) + (2 * yMargin); // (layoutHeight) + verticalPadding
     }
 
 }
