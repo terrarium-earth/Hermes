@@ -48,6 +48,8 @@ public abstract class FillAndBorderElement implements TagElement {
                     this.borderWidth = ElementParsingUtils.tryParse(borderSpecs[0], Integer::parseInt, borderWidth);
             }
         }
+        this.xSurround = backgroundPadding + borderWidth;
+        this.ySurround = Math.max(1, (backgroundPadding + borderWidth));
     }
 
     static int highPassAlpha(int color) {
