@@ -12,6 +12,7 @@ import earth.terrarium.hermes.api.defaults.lists.UnorderedListTagElement;
 public class DefaultTagProvider extends TagProvider {
 
     public DefaultTagProvider() {
+        addSerializer("a", LinkTagElement::new);
         addSerializer("p", ParagraphTagElement::new);
         addSerializer("h1", HeadingOneTagElement::new);
         addSerializer("h2", HeadingTwoTagElement::new);

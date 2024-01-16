@@ -12,6 +12,7 @@ import net.minecraft.world.item.Item;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.net.URL;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -103,6 +104,17 @@ public final class ElementParsingUtils {
             }
         }
         return defaultValue;
+    }
+
+    public static @Nullable URL parseURL(Map<String, String> parameters, String key) {
+        if (parameters.containsKey(key)) {
+            try {
+                return new URL(parameters.get(key));
+            } catch (Exception e) {
+                return null;
+            }
+        }
+        return null;
     }
 
     public static Alignment parseAlignment(Map<String, String> parameters, String key, Alignment defaultValue) {
