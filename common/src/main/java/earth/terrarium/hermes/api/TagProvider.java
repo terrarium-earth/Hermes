@@ -1,5 +1,6 @@
 package earth.terrarium.hermes.api;
 
+import earth.terrarium.hermes.api.defaults.ParagraphTagElement;
 import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -68,9 +69,20 @@ public class TagProvider {
                 } else {
                     throw new TagParseException("Unknown tag: " + child.getNodeName());
                 }
+            } else if (child.getNodeType() == Node.TEXT_NODE) {
+                String text = child.getTextContent().replace("\n", "");
+                if (StringUtils.isNotBlank(text)) {
+                    elements.add(praseTextNode(text));
+                }
             }
         }
         return elements;
+    }
+
+    public TagElement praseTextNode(String text) {
+        ParagraphTagElement element = new ParagraphTagElement(Map.of());
+        element.addText(text);
+        return element;
     }
 
     private boolean hasChildOf(Node node, short type) {

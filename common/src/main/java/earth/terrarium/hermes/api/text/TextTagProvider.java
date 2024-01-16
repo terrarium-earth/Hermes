@@ -1,5 +1,6 @@
 package earth.terrarium.hermes.api.text;
 
+import earth.terrarium.hermes.api.TagElement;
 import earth.terrarium.hermes.api.TagProvider;
 
 public final class TextTagProvider extends TagProvider {
@@ -53,5 +54,12 @@ public final class TextTagProvider extends TagProvider {
 
         addSerializer("translate", TextTagElements::translate);
         addSerializer("keybind", TextTagElements::keybind);
+    }
+
+    @Override
+    public TagElement praseTextNode(String text) {
+        StyledTagElement element = new StyledTagElement(s -> s);
+        element.addText(text);
+        return element;
     }
 }
