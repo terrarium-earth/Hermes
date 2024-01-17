@@ -57,7 +57,7 @@ public final class TextTagProvider extends TagProvider {
     }
 
     @Override
-    public TagElement praseTextNode(String text) {
+    public TagElement parseTextNode(String text) {
         StyledTagElement element = new StyledTagElement(s -> s);
         element.addText(text);
         return element;

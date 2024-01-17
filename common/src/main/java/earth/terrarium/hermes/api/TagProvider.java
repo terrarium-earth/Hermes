@@ -72,14 +72,14 @@ public class TagProvider {
             } else if (child.getNodeType() == Node.TEXT_NODE) {
                 String text = child.getTextContent().replace("\n", "");
                 if (StringUtils.isNotBlank(text)) {
-                    elements.add(praseTextNode(text));
+                    elements.add(parseTextNode(text));
                 }
             }
         }
         return elements;
     }
 
-    public TagElement praseTextNode(String text) {
+    public TagElement parseTextNode(String text) {
         ParagraphTagElement element = new ParagraphTagElement(Map.of());
         element.addText(text);
         return element;
