@@ -5,8 +5,8 @@ import com.teamresourceful.resourcefullib.common.color.ConstantColors;
 import earth.terrarium.hermes.api.TagElement;
 import earth.terrarium.hermes.utils.ElementParsingUtils;
 import earth.terrarium.hermes.utils.RenderUtils;
+import it.unimi.dsi.fastutil.ints.IntObjectPair;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.util.Tuple;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -19,41 +19,45 @@ public abstract class FillAndBorderElement implements TagElement {
     The area behind the element, plus any padding, may be filled with background color
     A border may surround the padding area, with its own width and color. */
 
-    protected @Nullable Tuple<Integer, Color> fill;
-    protected @Nullable Tuple<Integer, Color> border;
-    protected int xSurround = 0; // (background + borderWidth);
+    protected @Nullable IntObjectPair<Color> fill;
+    protected @Nullable IntObjectPair<Color> border;
+    protected int xSurround; // (background + borderWidth);
     protected int ySurround; // 1 or (backgroundPadding + borderWidth)
 
     protected FillAndBorderElement(Map<String, String> parameters) {
 
         this.fill = ElementParsingUtils.parsePair(
-                parameters, "background",
+                parameters, "background", IntObjectPair::of,
                 Integer::parseInt, 0,
-                Color::parse, ConstantColors.gainsboro);
+                Color::parse, ConstantColors.gainsboro
+        );
 
         this.border = ElementParsingUtils.parsePair(
-                parameters, "border",
+                parameters, "border", IntObjectPair::of,
                 Integer::parseInt, 0,
-                Color::parse, ConstantColors.whitesmoke);
+                Color::parse, ConstantColors.whitesmoke
+        );
 
-        if (fill != null) { xSurround += fill.getA(); }
-        if (border != null) { xSurround += border.getA(); }
+        if (fill != null) xSurround += fill.firstInt();
+        if (border != null) xSurround += border.firstInt();
         this.ySurround = Math.max(1, xSurround);
     }
 
-    static int highPassAlpha(int color) {
-        return (color >> 24) != 0 ? color : color + (0xFF << 24);
+    /** If the alpha channel is 0, make it 255. */
+    private static int ensureVisible(Color color) {
+        int value = color.getValue();
+        return (value >> 24) != 0 ? value : value | 0xFF000000;
     }
 
     public void drawFillAndBorder(GuiGraphics graphics, int x, int y, float width, float height) {
 
         if (fill != null) {
-            int padding = fill.getA();
+            int padding = fill.firstInt();
             int x0 = x - padding;
             int y0 = y - padding;
             int x1 = Math.round(x + width + padding);
             int y1 = Math.round(y + height + padding);
-            graphics.fill(x0, y0, x1, y1, highPassAlpha(fill.getB().getValue()));
+            graphics.fill(x0, y0, x1, y1, ensureVisible(fill.second()));
         }
 
         if (border != null) {
@@ -61,9 +65,8 @@ public abstract class FillAndBorderElement implements TagElement {
             int y0 = y - ySurround;
             int x1 = Math.round(x + width + xSurround);
             int y1 = Math.round(y + height + ySurround);
-            int color = highPassAlpha(border.getB().getValue());
-            RenderUtils.renderOutline(graphics, x0, y0, x1 - x0, y1 - y0, border.getA(), color);
+            int color = ensureVisible(border.second());
+            RenderUtils.renderOutline(graphics, x0, y0, x1 - x0, y1 - y0, border.firstInt(), color);
         }
     }
-
 }

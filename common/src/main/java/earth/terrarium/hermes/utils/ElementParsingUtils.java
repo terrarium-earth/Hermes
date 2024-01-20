@@ -6,13 +6,13 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public final class ElementParsingUtils {
@@ -116,29 +116,21 @@ public final class ElementParsingUtils {
         return defaultValue;
     }
 
-    public static <A,B> @Nullable Tuple<A,B> parsePair(@NotNull Map<String, String> parameters,
-                                                       String key,
-                                                       Function<String, A> parserA, A defaultA,
-                                                       Function<String, B> parserB, B defaultB) {
-
-        Tuple<A,B> result = new Tuple<>(null,null);
-
+    public static <A,B, C> @Nullable C parsePair(
+            @NotNull Map<String, String> parameters, String key, BiFunction<A, B, C> factory,
+            Function<String, A> parserA, A defaultA, Function<String, B> parserB, B defaultB
+    ) {
         if (!parameters.containsKey(key)) {
             return null;
-        } else {
-            String[] spec = parameters.get(key).split(" ");
-            switch (spec.length) {
-                case 1 -> {
-                    result.setA(tryParse(spec[0], parserA, defaultA));
-                    result.setB(defaultB);
-                }
-                case 2 -> {
-                    result.setA(tryParse(spec[0], parserA, defaultA));
-                    result.setB(tryParse(spec[1], parserB, defaultB));
-                }
-            }
-            return result;
         }
+
+        String[] spec = parameters.get(key).split(" ");
+        return switch (spec.length) {
+            case 0 -> factory.apply(defaultA, defaultB);
+            case 1 -> factory.apply(tryParse(spec[0], parserA, defaultA), defaultB);
+            case 2 -> factory.apply(tryParse(spec[0], parserA, defaultA), tryParse(spec[1], parserB, defaultB));
+            default -> null;
+        };
     }
 
     public static <R> R tryParse(String input, Function<String, R> parseFunc, R defaultResult) {
