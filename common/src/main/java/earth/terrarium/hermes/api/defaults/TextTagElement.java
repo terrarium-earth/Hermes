@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
-public abstract class TextTagElement implements TagElement {
+public abstract class TextTagElement extends FillAndBorderElement implements TagElement {
 
     protected String content = "";
     protected @Nullable Boolean bold;
@@ -25,6 +25,7 @@ public abstract class TextTagElement implements TagElement {
     protected Color color;
 
     protected TextTagElement(Map<String, String> parameters) {
+        super(parameters);
         this.bold = parameters.containsKey("bold") ? Boolean.parseBoolean(parameters.get("bold")) : null;
         this.italic = parameters.containsKey("italic") ? Boolean.parseBoolean(parameters.get("italic")) : null;
         this.underline = parameters.containsKey("underline") ? Boolean.parseBoolean(parameters.get("underline")) : null;
@@ -55,8 +56,8 @@ public abstract class TextTagElement implements TagElement {
     }
 
     public int getOffsetForTextTag(int width, FormattedCharSequence text) {
-        int textWidth = Minecraft.getInstance().font.width(text) - 1;
-        return Alignment.getOffset(width, textWidth, align);
+        int textWidth = Minecraft.getInstance().font.width(text) - 1; // -1 to trim trailing empty space
+        return Alignment.getOffset(width, textWidth + (2 * xSurround), align);
     }
 
     public Style getStyle() {

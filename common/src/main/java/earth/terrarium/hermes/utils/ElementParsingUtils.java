@@ -6,10 +6,14 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
+import java.util.function.Function;
 
 public final class ElementParsingUtils {
 
@@ -110,6 +114,39 @@ public final class ElementParsingUtils {
             }
         }
         return defaultValue;
+    }
+
+    public static <A,B> @Nullable Tuple<A,B> parsePair(@NotNull Map<String, String> parameters,
+                                                       String key,
+                                                       Function<String, A> parserA, A defaultA,
+                                                       Function<String, B> parserB, B defaultB) {
+
+        Tuple<A,B> result = new Tuple<>(null,null);
+
+        if (!parameters.containsKey(key)) {
+            return null;
+        } else {
+            String[] spec = parameters.get(key).split(" ");
+            switch (spec.length) {
+                case 1 -> {
+                    result.setA(tryParse(spec[0], parserA, defaultA));
+                    result.setB(defaultB);
+                }
+                case 2 -> {
+                    result.setA(tryParse(spec[0], parserA, defaultA));
+                    result.setB(tryParse(spec[1], parserB, defaultB));
+                }
+            }
+            return result;
+        }
+    }
+
+    public static <R> R tryParse(String input, Function<String, R> parseFunc, R defaultResult) {
+        try {
+            return parseFunc.apply(input);
+        } catch (Exception e) {
+            return defaultResult;
+        }
     }
 
 }
