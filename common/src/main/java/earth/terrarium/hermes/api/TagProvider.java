@@ -1,5 +1,6 @@
 package earth.terrarium.hermes.api;
 
+import earth.terrarium.hermes.api.defaults.ParagraphTagElement;
 import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -54,33 +55,44 @@ public class TagProvider {
                     TagElement element = serializer.deserialize(mapAttributes(child.getAttributes()));
                     if (element != null) {
                         elements.add(element);
-                        int elementNodes = getLengthOfType(child, Node.ELEMENT_NODE);
-                        if (elementNodes > 0) {
-                            nodeToElements(child).forEach(element::addChild);
+                        if (hasChildOf(child, Node.ELEMENT_NODE)) {
+                            element.getChildTagProvider(this)
+                                .nodeToElements(child)
+                                .forEach(element::addChild);
                         } else {
                             String text = child.getTextContent();
                             if (StringUtils.isNotBlank(text)) {
-                                element.setContent(text);
+                                element.addText(text);
                             }
                         }
                     }
                 } else {
                     throw new TagParseException("Unknown tag: " + child.getNodeName());
                 }
+            } else if (child.getNodeType() == Node.TEXT_NODE) {
+                String text = child.getTextContent().replace("\n", "");
+                if (StringUtils.isNotBlank(text)) {
+                    elements.add(parseTextNode(text));
+                }
             }
         }
         return elements;
     }
 
-    private int getLengthOfType(Node node, short type) {
-        int length = 0;
+    public TagElement parseTextNode(String text) {
+        ParagraphTagElement element = new ParagraphTagElement(Map.of());
+        element.addText(text);
+        return element;
+    }
+
+    private boolean hasChildOf(Node node, short type) {
         for (int i = 0; i < node.getChildNodes().getLength(); i++) {
             Node child = node.getChildNodes().item(i);
-            if (child.getNodeType() == type) {
-                length += child.getTextContent().length();
+            if (child.getNodeType() == type && !child.getTextContent().isEmpty()) {
+                return true;
             }
         }
-        return length;
+        return false;
     }
 
     private Map<String, String> mapAttributes(NamedNodeMap map) {

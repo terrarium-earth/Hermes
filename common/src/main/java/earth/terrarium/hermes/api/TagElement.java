@@ -2,6 +2,7 @@ package earth.terrarium.hermes.api;
 
 import earth.terrarium.hermes.api.themes.Theme;
 import net.minecraft.client.gui.GuiGraphics;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -34,8 +35,17 @@ public interface TagElement {
         return false;
     }
 
+    /**
+     * @deprecated Override and use {@link #addText(String)} instead.
+     */
+    @Deprecated
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.21")
     default void setContent(String content) {
         throw new UnsupportedOperationException();
+    }
+
+    default void addText(String content) {
+        setContent(content);
     }
 
     default void addChild(TagElement element) {
@@ -45,5 +55,14 @@ public interface TagElement {
     @NotNull
     default List<TagElement> getChildren() {
         return List.of();
+    }
+
+    /**
+     * This method is used to determine the tag provider it should use for the children of this element when parsing.
+     * @param parent The tag provider of the parent element.
+     * @return The tag provider to use for the children of this element.
+     */
+    default TagProvider getChildTagProvider(TagProvider parent) {
+        return parent;
     }
 }

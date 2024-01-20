@@ -32,5 +32,6 @@ public class DefaultTagProvider extends TagProvider {
         addSerializer("li", ListItemTagElement::new);
         addSerializer("columns", ColumnsTagElement::new);
         addSerializer("column", ColumnTagElement::new);
+        addSerializer("text", TextContentTagElement::new);
     }
 }
