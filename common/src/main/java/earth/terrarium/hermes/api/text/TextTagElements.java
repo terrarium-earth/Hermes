@@ -1,10 +1,13 @@
 package earth.terrarium.hermes.api.text;
 
 import com.teamresourceful.resourcefullib.common.color.Color;
+import earth.terrarium.hermes.utils.ElementParsingUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 
 import java.util.Map;
 import java.util.function.UnaryOperator;
@@ -132,13 +135,29 @@ public final class TextTagElements {
         String link = parameters.get("href");
         ClickEvent event = new ClickEvent(ClickEvent.Action.OPEN_URL, link);
         HoverEvent hover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal(link).withStyle(ChatFormatting.GRAY));
-        return new StyledTagElement(style -> style.withClickEvent(event).withHoverEvent(hover));
+        return new DefaultStyledTagElement(
+                style -> style.withClickEvent(event).withHoverEvent(hover),
+                Component.literal(link).withStyle(ChatFormatting.BLUE)
+        );
     }
 
     public static ChildTextTagElement copyToClipboard(Map<String, String> parameters) {
+        Component text = Component.literal("Copy to Clipboard").withStyle(ChatFormatting.GRAY);
         ClickEvent click = new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, parameters.get("text"));
-        HoverEvent hover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("Copies to clipboard").withStyle(ChatFormatting.GRAY));
-        return new StyledTagElement(style -> style.withClickEvent(click).withHoverEvent(hover));
+        HoverEvent hover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, text);
+        return new DefaultStyledTagElement(
+                style -> style.withClickEvent(click).withHoverEvent(hover),
+                text
+        );
+    }
+
+    public static ChildTextTagElement item(Map<String, String> parameters) {
+        Item item = ElementParsingUtils.parseItem(parameters, "item", Items.AIR);
+        HoverEvent hover = new HoverEvent(HoverEvent.Action.SHOW_ITEM, new HoverEvent.ItemStackInfo(item.getDefaultInstance()));
+        return new DefaultStyledTagElement(
+                style -> style.withHoverEvent(hover),
+                item.getName(item.getDefaultInstance())
+        );
     }
 
     public static ChildTextTagElement translate(Map<String, String> ignored) {

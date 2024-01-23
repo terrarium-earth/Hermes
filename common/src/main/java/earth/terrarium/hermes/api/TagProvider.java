@@ -88,7 +88,7 @@ public class TagProvider {
     private boolean hasChildOf(Node node, short type) {
         for (int i = 0; i < node.getChildNodes().getLength(); i++) {
             Node child = node.getChildNodes().item(i);
-            if (child.getNodeType() == type && !child.getTextContent().isEmpty()) {
+            if (child.getNodeType() == type) {
                 return true;
             }
         }
