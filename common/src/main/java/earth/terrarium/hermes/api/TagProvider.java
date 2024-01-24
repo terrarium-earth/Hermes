@@ -1,6 +1,6 @@
 package earth.terrarium.hermes.api;
 
-import earth.terrarium.hermes.api.defaults.ParagraphTagElement;
+import earth.terrarium.hermes.api.defaults.TextTagElement;
 import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -80,7 +80,7 @@ public class TagProvider {
     }
 
     public TagElement parseTextNode(String text) {
-        ParagraphTagElement element = new ParagraphTagElement(Map.of());
+        TextTagElement element = new TextTagElement(Map.of());
         element.addText(text);
         return element;
     }

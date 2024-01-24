@@ -12,7 +12,7 @@ import earth.terrarium.hermes.api.defaults.lists.UnorderedListTagElement;
 public class DefaultTagProvider extends TagProvider {
 
     public DefaultTagProvider() {
-        addSerializer("p", ParagraphTagElement::new);
+        addSerializer("p", TextTagElement::new);
         addSerializer("h1", HeadingOneTagElement::new);
         addSerializer("h2", HeadingTwoTagElement::new);
         addSerializer("img", ImageTagElement::new);
@@ -32,6 +32,6 @@ public class DefaultTagProvider extends TagProvider {
         addSerializer("li", ListItemTagElement::new);
         addSerializer("columns", ColumnsTagElement::new);
         addSerializer("column", ColumnTagElement::new);
-        addSerializer("text", TextContentTagElement::new);
+        addSerializer("text", TextTagElement::new);
     }
 }
