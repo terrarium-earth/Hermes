@@ -1,6 +1,7 @@
 package earth.terrarium.hermes.api.defaults;
 
 import com.teamresourceful.resourcefullib.common.color.Color;
+import com.teamresourceful.resourcefullib.common.color.ConstantColors;
 import earth.terrarium.hermes.api.Alignment;
 import earth.terrarium.hermes.api.TagElement;
 import earth.terrarium.hermes.api.TagProvider;
@@ -24,11 +25,20 @@ public class TextContentTagElement extends FillAndBorderElement implements TagEl
 
     protected MutableComponent component = Component.empty();
     protected Alignment align;
+    protected boolean shadowed;
 
     public TextContentTagElement(Map<String, String> parameters) {
         super(parameters);
-
+        this.component.setStyle(Style.EMPTY
+                .withBold(ElementParsingUtils.parseBoolean(parameters, "bold", false))
+                .withItalic(ElementParsingUtils.parseBoolean(parameters, "italic", false))
+                .withUnderlined(ElementParsingUtils.parseBoolean(parameters, "underline", false))
+                .withObfuscated(ElementParsingUtils.parseBoolean(parameters, "obfuscated", false))
+                .withStrikethrough(ElementParsingUtils.parseBoolean(parameters, "strikethrough", false))
+                .withColor(ElementParsingUtils.parseColor(parameters, "color", Color.DEFAULT).getValue())
+        );
         this.align = ElementParsingUtils.parseAlignment(parameters, "align", Alignment.MIN);
+        this.shadowed = ElementParsingUtils.parseBoolean(parameters, "shadowed", false);
     }
 
     @Override
@@ -49,7 +59,7 @@ public class TextContentTagElement extends FillAndBorderElement implements TagEl
         int height = 0;
         for (FormattedCharSequence sequence : font.split(component, width - (5 + 2 * xSurround))) {
             int textOffset = getOffsetForTextTag(width, sequence);
-            theme.drawText(graphics, sequence, x + textOffset, y + height, Color.DEFAULT, false);
+            theme.drawText(graphics, sequence, x + textOffset, y + height, Color.DEFAULT, this.shadowed);
 
             if (actMouseX >= textOffset && actMouseX <= width && actMouseY >= height && actMouseY <= height + font.lineHeight) {
                 graphics.renderComponentHoverEffect(
