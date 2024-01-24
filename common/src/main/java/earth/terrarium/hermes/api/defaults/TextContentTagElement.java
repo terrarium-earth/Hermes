@@ -1,7 +1,6 @@
 package earth.terrarium.hermes.api.defaults;
 
 import com.teamresourceful.resourcefullib.common.color.Color;
-import com.teamresourceful.resourcefullib.common.color.ConstantColors;
 import earth.terrarium.hermes.api.Alignment;
 import earth.terrarium.hermes.api.TagElement;
 import earth.terrarium.hermes.api.TagProvider;
