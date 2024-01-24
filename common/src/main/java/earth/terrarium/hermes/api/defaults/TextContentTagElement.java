@@ -37,9 +37,9 @@ public class TextContentTagElement extends FillAndBorderElement implements TagEl
         y = y + ySurround;
 
         Font font = Minecraft.getInstance().font;
-        List<FormattedCharSequence> lines = font.split(component, width - 5);
+        List<FormattedCharSequence> lines = font.split(component, width - (5 + (2 * xSurround)));
         int maxWidth = lines.stream().mapToInt(font::width).max().orElse(0);
-        int maxHeight = lines.size() * (font.lineHeight + 1) + (lines.size() - 2);
+        int maxHeight = (lines.size() * font.lineHeight) + (lines.size() - 2);
         int offsetX = Alignment.getOffset(width, maxWidth + (2 * xSurround), align);
 
         drawFillAndBorder(graphics, x + offsetX, y, maxWidth, maxHeight);
@@ -47,9 +47,9 @@ public class TextContentTagElement extends FillAndBorderElement implements TagEl
         int actMouseX = mouseX - x;
         int actMouseY = mouseY - y;
         int height = 0;
-        for (FormattedCharSequence sequence : font.split(component, width - 5)) {
+        for (FormattedCharSequence sequence : font.split(component, width - (5 + 2 * xSurround))) {
             int textOffset = getOffsetForTextTag(width, sequence);
-            theme.drawText(graphics, sequence, x + textOffset, y + height, Color.DEFAULT, true);
+            theme.drawText(graphics, sequence, x + textOffset, y + height, Color.DEFAULT, false);
 
             if (actMouseX >= textOffset && actMouseX <= width && actMouseY >= height && actMouseY <= height + font.lineHeight) {
                 graphics.renderComponentHoverEffect(
@@ -84,8 +84,9 @@ public class TextContentTagElement extends FillAndBorderElement implements TagEl
     @Override
     public int getHeight(int width) {
         Font font = Minecraft.getInstance().font;
-        int lines = font.split(component, width - 5).size();
-        return lines * (font.lineHeight + 1);
+        int lines = font.split(component, width - (5 + (2 * xSurround))).size();
+        int lineHeight = font.lineHeight;
+        return ((lines * lineHeight) + (lines - 2)) + (2 * ySurround);
     }
 
     @Override
