@@ -1,6 +1,7 @@
 package earth.terrarium.hermes.api.text;
 
 import com.teamresourceful.resourcefullib.common.color.Color;
+import earth.terrarium.hermes.utils.ElementParsingUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
@@ -126,6 +127,18 @@ public final class TextTagElements {
         } catch (Exception ignored) {
             return new StyledTagElement(UnaryOperator.identity());
         }
+    }
+
+    public static ChildTextTagElement span(Map<String, String> parameters) {
+        return new StyledTagElement(style -> {
+            style = parameters.containsKey("bold") ? style.withBold(ElementParsingUtils.parseBoolean(parameters, "bold", false)) : style;
+            style = parameters.containsKey("italic") ? style.withItalic(ElementParsingUtils.parseBoolean(parameters, "italic", false)) : style;
+            style = parameters.containsKey("underline") ? style.withUnderlined(ElementParsingUtils.parseBoolean(parameters, "underline", false)) : style;
+            style = parameters.containsKey("obfuscated") ? style.withObfuscated(ElementParsingUtils.parseBoolean(parameters, "obfuscated", false)) : style;
+            style = parameters.containsKey("strikethrough") ? style.withStrikethrough(ElementParsingUtils.parseBoolean(parameters, "strikethrough", false)) : style;
+            style = parameters.containsKey("color") ? style.withColor(ElementParsingUtils.parseColor(parameters, "color", Color.DEFAULT).getValue()) : style;
+            return style;
+        });
     }
 
     public static ChildTextTagElement link(Map<String, String> parameters) {
