@@ -125,7 +125,7 @@ public final class ElementParsingUtils {
         // Example: style="!obfuscated,b,em,color:lavender,bg:0 #4a38d0"
 
         Map<String, String> result = new HashMap<>();
-        String[] specificers = parameters.get("style").split(",");
+        String[] specificers = parameters.get("style").split(";");
         String specValue;
         for (String specifier : specificers) {
             String[] specParts = specifier.split(":",2);
