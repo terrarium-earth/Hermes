@@ -1,5 +1,7 @@
 package earth.terrarium.hermes.api.defaults;
 
+import earth.terrarium.hermes.api.TagElement;
+
 import java.util.*;
 
 import static net.minecraft.network.chat.Component.Serializer.fromJson;
@@ -15,4 +17,10 @@ public class ComponentTagElement extends TextTagElement {
     public void addText(String content) {
         this.component.append(fromJson(content));
     }
+
+    @Override
+    public void addChild(TagElement element) {
+        throw new UnsupportedOperationException();
+    }
+
 }
