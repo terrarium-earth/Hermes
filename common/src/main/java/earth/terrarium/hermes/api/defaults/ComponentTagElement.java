@@ -4,6 +4,7 @@ import java.util.*;
 
 import static net.minecraft.network.chat.Component.Serializer.fromJson;
 
+@Deprecated
 public class ComponentTagElement extends TextTagElement {
 
     public ComponentTagElement(Map<String, String> parameters) {
