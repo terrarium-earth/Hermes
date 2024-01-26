@@ -37,7 +37,7 @@ public class TextContentTagElement extends FillAndBorderElement implements TagEl
                 .withColor(ElementParsingUtils.parseColor(parameters, "color", Color.DEFAULT).getValue())
         );
         this.align = ElementParsingUtils.parseAlignment(parameters, "align", Alignment.MIN);
-        this.shadowed = ElementParsingUtils.parseBoolean(parameters, "shadowed", false);
+        this.shadowed = ElementParsingUtils.parseBoolean(parameters, "shadowed", true);
     }
 
     @Override
