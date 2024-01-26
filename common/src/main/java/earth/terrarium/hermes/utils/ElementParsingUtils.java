@@ -131,12 +131,13 @@ public final class ElementParsingUtils {
             String[] specParts = specifier.split(":",2);
             if (specParts.length == 2) {
                 // key:value form
-                specifier = specParts[0];
-                specValue = specParts[1];
+                specifier = specParts[0].strip();
+                specValue = specParts[1].strip();
             } else {
                 // boolean form
+                specifier = specifier.strip();
                 if (specifier.startsWith("!")) {
-                    specifier = specifier.substring(1);
+                    specifier = specifier.substring(1).strip();
                     specValue = "false";
                 } else {
                     specValue = "true";
