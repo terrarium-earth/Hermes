@@ -20,7 +20,7 @@ public class DefaultTagProvider extends TagProvider {
         addSerializer("carousel-item", CarouselItemTagElement::new);
         addSerializer("br", BreakLineTagElement::new);
         addSerializer("blockquote", BlockquoteTagElement::new);
-        addSerializer("component", ComponentTagElement::new);
+        addSerializer("component", ComponentTagElement::new); // * ComponentTagElement is DEPRECATED
         addSerializer("hint", HintTagElement::new);
         addSerializer("crafting-recipe", CraftingRecipeTagElement::new);
         addSerializer("details", DetailsTagElement::new);
@@ -32,6 +32,6 @@ public class DefaultTagProvider extends TagProvider {
         addSerializer("li", ListItemTagElement::new);
         addSerializer("columns", ColumnsTagElement::new);
         addSerializer("column", ColumnTagElement::new);
-        addSerializer("text", TextContentTagElement::new);
+        addSerializer("text", TextTagElement::new);
     }
 }
