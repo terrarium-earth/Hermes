@@ -44,7 +44,7 @@ public class BlockquoteTagElement implements TagElement {
 
     @Override
     public void addChild(TagElement element) {
-        if (!(element instanceof TextTagElement)) {
+        if (!(element instanceof TextTagElement) && !(element instanceof TextContentTagElement)) {
             throw new IllegalArgumentException("Blockquote elements can only contain text elements.");
         }
         this.children.add(element);
