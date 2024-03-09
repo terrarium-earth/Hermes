@@ -131,6 +131,18 @@ public final class TextTagElements {
         }
     }
 
+    public static ChildTextTagElement span(Map<String, String> parameters) {
+        return new StyledTagElement(style -> {
+            style = parameters.containsKey("bold") ? style.withBold(ElementParsingUtils.parseBoolean(parameters, "bold", false)) : style;
+            style = parameters.containsKey("italic") ? style.withItalic(ElementParsingUtils.parseBoolean(parameters, "italic", false)) : style;
+            style = parameters.containsKey("underline") ? style.withUnderlined(ElementParsingUtils.parseBoolean(parameters, "underline", false)) : style;
+            style = parameters.containsKey("obfuscated") ? style.withObfuscated(ElementParsingUtils.parseBoolean(parameters, "obfuscated", false)) : style;
+            style = parameters.containsKey("strikethrough") ? style.withStrikethrough(ElementParsingUtils.parseBoolean(parameters, "strikethrough", false)) : style;
+            style = parameters.containsKey("color") ? style.withColor(ElementParsingUtils.parseColor(parameters, "color", Color.DEFAULT).getValue()) : style;
+            return style;
+        });
+    }
+
     public static ChildTextTagElement link(Map<String, String> parameters) {
         String link = parameters.get("href");
         ClickEvent event = new ClickEvent(ClickEvent.Action.OPEN_URL, link);

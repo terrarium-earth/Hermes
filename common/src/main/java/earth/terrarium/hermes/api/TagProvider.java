@@ -1,6 +1,7 @@
 package earth.terrarium.hermes.api;
 
 import earth.terrarium.hermes.api.defaults.ParagraphTagElement;
+import earth.terrarium.hermes.utils.ElementParsingUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -100,6 +101,10 @@ public class TagProvider {
         for (int i = 0; i < map.getLength(); i++) {
             Node attribute = map.item(i);
             attributes.put(attribute.getNodeName(), attribute.getNodeValue());
+        }
+        if (attributes.containsKey("style")) {
+            var styleAttributes = ElementParsingUtils.parseStyleAttribute(attributes);
+            styleAttributes.forEach(attributes::putIfAbsent);
         }
         return attributes;
     }

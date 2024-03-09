@@ -11,6 +11,7 @@ import net.minecraft.world.item.Item;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -116,7 +117,49 @@ public final class ElementParsingUtils {
         return defaultValue;
     }
 
-    public static <A,B, C> @Nullable C parsePair(
+    public static Map<String, String> parseStyleAttribute(Map<String, String> parameters) {
+
+        // Allow for using 'style="..."' attribute values to compactly specify multiple attributes.
+        // These compact attributes may be in 'key:value' or boolean form.
+        // Booleans can be negated with a leading '!'; both forms may have short names or synonyms.
+        // Example: style="!obfuscated,b,em,color:lavender,bg:0 #4a38d0"
+
+        Map<String, String> result = new HashMap<>();
+        String[] specificers = parameters.get("style").split(";");
+        String specValue;
+        for (String specifier : specificers) {
+            String[] specParts = specifier.split(":",2);
+            if (specParts.length == 2) {
+                // key:value form
+                specifier = specParts[0].strip();
+                specValue = specParts[1].strip();
+            } else {
+                // boolean form
+                specifier = specifier.strip();
+                if (specifier.startsWith("!")) {
+                    specifier = specifier.substring(1).strip();
+                    specValue = "false";
+                } else {
+                    specValue = "true";
+                }
+            }
+            // handle short names and synonyms
+            specifier = switch (specifier) {
+                case "i", "em" -> "italic";
+                case "b" -> "bold";
+                case "u" -> "underline";
+                case "st" -> "strikethrough";
+                case "obf" -> "obfuscated";
+                case "bg" -> "background";
+                case "brd" -> "border";
+                default -> specifier;
+            };
+            result.put(specifier, specValue);
+        }
+        return result;
+    }
+
+    public static <A, B, C> @Nullable C parsePair(
             @NotNull Map<String, String> parameters, String key, BiFunction<A, B, C> factory,
             Function<String, A> parserA, A defaultA, Function<String, B> parserB, B defaultB
     ) {

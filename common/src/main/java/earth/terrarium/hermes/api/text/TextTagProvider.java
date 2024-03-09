@@ -49,6 +49,7 @@ public final class TextTagProvider extends TagProvider {
         addSerializer("reset", TextTagElements::reset);
 
         addSerializer("color", TextTagElements::color);
+        addSerializer("span", TextTagElements::span);
         addSerializer("link", TextTagElements::link);
         addSerializer("clipboard", TextTagElements::copyToClipboard);
         addSerializer("item", TextTagElements::item);
