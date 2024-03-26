@@ -57,7 +57,7 @@ public class HintTagElement implements TagElement {
 
     @Override
     public void addChild(TagElement element) {
-        if (!(element instanceof TextTagElement) && !(element instanceof TextContentTagElement)) {
+        if (!(element instanceof TextTagElement)) {
             throw new IllegalArgumentException("Hint elements can only contain text elements.");
         }
         this.children.add(element);
