@@ -16,13 +16,13 @@ public class AttributeParser {
         return attribute == null ? defaultValue : attribute;
     }
 
-    public static int parseInt(Attributes attributes, String key) {
+    public static int parseInt(Attributes attributes, String key, int defaultValue) {
         var attribute = attributes.getValue(key);
-        if (attribute == null) return 0;
+        if (attribute == null) return defaultValue;
         try {
             return Integer.parseInt(attribute);
         } catch (NumberFormatException e) {
-            return 0;
+            return defaultValue;
         }
     }
 

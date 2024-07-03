@@ -30,13 +30,17 @@ public class CssParser {
                 default -> null;
             };
         }
-        return ColorFactory.web(css);
+        try {
+            return ColorFactory.web(css);
+        } catch (Exception e) {
+            return ColorFactory.TRANSPARENT;
+        }
     }
 
     public static CursorScreen.Cursor parseCursor(String css, String element) {
         if (css == null) {
             return switch (element) {
-                case "a", "link" -> CursorScreen.Cursor.POINTER;
+                case "a" -> CursorScreen.Cursor.POINTER;
                 default -> null;
             };
         }

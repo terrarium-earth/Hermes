@@ -28,7 +28,9 @@ public final class DefaultStyle {
     public static final HermesBlockquoteStyle BLOCKQUOTE_STYLE = new HermesBlockquoteStyle(
             6f, 4f, 2f, 10f, LINE_COLOR, new Color(0, 0, 0, 50)
     );
-    public static final CodeBlockStyleConfig CODEBLOCK_STYLE = new CodeBlockStyleConfig(2f, 1f, 6f, 6f, LINE_COLOR);
+    public static final CodeBlockStyleConfig CODEBLOCK_STYLE = new CodeBlockStyleConfig(
+            2f, 1f, 6f, 6f, LINE_COLOR
+    );
     public static final TableStyleConfig TABLE_STYLE = new TableStyleConfig(
             6f, 4f, 1f, LINE_COLOR,
             new Color(0, 0, 0, 150),

@@ -8,6 +8,7 @@ import earth.terrarium.hermes.elements.html.HtmlParagraph;
 import earth.terrarium.hermes.renderer.HermesRenderer;
 import earth.terrarium.hermes.styles.HermesStyle;
 import earth.terrarium.hermes.utils.AttributeParser;
+import earth.terrarium.hermes.utils.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.xml.sax.Attributes;
@@ -26,61 +27,42 @@ public class HtmlDetails extends ChildBasedElement<HermesStyle, HermesRenderer> 
         assert attributes != null;
 
         this.open = AttributeParser.parseBoolean(attributes, "open", false);
+    }
 
-        AttributesImpl defaultSummaryAttributes = new AttributesImpl();
-        defaultSummaryAttributes.addAttribute(
-                "", "default-details", "default-details", "CDATA", "true"
-        );
+    @Override
+    public void complete() {
+        Element<HermesStyle, HermesRenderer> summary = Utils.findFirst(this.children, element -> element instanceof HtmlSummary);
+        if (summary == null) {
+            summary = new HtmlSummary(
+                    style, layoutStyle,
+                    this,
+                    "summary",
+                    new AttributesImpl()
+            );
+            new HtmlParagraph(
+                    Objects.requireNonNullElse(attributes.getValue("summary"), "Details"),
+                    style, layoutStyle,
+                    summary,
+                    "text", null
+            );
+        }
 
-        new HtmlParagraph(
-                Objects.requireNonNullElse(attributes.getValue("summary"), "Details"),
-                style, layoutStyle,
-                new HtmlSummary.Default(
-                        style, layoutStyle,
-                        this,
-                        "summary",
-                        defaultSummaryAttributes
-                ),
-                "text", null
-        );
+        this.children.remove(summary);
+        this.children.addFirst(summary);
+
+        this.copy = List.copyOf(this.children);
+
+        if (summary instanceof HtmlSummary s) {
+            s.setAsHeading();
+        }
     }
 
     public boolean open() {
         return this.open;
     }
 
-    public HtmlSummary getSummary() {
-        for (Element<HermesStyle, HermesRenderer> child : this.children) {
-            if (child instanceof HtmlSummary summary) {
-                return summary;
-            }
-        }
-        return null;
-    }
-
     @Override
     public void generateLayout(LayoutData layoutData, HermesRenderer renderData) {
-        this.children.sort((a, b) -> {
-            // sort by default then summary
-            if (a instanceof HtmlSummary.Default) return -1;
-            if (b instanceof HtmlSummary.Default) return 1;
-            if (a instanceof HtmlSummary) return -1;
-            if (b instanceof HtmlSummary) return 1;
-            return 0;
-        });
-
-        if (
-            this.children.size() > 2 &&
-            this.children.get(1) instanceof HtmlSummary &&
-            this.children.getFirst() instanceof HtmlSummary.Default
-        ) {
-            this.children.removeFirst().close();
-        }
-
-        if (this.copy == null) {
-            this.copy = List.copyOf(this.children);
-        }
-
         if (this.open) {
             this.children.clear();
             this.children.addAll(this.copy);

@@ -15,17 +15,10 @@ import org.jetbrains.annotations.Nullable;
 import org.xml.sax.Attributes;
 
 import java.awt.*;
-import java.util.Set;
 
 public class HtmlDefault extends ChildMovingElement<HermesStyle, HermesRenderer> implements Inline {
 
     public static final ElementCreator<HermesStyle, HermesRenderer> CREATOR = new Creator();
-
-    private static final Set<String> BLOCK = Set.of(
-            "address", "article", "aside", "button", "canvas",
-            "caption", "div", "figure", "footer", "header",
-            "main", "nav", "section", "menu"
-    );
 
     public HtmlDefault(@NotNull HermesStyle style, @NotNull LayoutStyle layoutStyle, @Nullable Element<HermesStyle, HermesRenderer> parent, @NotNull String qName, @Nullable Attributes attributes) {
         super(style, layoutStyle, parent, qName, attributes);
@@ -34,7 +27,7 @@ public class HtmlDefault extends ChildMovingElement<HermesStyle, HermesRenderer>
     @Override
     @ApiStatus.Internal
     public void generateLayout(LayoutData layoutData, HermesRenderer renderer) {
-        if (BLOCK.contains(qName)) {
+        if (Html.BLOCK.contains(qName)) {
             super.generateLayout(layoutData, renderer);
         } else {
             generateNewLayout(layoutData, renderer);

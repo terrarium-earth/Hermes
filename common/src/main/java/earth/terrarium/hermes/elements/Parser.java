@@ -8,15 +8,20 @@ import dev.dediamondpro.minemark.elements.formatting.impl.AlignmentElement;
 import dev.dediamondpro.minemark.elements.formatting.impl.CssStyleElement;
 import dev.dediamondpro.minemark.elements.impl.LinkElement;
 import dev.dediamondpro.minemark.elements.impl.ParagraphElement;
-import dev.dediamondpro.minemark.elements.impl.table.TableHolderElement;
 import dev.dediamondpro.minemark.elements.impl.table.TableRowElement;
+import earth.terrarium.hermes.elements.base.NoOpElement;
 import earth.terrarium.hermes.elements.custom.HermesItem;
 import earth.terrarium.hermes.elements.custom.HermesText;
 import earth.terrarium.hermes.elements.html.*;
 import earth.terrarium.hermes.elements.html.details.HtmlDetails;
 import earth.terrarium.hermes.elements.html.details.HtmlSummary;
+import earth.terrarium.hermes.elements.html.list.HtmlList;
+import earth.terrarium.hermes.elements.html.list.HtmlListItem;
 import earth.terrarium.hermes.elements.html.map.HtmlArea;
 import earth.terrarium.hermes.elements.html.map.HtmlMap;
+import earth.terrarium.hermes.elements.html.table.HtmlCaption;
+import earth.terrarium.hermes.elements.html.table.HtmlTable;
+import earth.terrarium.hermes.elements.html.table.HtmlTableCell;
 import earth.terrarium.hermes.renderer.HermesRenderer;
 import earth.terrarium.hermes.styles.HermesStyle;
 import org.commonmark.ext.gfm.strikethrough.StrikethroughExtension;
@@ -25,8 +30,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.regex.Pattern;
 
 public class Parser {
+
+    private static final Pattern PREFIX_PATTERN = Pattern.compile("^ +<", Pattern.MULTILINE);
+    private static final Pattern SUFFIX_PATTERN = Pattern.compile("> +$", Pattern.MULTILINE);
 
     private final MineMarkCore<HermesStyle, HermesRenderer> core;
     private final HermesStyle style;
@@ -42,14 +51,17 @@ public class Parser {
             builder.addElement(List.of("p", "text"), ParagraphElement::new);
             builder.addElement(Elements.LINK, LinkElement::new);
 
-            builder.addElement(List.of("ol", "ul", "dl"), HtmlList::new);
+            builder.addElement(List.of("ol", "ul", "dl", "menu"), HtmlList::new);
             builder.addElement(List.of("li", "dt", "dd"), HtmlListItem::new);
 
-            builder.addElement(Elements.TABLE, TableHolderElement::new);
+            builder.addElement(Elements.TABLE, HtmlTable::new);
             builder.addElement(Elements.TABLE_ROW, TableRowElement::new);
             builder.addElement(Elements.TABLE_CELL, HtmlTableCell::new);
+            builder.addElement("caption", HtmlCaption::new);
 
             builder.addElement(Elements.IMAGE, HtmlImage::new);
+            builder.addElement("embed", HtmlImage::forEmbed);
+            builder.addElement("object", HtmlImage::forObject);
             builder.addElement(Elements.HORIZONTAL_RULE, HtmlHorizontalRule::new);
 
             builder.addElement("details", HtmlDetails::new);
@@ -63,6 +75,9 @@ public class Parser {
             builder.addElement("map", HtmlMap::new);
             builder.addElement("area", HtmlArea::new);
 
+            builder.addElement("progress", HtmlProgress::new);
+            builder.addElement("meter", HtmlMeter::new);
+
             builder.addElement("item", HermesItem::new);
 
 
@@ -72,6 +87,7 @@ public class Parser {
             builder.addFormatingElement(new AlignmentElement<>());
             builder.addFormatingElement(new CssStyleElement<>());
 
+            builder.addElement(NoOpElement.CREATOR);
             builder.addElement(HtmlDefault.CREATOR);
         });
     }
@@ -88,7 +104,9 @@ public class Parser {
     @Nullable
     public MineMarkElement<HermesStyle, HermesRenderer> parse(String text) {
         try {
-            this.style.getGlobalData().clear();
+            text = PREFIX_PATTERN.matcher(text).replaceAll("<");
+            text = SUFFIX_PATTERN.matcher(text).replaceAll(">");
+            this.style.globalData().clear();
             return core.parse(this.style, text);
         } catch (Exception e) {
             e.printStackTrace();

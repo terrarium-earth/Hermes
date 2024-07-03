@@ -10,7 +10,6 @@ import dev.dediamondpro.minemark.utils.MouseButton;
 import earth.terrarium.hermes.renderer.HermesRenderer;
 import earth.terrarium.hermes.styles.HermesStyle;
 import earth.terrarium.hermes.utils.MarkdownPositions;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.xml.sax.Attributes;
@@ -19,16 +18,17 @@ import org.xml.sax.helpers.AttributesImpl;
 public class HtmlSummary extends ChildBasedElement<HermesStyle, HermesRenderer> {
 
     private final MarkdownPositions positions = new MarkdownPositions();
+    private boolean isHeading;
 
     public HtmlSummary(@NotNull HermesStyle style, @NotNull LayoutStyle layoutStyle, @Nullable Element<HermesStyle, HermesRenderer> parent, @NotNull String qName, @Nullable Attributes attributes) {
         super(style, layoutStyle, parent, qName, attributes);
+    }
 
-        if (parent instanceof HtmlDetails details) {
-            HtmlSummary summary = details.getSummary();
-            if (summary instanceof Default || this instanceof Default) {
-                new Chevron(style, layoutStyle, this, "chevron", new AttributesImpl());
-            }
-        }
+    public void setAsHeading() {
+        this.isHeading = true;
+        var chevron = new Chevron(style, layoutStyle, this, "chevron", new AttributesImpl());
+        this.children.remove(chevron);
+        this.children.addFirst(chevron);
     }
 
     @Override
@@ -37,11 +37,9 @@ public class HtmlSummary extends ChildBasedElement<HermesStyle, HermesRenderer> 
     }
 
     @Override
-    @ApiStatus.Internal
-    @SuppressWarnings("UnstableApiUsage")
     public void onMouseClickedInternal(MouseButton button, float mouseX, float mouseY) {
         if (!(parent instanceof HtmlDetails details)) return;
-        if (details.getSummary() != this) return;
+        if (!this.isHeading) return;
         if (button != MouseButton.LEFT) return;
         if (!positions.isAnyInside(mouseX, mouseY)) return;
 
@@ -58,7 +56,6 @@ public class HtmlSummary extends ChildBasedElement<HermesStyle, HermesRenderer> 
         protected void drawElement(float x, float y, float width, float height, HermesRenderer renderData) {
             if (!(parent instanceof HtmlSummary)) return;
             if (!(parent.getParent() instanceof HtmlDetails details)) return;
-            if (parent != details.getSummary()) return;
 
             renderData.drawString(
                     details.open() ? "▼ " : "▶ ",
@@ -76,12 +73,6 @@ public class HtmlSummary extends ChildBasedElement<HermesStyle, HermesRenderer> 
         @Override
         protected float getHeight(LayoutData layoutData, HermesRenderer renderer) {
             return 8f * this.layoutStyle.getFontSize();
-        }
-    }
-
-    public static class Default extends HtmlSummary {
-        public Default(@NotNull HermesStyle style, @NotNull LayoutStyle layoutStyle, @Nullable Element<HermesStyle, HermesRenderer> parent, @NotNull String qName, @Nullable Attributes attributes) {
-            super(style, layoutStyle, parent, qName, attributes);
         }
     }
 }

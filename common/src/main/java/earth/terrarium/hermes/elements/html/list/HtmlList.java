@@ -1,4 +1,4 @@
-package earth.terrarium.hermes.elements.html;
+package earth.terrarium.hermes.elements.html.list;
 
 import dev.dediamondpro.minemark.LayoutStyle;
 import dev.dediamondpro.minemark.elements.Element;
@@ -44,7 +44,7 @@ public class HtmlList extends ListHolderElement<HermesStyle, HermesRenderer> {
                 };
             };
 
-            this.start = AttributeParser.parseInt(attributes, "start");
+            this.start = AttributeParser.parseInt(attributes, "start", 0);
         }
     }
 

@@ -46,7 +46,7 @@ public class HermesStyle implements Style {
         );
     }
 
-    public GlobalData getGlobalData() {
+    public GlobalData globalData() {
         return globalData;
     }
 

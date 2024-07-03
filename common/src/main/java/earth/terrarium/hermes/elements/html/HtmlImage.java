@@ -17,6 +17,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.xml.sax.Attributes;
 
+import java.util.Set;
+
 public class HtmlImage extends ImageElement<HermesStyle, HermesRenderer, CustomImage> {
 
     private final String map;
@@ -25,10 +27,33 @@ public class HtmlImage extends ImageElement<HermesStyle, HermesRenderer, CustomI
         super(style, layoutStyle, parent, qName, attributes);
         assert attributes != null;
 
-        this.map = Optionull.map(
-                attributes.getValue("usemap"),
-                s -> s.startsWith("#") ? s.substring(1) : null
-        );
+        if (qName.equals("img")) {
+            this.map = Optionull.map(
+                    attributes.getValue("usemap"),
+                    s -> s.startsWith("#") ? s.substring(1) : null
+            );
+        } else {
+            this.map = null;
+        }
+    }
+
+    public static HtmlImage forEmbed(@NotNull HermesStyle style, @NotNull LayoutStyle layoutStyle, @Nullable Element<HermesStyle, HermesRenderer> parent, @NotNull String qName, @NotNull Attributes attributes) {
+        String type = attributes.getValue("type");
+        if (type != null && type.startsWith("image/")) {
+            return new HtmlImage(style, layoutStyle, parent, qName, attributes);
+        }
+        return null;
+    }
+
+    public static HtmlImage forObject(@NotNull HermesStyle style, @NotNull LayoutStyle layoutStyle, @Nullable Element<HermesStyle, HermesRenderer> parent, @NotNull String qName, @NotNull Attributes attributes) {
+        String data = attributes.getValue("data");
+        if (data == null || !data.contains(".")) return null;
+        Set<String> imageTypes = Set.of(".png", ".jpg", ".jpeg", ".gif", ".bmp", ".webp");
+        String extension = data.substring(data.lastIndexOf('.'));
+        if (imageTypes.contains(extension)) {
+            return new HtmlImage(style, layoutStyle, parent, qName, attributes);
+        }
+        return null;
     }
 
     @Override
@@ -39,7 +64,7 @@ public class HtmlImage extends ImageElement<HermesStyle, HermesRenderer, CustomI
         if (cursor != null) {
             renderData.setCursor(cursor);
         } else {
-            ImageMap imageMap = this.style.getGlobalData().get(GlobalData.IMAGE_MAP, map);
+            ImageMap imageMap = this.style.globalData().get(GlobalData.IMAGE_MAP, map);
             if (imageMap == null) return;
             MapArea area = imageMap.getArea(
                     (mouseX - position.getX()) * (imageWidth / width),
@@ -59,11 +84,10 @@ public class HtmlImage extends ImageElement<HermesStyle, HermesRenderer, CustomI
     }
 
     @Override
-    @SuppressWarnings("UnstableApiUsage")
     public void onMouseClickedInternal(MouseButton button, float mouseX, float mouseY) {
         super.onMouseClickedInternal(button, mouseX, mouseY);
         if (button != MouseButton.LEFT || map == null) return;
-        ImageMap imageMap = this.style.getGlobalData().get(GlobalData.IMAGE_MAP, map);
+        ImageMap imageMap = this.style.globalData().get(GlobalData.IMAGE_MAP, map);
         if (imageMap == null) return;
         if (!position.isInside(mouseX, mouseY)) return;
         MapArea area = imageMap.getArea(

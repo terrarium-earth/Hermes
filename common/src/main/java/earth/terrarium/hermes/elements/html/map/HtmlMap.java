@@ -23,7 +23,7 @@ public class HtmlMap extends NoOpElement<HermesStyle, HermesRenderer> {
             this.map = null;
         } else {
             this.map = new ImageMap();
-            style.getGlobalData().put(GlobalData.IMAGE_MAP, name, this.map);
+            style.globalData().put(GlobalData.IMAGE_MAP, name, this.map);
         }
     }
 
