@@ -2,9 +2,9 @@ package earth.terrarium.hermes.elements.html.table;
 
 import dev.dediamondpro.minemark.LayoutStyle;
 import dev.dediamondpro.minemark.elements.Element;
+import earth.terrarium.hermes.api.rendering.HtmlRenderer;
+import earth.terrarium.hermes.api.rendering.HtmlStyle;
 import earth.terrarium.hermes.elements.html.HtmlDefault;
-import earth.terrarium.hermes.renderer.HermesRenderer;
-import earth.terrarium.hermes.styles.HermesStyle;
 import earth.terrarium.hermes.utils.CssParser;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,7 +23,7 @@ public class HtmlCaption extends HtmlDefault implements Comparable<HtmlCaption> 
 
     private final CaptionSide side;
 
-    public HtmlCaption(@NotNull HermesStyle style, @NotNull LayoutStyle layoutStyle, @Nullable Element<HermesStyle, HermesRenderer> parent, @NotNull String qName, @Nullable Attributes attributes) {
+    public HtmlCaption(@NotNull HtmlStyle style, @NotNull LayoutStyle layoutStyle, @Nullable Element<HtmlStyle, HtmlRenderer> parent, @NotNull String qName, @Nullable Attributes attributes) {
         super(style, layoutStyle, parent, qName, attributes);
         assert attributes != null;
 

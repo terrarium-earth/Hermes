@@ -2,11 +2,10 @@ package earth.terrarium.hermes.elements.html.map;
 
 import dev.dediamondpro.minemark.LayoutStyle;
 import dev.dediamondpro.minemark.elements.Element;
-import earth.terrarium.hermes.data.map.ImageMap;
-import earth.terrarium.hermes.data.map.MapArea;
+import earth.terrarium.hermes.api.rendering.HtmlStyle;
+import earth.terrarium.hermes.impl.map.ImageMap;
+import earth.terrarium.hermes.impl.map.MapArea;
 import earth.terrarium.hermes.elements.base.NoOpElement;
-import earth.terrarium.hermes.renderer.HermesRenderer;
-import earth.terrarium.hermes.styles.HermesStyle;
 import earth.terrarium.hermes.utils.AttributeParser;
 import earth.terrarium.hermes.utils.CssParser;
 import org.jetbrains.annotations.NotNull;
@@ -16,12 +15,12 @@ import org.xml.sax.Attributes;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 
-public class HtmlArea extends NoOpElement<HermesStyle, HermesRenderer> {
+public class HtmlArea<R> extends NoOpElement<HtmlStyle, R> {
 
-    public HtmlArea(@NotNull HermesStyle style, @NotNull LayoutStyle layoutStyle, @Nullable Element<HermesStyle, HermesRenderer> parent, @NotNull String qName, @Nullable Attributes attributes) {
+    public HtmlArea(@NotNull HtmlStyle style, @NotNull LayoutStyle layoutStyle, @Nullable Element<HtmlStyle, R> parent, @NotNull String qName, @Nullable Attributes attributes) {
         super(style, layoutStyle, parent, qName, attributes);
         assert attributes != null;
-        if (!(parent instanceof HtmlMap map)) return;
+        if (!(parent instanceof HtmlMap<R> map)) return;
         ImageMap imageMap = map.getMap();
         if (imageMap == null) return;
         Shape shape = parse(attributes.getValue("shape"), attributes.getValue("coords"));

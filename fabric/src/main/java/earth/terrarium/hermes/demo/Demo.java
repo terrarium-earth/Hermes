@@ -2,10 +2,10 @@ package earth.terrarium.hermes.demo;
 
 import com.teamresourceful.resourcefullib.client.screens.BaseCursorScreen;
 import dev.dediamondpro.minemark.elements.MineMarkElement;
+import earth.terrarium.hermes.api.rendering.HtmlRenderer;
+import earth.terrarium.hermes.api.rendering.HtmlStyle;
 import earth.terrarium.hermes.elements.Parser;
-import earth.terrarium.hermes.renderer.HermesRenderer;
-import earth.terrarium.hermes.renderer.HermesWidget;
-import earth.terrarium.hermes.styles.HermesStyle;
+import earth.terrarium.hermes.HermesWidget;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
@@ -44,12 +44,12 @@ public class Demo implements ClientModInitializer {
 
     private static class HermesDemoScreen extends BaseCursorScreen {
 
-        private final MineMarkElement<HermesStyle, HermesRenderer> parsed;
+        private final MineMarkElement<HtmlStyle, HtmlRenderer> parsed;
         private HermesWidget widget;
 
         protected HermesDemoScreen(String text) {
             super(CommonComponents.EMPTY);
-            this.parsed = new Parser(new HermesStyle()).parse(text);
+            this.parsed = new Parser(DemoStyle.create()).parse(text);
         }
 
         @Override

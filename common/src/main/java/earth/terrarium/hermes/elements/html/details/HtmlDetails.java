@@ -4,9 +4,9 @@ import dev.dediamondpro.minemark.LayoutData;
 import dev.dediamondpro.minemark.LayoutStyle;
 import dev.dediamondpro.minemark.elements.ChildBasedElement;
 import dev.dediamondpro.minemark.elements.Element;
+import earth.terrarium.hermes.api.rendering.HtmlRenderer;
+import earth.terrarium.hermes.api.rendering.HtmlStyle;
 import earth.terrarium.hermes.elements.html.HtmlParagraph;
-import earth.terrarium.hermes.renderer.HermesRenderer;
-import earth.terrarium.hermes.styles.HermesStyle;
 import earth.terrarium.hermes.utils.AttributeParser;
 import earth.terrarium.hermes.utils.Utils;
 import org.jetbrains.annotations.NotNull;
@@ -17,12 +17,12 @@ import org.xml.sax.helpers.AttributesImpl;
 import java.util.List;
 import java.util.Objects;
 
-public class HtmlDetails extends ChildBasedElement<HermesStyle, HermesRenderer> {
+public class HtmlDetails extends ChildBasedElement<HtmlStyle, HtmlRenderer> {
 
     private boolean open;
-    private List<Element<HermesStyle, HermesRenderer>> copy = null;
+    private List<Element<HtmlStyle, HtmlRenderer>> copy = null;
 
-    public HtmlDetails(@NotNull HermesStyle style, @NotNull LayoutStyle layoutStyle, @Nullable Element<HermesStyle, HermesRenderer> parent, @NotNull String qName, @Nullable Attributes attributes) {
+    public HtmlDetails(@NotNull HtmlStyle style, @NotNull LayoutStyle layoutStyle, @Nullable Element<HtmlStyle, HtmlRenderer> parent, @NotNull String qName, @Nullable Attributes attributes) {
         super(style, layoutStyle, parent, qName, attributes);
         assert attributes != null;
 
@@ -31,7 +31,7 @@ public class HtmlDetails extends ChildBasedElement<HermesStyle, HermesRenderer> 
 
     @Override
     public void complete() {
-        Element<HermesStyle, HermesRenderer> summary = Utils.findFirst(this.children, element -> element instanceof HtmlSummary);
+        Element<HtmlStyle, HtmlRenderer> summary = Utils.findFirst(this.children, element -> element instanceof HtmlSummary);
         if (summary == null) {
             summary = new HtmlSummary(
                     style, layoutStyle,
@@ -62,7 +62,7 @@ public class HtmlDetails extends ChildBasedElement<HermesStyle, HermesRenderer> 
     }
 
     @Override
-    public void generateLayout(LayoutData layoutData, HermesRenderer renderData) {
+    public void generateLayout(LayoutData layoutData, HtmlRenderer renderer) {
         if (this.open) {
             this.children.clear();
             this.children.addAll(this.copy);
@@ -71,7 +71,7 @@ public class HtmlDetails extends ChildBasedElement<HermesStyle, HermesRenderer> 
             this.children.add(this.copy.getFirst());
         }
 
-        super.generateLayout(layoutData, renderData);
+        super.generateLayout(layoutData, renderer);
     }
 
     public void toggle() {

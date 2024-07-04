@@ -6,8 +6,8 @@ import dev.dediamondpro.minemark.elements.BasicElement;
 import dev.dediamondpro.minemark.elements.Element;
 import dev.dediamondpro.minemark.elements.Inline;
 import dev.dediamondpro.minemark.utils.ColorFactory;
-import earth.terrarium.hermes.renderer.HermesRenderer;
-import earth.terrarium.hermes.styles.HermesStyle;
+import earth.terrarium.hermes.api.rendering.HtmlRenderer;
+import earth.terrarium.hermes.api.rendering.HtmlStyle;
 import earth.terrarium.hermes.utils.AttributeParser;
 import earth.terrarium.hermes.utils.CssParser;
 import net.minecraft.util.Mth;
@@ -17,7 +17,7 @@ import org.xml.sax.Attributes;
 
 import java.awt.*;
 
-public class HtmlProgress extends BasicElement<HermesStyle, HermesRenderer> implements Inline {
+public class HtmlProgress extends BasicElement<HtmlStyle, HtmlRenderer> implements Inline {
 
     private final float max;
     private final float value;
@@ -26,7 +26,7 @@ public class HtmlProgress extends BasicElement<HermesStyle, HermesRenderer> impl
     private final Color backgroundColor;
     private final Color barColor;
 
-    public HtmlProgress(@NotNull HermesStyle style, @NotNull LayoutStyle layoutStyle, @Nullable Element<HermesStyle, HermesRenderer> parent, @NotNull String qName, @Nullable Attributes attributes) {
+    public HtmlProgress(@NotNull HtmlStyle style, @NotNull LayoutStyle layoutStyle, @Nullable Element<HtmlStyle, HtmlRenderer> parent, @NotNull String qName, @Nullable Attributes attributes) {
         super(style, layoutStyle, parent, qName, attributes);
         assert attributes != null;
 
@@ -40,7 +40,7 @@ public class HtmlProgress extends BasicElement<HermesStyle, HermesRenderer> impl
     }
 
     @Override
-    protected void drawElement(float x, float y, float width, float height, HermesRenderer renderer) {
+    protected void drawElement(float x, float y, float width, float height, HtmlRenderer renderer) {
         renderer.fill(x + 1, y, width - 2, 1, this.borderColor.getRGB()); // top
         renderer.fill(x + 1, y + height - 1, width - 2, 1, this.borderColor.getRGB()); // bottom
         renderer.fill(x, y + 1, 1, height - 2, this.borderColor.getRGB()); // left
@@ -58,12 +58,12 @@ public class HtmlProgress extends BasicElement<HermesStyle, HermesRenderer> impl
     }
 
     @Override
-    protected float getWidth(LayoutData layoutData, HermesRenderer renderer) {
+    protected float getWidth(LayoutData layoutData, HtmlRenderer renderer) {
         return renderer.width(" ", this.layoutStyle.getFontSize()) * 20f;
     }
 
     @Override
-    protected float getHeight(LayoutData layoutData, HermesRenderer renderer) {
+    protected float getHeight(LayoutData layoutData, HtmlRenderer renderer) {
         return 8f * this.layoutStyle.getFontSize();
     }
 }

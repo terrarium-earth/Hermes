@@ -3,9 +3,8 @@ package earth.terrarium.hermes.elements.custom;
 import dev.dediamondpro.minemark.LayoutStyle;
 import dev.dediamondpro.minemark.elements.Element;
 import dev.dediamondpro.minemark.elements.formatting.FormattingElement;
+import dev.dediamondpro.minemark.style.Style;
 import dev.dediamondpro.minemark.utils.StyleType;
-import earth.terrarium.hermes.renderer.HermesRenderer;
-import earth.terrarium.hermes.styles.HermesStyle;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +15,7 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HermesText implements FormattingElement<HermesStyle, HermesRenderer> {
+public class HermesText<S extends Style, R> implements FormattingElement<S, R> {
 
     public static final StyleType<Boolean> OBFUSCATED = new StyleType<>("hermes:obfuscated", Boolean.class);
 
@@ -52,7 +51,7 @@ public class HermesText implements FormattingElement<HermesStyle, HermesRenderer
 
 
     @Override
-    public void applyStyle(@NotNull HermesStyle style, @NotNull LayoutStyle layoutStyle, @Nullable Element<HermesStyle, HermesRenderer> parent, @NotNull String qName, @NotNull Attributes attributes) {
+    public void applyStyle(@NotNull S style, @NotNull LayoutStyle layoutStyle, @Nullable Element<S, R> parent, @NotNull String qName, @NotNull Attributes attributes) {
         ChatFormatting formatting = FORMATTING.get(qName);
         switch (formatting) {
             case BOLD -> layoutStyle.setBold(true);
@@ -66,7 +65,7 @@ public class HermesText implements FormattingElement<HermesStyle, HermesRenderer
     }
 
     @Override
-    public boolean appliesTo(HermesStyle style, LayoutStyle layoutStyle, @NotNull Element<HermesStyle, HermesRenderer> parent, @NotNull String qName, @NotNull Attributes attributes) {
+    public boolean appliesTo(S style, LayoutStyle layoutStyle, @NotNull Element<S, R> parent, @NotNull String qName, @NotNull Attributes attributes) {
         return FORMATTING.containsKey(qName);
     }
 }

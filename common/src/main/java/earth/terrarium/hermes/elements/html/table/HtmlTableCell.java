@@ -3,32 +3,32 @@ package earth.terrarium.hermes.elements.html.table;
 import dev.dediamondpro.minemark.LayoutStyle;
 import dev.dediamondpro.minemark.elements.Element;
 import dev.dediamondpro.minemark.elements.impl.table.TableCellElement;
-import earth.terrarium.hermes.renderer.HermesRenderer;
-import earth.terrarium.hermes.styles.HermesStyle;
+import earth.terrarium.hermes.api.rendering.HtmlRenderer;
+import earth.terrarium.hermes.api.rendering.HtmlStyle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.xml.sax.Attributes;
 
 import java.awt.*;
 
-public class HtmlTableCell extends TableCellElement<HermesStyle, HermesRenderer> {
+public class HtmlTableCell extends TableCellElement<HtmlStyle, HtmlRenderer> {
 
-    public HtmlTableCell(@NotNull HermesStyle style, @NotNull LayoutStyle layoutStyle, @Nullable Element<HermesStyle, HermesRenderer> parent, @NotNull String qName, @Nullable Attributes attributes) {
+    public HtmlTableCell(@NotNull HtmlStyle style, @NotNull LayoutStyle layoutStyle, @Nullable Element<HtmlStyle, HtmlRenderer> parent, @NotNull String qName, @NotNull Attributes attributes) {
         super(style, layoutStyle, parent, qName, attributes);
     }
 
     @Override
-    protected void drawCellBackground(float x, float y, float width, float height, Color color, HermesRenderer renderer) {
+    protected void drawCellBackground(float x, float y, float width, float height, Color color, HtmlRenderer renderer) {
         renderer.fill(x, y, width, height, color.getRGB());
     }
 
     @Override
-    protected void drawBorderLine(float x, float y, float width, float height, Color color, HermesRenderer renderer) {
+    protected void drawBorderLine(float x, float y, float width, float height, Color color, HtmlRenderer renderer) {
         renderer.fill(x, y, width, height, color.getRGB());
     }
 
     @Override
-    public void beforeDrawInternal(float xOffset, float yOffset, float mouseX, float mouseY, HermesRenderer renderer) {
+    public void beforeDrawInternal(float xOffset, float yOffset, float mouseX, float mouseY, HtmlRenderer renderer) {
         boolean setIndex = this.cellHeight == -1.0F;
         super.beforeDrawInternal(xOffset, yOffset, mouseX, mouseY, renderer);
         if (setIndex) {

@@ -5,9 +5,9 @@ import dev.dediamondpro.minemark.LayoutData;
 import dev.dediamondpro.minemark.LayoutStyle;
 import dev.dediamondpro.minemark.elements.Element;
 import dev.dediamondpro.minemark.elements.impl.TextElement;
+import earth.terrarium.hermes.api.rendering.HtmlRenderer;
+import earth.terrarium.hermes.api.rendering.HtmlStyle;
 import earth.terrarium.hermes.elements.custom.HermesText;
-import earth.terrarium.hermes.renderer.HermesRenderer;
-import earth.terrarium.hermes.styles.HermesStyle;
 import earth.terrarium.hermes.utils.types.VerticalAlignment;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
@@ -16,31 +16,31 @@ import org.xml.sax.Attributes;
 
 import java.awt.*;
 
-public class HtmlParagraph extends TextElement<HermesStyle, HermesRenderer> {
+public class HtmlParagraph extends TextElement<HtmlStyle, HtmlRenderer> {
 
-    public HtmlParagraph(@NotNull String text, @NotNull HermesStyle style, @NotNull LayoutStyle layoutStyle, @Nullable Element<HermesStyle, HermesRenderer> parent, @NotNull String qName, @Nullable Attributes attributes) {
+    public HtmlParagraph(@NotNull String text, @NotNull HtmlStyle style, @NotNull LayoutStyle layoutStyle, @Nullable Element<HtmlStyle, HtmlRenderer> parent, @NotNull String qName, @Nullable Attributes attributes) {
         super(text, style, layoutStyle, parent, qName, attributes);
     }
 
     @Override
-    protected void drawText(@NotNull String text, float x, float y, float fontSize, Color color, boolean hovered, LayoutData.MarkDownElementPosition position, @NotNull HermesRenderer renderer) {
+    protected void drawText(@NotNull String text, float x, float y, float fontSize, Color color, boolean hovered, LayoutData.MarkDownElementPosition position, @NotNull HtmlRenderer renderer) {
         text = getPrefix(hovered) + text;
-        VerticalAlignment alignment = layoutStyle.get(AttributesGlobal.VERTICAL_ALIGNMENT);
+        VerticalAlignment alignment = layoutStyle.get(GlobalAttributesElement.VERTICAL_ALIGNMENT);
         if (alignment != null) {
             y = alignment.changeOffset(y, 8f * fontSize);
             fontSize = alignment.changeFontSize(fontSize);
         }
 
         float width = renderer.width(text, fontSize);
-        if (layoutStyle.get(AttributesGlobal.BACKGROUND_COLOR) != null) {
-            try (var stack = new CloseablePoseStack(renderer.graphics())) {
+        if (layoutStyle.get(GlobalAttributesElement.BACKGROUND_COLOR) != null) {
+            try (var stack = new CloseablePoseStack(renderer.getGraphics())) {
                 stack.scale(fontSize, fontSize, 1f);
                 renderer.fill(
                         (x - 1 * fontSize) / fontSize,
                         (y - 1 * fontSize) / fontSize,
                         width / fontSize + 1,
                         9,
-                        layoutStyle.get(AttributesGlobal.BACKGROUND_COLOR).getRGB()
+                        layoutStyle.get(GlobalAttributesElement.BACKGROUND_COLOR).getRGB()
                 );
             }
         }
@@ -53,23 +53,23 @@ public class HtmlParagraph extends TextElement<HermesStyle, HermesRenderer> {
                 false
         );
 
-        if (this.layoutStyle.get(AttributesGlobal.TITLE) != null && hovered) {
-            renderer.setTooltip(Component.literal(this.layoutStyle.get(AttributesGlobal.TITLE)));
+        if (this.layoutStyle.get(GlobalAttributesElement.TITLE) != null && hovered) {
+            renderer.setTooltip(Component.literal(this.layoutStyle.get(GlobalAttributesElement.TITLE)));
         }
 
-        if (this.layoutStyle.get(AttributesGlobal.CURSOR) != null && hovered) {
-            renderer.setCursor(this.layoutStyle.get(AttributesGlobal.CURSOR));
+        if (this.layoutStyle.get(GlobalAttributesElement.CURSOR) != null && hovered) {
+            renderer.setCursor(this.layoutStyle.get(GlobalAttributesElement.CURSOR));
         }
     }
 
     @Override
-    protected void drawInlineCodeBlock(float x, float y, float width, float height, Color color, @NotNull HermesRenderer renderer) {
+    protected void drawInlineCodeBlock(float x, float y, float width, float height, Color color, @NotNull HtmlRenderer renderer) {
         renderer.fill(x, y, width, height, color.getRGB());
     }
 
     @Override
-    protected float getTextWidth(@NotNull String text, float fontSize, HermesRenderer renderer) {
-        VerticalAlignment alignment = layoutStyle.get(AttributesGlobal.VERTICAL_ALIGNMENT);
+    protected float getTextWidth(@NotNull String text, float fontSize, HtmlRenderer renderer) {
+        VerticalAlignment alignment = layoutStyle.get(GlobalAttributesElement.VERTICAL_ALIGNMENT);
         if (alignment != null) {
             fontSize = alignment.changeFontSize(fontSize);
         }
@@ -87,7 +87,7 @@ public class HtmlParagraph extends TextElement<HermesStyle, HermesRenderer> {
     }
 
     @Override
-    protected float getBaselineHeight(float fontSize, HermesRenderer renderData) {
+    protected float getBaselineHeight(float fontSize, HtmlRenderer renderData) {
         return 8f * fontSize;
     }
 }

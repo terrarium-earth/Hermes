@@ -9,6 +9,9 @@ import dev.dediamondpro.minemark.elements.formatting.impl.CssStyleElement;
 import dev.dediamondpro.minemark.elements.impl.LinkElement;
 import dev.dediamondpro.minemark.elements.impl.ParagraphElement;
 import dev.dediamondpro.minemark.elements.impl.table.TableRowElement;
+import earth.terrarium.hermes.api.ElementExtension;
+import earth.terrarium.hermes.api.rendering.HtmlRenderer;
+import earth.terrarium.hermes.api.rendering.HtmlStyle;
 import earth.terrarium.hermes.elements.base.NoOpElement;
 import earth.terrarium.hermes.elements.custom.HermesItem;
 import earth.terrarium.hermes.elements.custom.HermesText;
@@ -22,8 +25,6 @@ import earth.terrarium.hermes.elements.html.map.HtmlMap;
 import earth.terrarium.hermes.elements.html.table.HtmlCaption;
 import earth.terrarium.hermes.elements.html.table.HtmlTable;
 import earth.terrarium.hermes.elements.html.table.HtmlTableCell;
-import earth.terrarium.hermes.renderer.HermesRenderer;
-import earth.terrarium.hermes.styles.HermesStyle;
 import org.commonmark.ext.gfm.strikethrough.StrikethroughExtension;
 import org.commonmark.ext.gfm.tables.TablesExtension;
 import org.jetbrains.annotations.Nullable;
@@ -37,10 +38,10 @@ public class Parser {
     private static final Pattern PREFIX_PATTERN = Pattern.compile("^ +<", Pattern.MULTILINE);
     private static final Pattern SUFFIX_PATTERN = Pattern.compile("> +$", Pattern.MULTILINE);
 
-    private final MineMarkCore<HermesStyle, HermesRenderer> core;
-    private final HermesStyle style;
+    private final MineMarkCore<HtmlStyle, HtmlRenderer> core;
+    private final HtmlStyle style;
 
-    public Parser(HermesStyle style) {
+    public Parser(HtmlStyle style) {
         this(style, builder -> {
             builder.addExtension(StrikethroughExtension.builder().requireTwoTildes(true).build());
             builder.addExtension(TablesExtension.create());
@@ -80,20 +81,23 @@ public class Parser {
 
             builder.addElement("item", HermesItem::new);
 
+            ElementExtension.EXTENSIONS.get().forEach(extension -> extension.addDefaultElements(builder));
 
-            builder.addFormatingElement(new HermesText());
-            builder.addFormatingElement(new HtmlFont());
-            builder.addFormatingElement(new AttributesGlobal());
+            builder.addFormatingElement(new HermesText<>());
+            builder.addFormatingElement(new FontElement<>());
+            builder.addFormatingElement(new GlobalAttributesElement<>());
             builder.addFormatingElement(new AlignmentElement<>());
             builder.addFormatingElement(new CssStyleElement<>());
 
-            builder.addElement(NoOpElement.CREATOR);
+            ElementExtension.EXTENSIONS.get().forEach(extension -> extension.addDefaultFormatting(builder));
+
+            builder.addElement(new NoOpElement.Creator<>());
             builder.addElement(HtmlDefault.CREATOR);
         });
     }
 
-    public Parser(HermesStyle style, Consumer<MineMarkCoreBuilder<HermesStyle, HermesRenderer>> factory) {
-        var builder = MineMarkCore.<HermesStyle, HermesRenderer>builder()
+    public Parser(HtmlStyle style, Consumer<MineMarkCoreBuilder<HtmlStyle, HtmlRenderer>> factory) {
+        var builder = MineMarkCore.<HtmlStyle, HtmlRenderer>builder()
                 .withoutDefaultElements()
                 .withoutDefaultFormattingElements();
         factory.accept(builder);
@@ -102,11 +106,11 @@ public class Parser {
     }
 
     @Nullable
-    public MineMarkElement<HermesStyle, HermesRenderer> parse(String text) {
+    public MineMarkElement<HtmlStyle, HtmlRenderer> parse(String text) {
         try {
             text = PREFIX_PATTERN.matcher(text).replaceAll("<");
             text = SUFFIX_PATTERN.matcher(text).replaceAll(">");
-            this.style.globalData().clear();
+            this.style.onStart();
             return core.parse(this.style, text);
         } catch (Exception e) {
             e.printStackTrace();

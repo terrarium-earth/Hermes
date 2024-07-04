@@ -3,8 +3,8 @@ package earth.terrarium.hermes.elements.html.list;
 import dev.dediamondpro.minemark.LayoutStyle;
 import dev.dediamondpro.minemark.elements.Element;
 import dev.dediamondpro.minemark.elements.impl.list.ListHolderElement;
-import earth.terrarium.hermes.renderer.HermesRenderer;
-import earth.terrarium.hermes.styles.HermesStyle;
+import earth.terrarium.hermes.api.rendering.HtmlRenderer;
+import earth.terrarium.hermes.api.rendering.HtmlStyle;
 import earth.terrarium.hermes.utils.AttributeParser;
 import earth.terrarium.hermes.utils.CssParser;
 import earth.terrarium.hermes.utils.Numerals;
@@ -13,12 +13,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.xml.sax.Attributes;
 
-public class HtmlList extends ListHolderElement<HermesStyle, HermesRenderer> {
+public class HtmlList extends ListHolderElement<HtmlStyle, HtmlRenderer> {
 
     protected final Style style;
     protected final int start;
 
-    public HtmlList(@NotNull HermesStyle style, @NotNull LayoutStyle layoutStyle, @Nullable Element<HermesStyle, HermesRenderer> parent, @NotNull String qName, @Nullable Attributes attributes) {
+    public HtmlList(@NotNull HtmlStyle style, @NotNull LayoutStyle layoutStyle, @Nullable Element<HtmlStyle, HtmlRenderer> parent, @NotNull String qName, @NotNull Attributes attributes) {
         super(style, layoutStyle, parent, qName, attributes);
         assert attributes != null;
 

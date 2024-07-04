@@ -24,13 +24,18 @@ subprojects {
     apply(plugin = "architectury-plugin")
     apply(plugin = "com.github.johnrengelman.shadow")
 
+    val isExtension = project.layout.projectDirectory.asFile.parentFile.name == "extensions"
     val minecraftVersion: String by project
-    val modLoader = project.name
+    val modLoader = if (isExtension) "common" else project.name
     val modId = rootProject.name
     val isCommon = modLoader == rootProject.projects.common.name
 
     base {
-        archivesName.set("$modId-$modLoader-$minecraftVersion")
+        if (isExtension) {
+            archivesName.set("$modId-${project.name}-$minecraftVersion")
+        } else {
+            archivesName.set("$modId-$modLoader-$minecraftVersion")
+        }
     }
 
     configure<LoomGradleExtensionAPI> {
@@ -67,10 +72,18 @@ subprojects {
         })
 
         "modApi"(group = "com.teamresourceful.resourcefullib", name = "resourcefullib-$modLoader-$minecraftVersion", version = resourcefulLibVersion)
-        shade("dev.dediamondpro:minemark-core:$mineMarkVersion")
+
         implementation("org.commonmark:commonmark:$commonMarkVersion")
-        shade("org.commonmark:commonmark-ext-gfm-strikethrough:$commonMarkVersion") { isTransitive = false }
-        shade("org.commonmark:commonmark-ext-gfm-tables:$commonMarkVersion") { isTransitive = false }
+
+        if (isCommon) {
+            implementation("dev.dediamondpro:minemark-core:$mineMarkVersion")
+            implementation("org.commonmark:commonmark-ext-gfm-strikethrough:$commonMarkVersion") { isTransitive = false }
+            implementation("org.commonmark:commonmark-ext-gfm-tables:$commonMarkVersion") { isTransitive = false }
+        } else {
+            shade("dev.dediamondpro:minemark-core:$mineMarkVersion")
+            shade("org.commonmark:commonmark-ext-gfm-strikethrough:$commonMarkVersion") { isTransitive = false }
+            shade("org.commonmark:commonmark-ext-gfm-tables:$commonMarkVersion") { isTransitive = false }
+        }
     }
 
     java {
@@ -86,12 +99,6 @@ subprojects {
         injectAccessWidener.set(true)
     }
 
-    tasks.named<ShadowJar>("shadowJar") {
-        relocate("dev.dediamondpro.minemark", "earth.terrarium.hermes.libs.minemark")
-        relocate("org.commonmark", "earth.terrarium.hermes.libs.commonmark")
-        relocate("org.ccil.cowan.tagsoup", "earth.terrarium.hermes.libs.tagsoup")
-    }
-
     tasks.processResources {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         filesMatching(listOf("META-INF/neoforge.mods.toml", "fabric.mod.json")) {
@@ -100,8 +107,10 @@ subprojects {
     }
 
     if (!isCommon) {
-        configure<ArchitectPluginExtension> {
-            platformSetupLoomIde()
+        if (!isExtension) {
+            configure<ArchitectPluginExtension> {
+                platformSetupLoomIde()
+            }
         }
 
         val shadowCommon by configurations.creating {
@@ -111,6 +120,10 @@ subprojects {
 
         tasks {
             "shadowJar"(ShadowJar::class) {
+                relocate("dev.dediamondpro.minemark", "earth.terrarium.hermes.libs.minemark")
+                relocate("org.commonmark", "earth.terrarium.hermes.libs.commonmark")
+                relocate("org.ccil.cowan.tagsoup", "earth.terrarium.hermes.libs.tagsoup")
+
                 archiveClassifier.set("dev-shadow")
                 configurations = listOf(shadowCommon, shade)
 

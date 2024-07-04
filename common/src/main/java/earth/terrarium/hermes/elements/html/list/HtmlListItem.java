@@ -5,18 +5,18 @@ import dev.dediamondpro.minemark.LayoutStyle;
 import dev.dediamondpro.minemark.elements.Element;
 import dev.dediamondpro.minemark.elements.impl.list.ListElement;
 import dev.dediamondpro.minemark.elements.impl.list.ListHolderElement;
-import earth.terrarium.hermes.renderer.HermesRenderer;
-import earth.terrarium.hermes.styles.HermesStyle;
+import earth.terrarium.hermes.api.rendering.HtmlRenderer;
+import earth.terrarium.hermes.api.rendering.HtmlStyle;
 import earth.terrarium.hermes.utils.Numerals;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.xml.sax.Attributes;
 
-public class HtmlListItem extends ListElement<HermesStyle, HermesRenderer> {
+public class HtmlListItem extends ListElement<HtmlStyle, HtmlRenderer> {
 
     private final String prefix;
 
-    public HtmlListItem(@NotNull HermesStyle style, @NotNull LayoutStyle layoutStyle, @Nullable Element<HermesStyle, HermesRenderer> parent, @NotNull String qName, @Nullable Attributes attributes) {
+    public HtmlListItem(@NotNull HtmlStyle style, @NotNull LayoutStyle layoutStyle, @Nullable Element<HtmlStyle, HtmlRenderer> parent, @NotNull String qName, @Nullable Attributes attributes) {
         super(style, layoutStyle, parent, qName, attributes);
 
         if (!(parent instanceof HtmlList list)) {
@@ -37,7 +37,7 @@ public class HtmlListItem extends ListElement<HermesStyle, HermesRenderer> {
     }
 
     @Override
-    protected void drawMarker(float x, float y, HermesRenderer renderer) {
+    protected void drawMarker(float x, float y, HtmlRenderer renderer) {
         renderer.drawString(
                 prefix,
                 x,
@@ -49,7 +49,7 @@ public class HtmlListItem extends ListElement<HermesStyle, HermesRenderer> {
     }
 
     @Override
-    protected float getListMarkerWidth(LayoutData layout, HermesRenderer renderer) {
+    protected float getListMarkerWidth(LayoutData layout, HtmlRenderer renderer) {
         float indent = Math.max(renderer.width(prefix, layoutStyle.getFontSize()), style.getListStyle().getIndentation());
         if (qName.equals("dd")) {
             return indent * 2f;
@@ -58,7 +58,7 @@ public class HtmlListItem extends ListElement<HermesStyle, HermesRenderer> {
     }
 
     @Override
-    protected float getMarkerHeight(LayoutData layoutData, HermesRenderer renderData) {
+    protected float getMarkerHeight(LayoutData layoutData, HtmlRenderer renderData) {
         return 8f * layoutStyle.getFontSize();
     }
 }

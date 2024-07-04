@@ -1,0 +1,15 @@
+{
+    "schemaVersion": 1,
+    "id": "hermessvg",
+    "version": "${version}",
+    "name": "Hermes Svg",
+    "description": "A simple SVG renderer for Hermes",
+    "authors": ["ThatGravyBoat"],
+    "contact": {},
+    "license": "MIT",
+    "environment": "*",
+    "depends": {
+        "fabric": "*",
+        "hermes": ">=2.0.0"
+    }
+}

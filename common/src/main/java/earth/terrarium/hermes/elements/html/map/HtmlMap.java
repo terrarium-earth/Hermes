@@ -2,20 +2,18 @@ package earth.terrarium.hermes.elements.html.map;
 
 import dev.dediamondpro.minemark.LayoutStyle;
 import dev.dediamondpro.minemark.elements.Element;
-import earth.terrarium.hermes.data.GlobalData;
-import earth.terrarium.hermes.data.map.ImageMap;
+import earth.terrarium.hermes.api.rendering.HtmlStyle;
 import earth.terrarium.hermes.elements.base.NoOpElement;
-import earth.terrarium.hermes.renderer.HermesRenderer;
-import earth.terrarium.hermes.styles.HermesStyle;
+import earth.terrarium.hermes.impl.map.ImageMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.xml.sax.Attributes;
 
-public class HtmlMap extends NoOpElement<HermesStyle, HermesRenderer> {
+public class HtmlMap<R> extends NoOpElement<HtmlStyle, R> {
 
     private final ImageMap map;
 
-    public HtmlMap(@NotNull HermesStyle style, @NotNull LayoutStyle layoutStyle, @Nullable Element<HermesStyle, HermesRenderer> parent, @NotNull String qName, @Nullable Attributes attributes) {
+    public HtmlMap(@NotNull HtmlStyle style, @NotNull LayoutStyle layoutStyle, @Nullable Element<HtmlStyle, R> parent, @NotNull String qName, @Nullable Attributes attributes) {
         super(style, layoutStyle, parent, qName, attributes);
         assert attributes != null;
         String name = attributes.getValue("name");
@@ -23,7 +21,7 @@ public class HtmlMap extends NoOpElement<HermesStyle, HermesRenderer> {
             this.map = null;
         } else {
             this.map = new ImageMap();
-            style.globalData().put(GlobalData.IMAGE_MAP, name, this.map);
+            style.data().put(ImageMap.DATA_KEY, name, this.map);
         }
     }
 

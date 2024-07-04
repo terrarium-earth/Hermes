@@ -14,3 +14,10 @@ pluginManagement {
 include("common")
 include("fabric")
 include("neoforge")
+
+includeExtension("svg")
+
+fun includeExtension(name: String) {
+    include("extensions/$name")
+    project(":extensions/$name").name = name
+}

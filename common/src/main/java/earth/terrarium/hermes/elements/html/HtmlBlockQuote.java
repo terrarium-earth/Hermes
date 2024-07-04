@@ -4,22 +4,22 @@ import dev.dediamondpro.minemark.LayoutData;
 import dev.dediamondpro.minemark.LayoutStyle;
 import dev.dediamondpro.minemark.elements.ChildMovingElement;
 import dev.dediamondpro.minemark.elements.Element;
-import earth.terrarium.hermes.renderer.HermesRenderer;
-import earth.terrarium.hermes.styles.HermesStyle;
+import earth.terrarium.hermes.api.rendering.HtmlRenderer;
+import earth.terrarium.hermes.api.rendering.HtmlStyle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.xml.sax.Attributes;
 
 import java.util.Objects;
 
-public class HtmlBlockQuote extends ChildMovingElement<HermesStyle, HermesRenderer> {
+public class HtmlBlockQuote extends ChildMovingElement<HtmlStyle, HtmlRenderer> {
 
-    public HtmlBlockQuote(@NotNull HermesStyle style, @NotNull LayoutStyle layoutStyle, @Nullable Element<HermesStyle, HermesRenderer> parent, @NotNull String qName, @Nullable Attributes attributes) {
+    public HtmlBlockQuote(@NotNull HtmlStyle style, @NotNull LayoutStyle layoutStyle, @Nullable Element<HtmlStyle, HtmlRenderer> parent, @NotNull String qName, @NotNull Attributes attributes) {
         super(style, layoutStyle, parent, qName, attributes);
     }
 
     @Override
-    protected void drawMarker(float x, float y, float markerWidth, float totalHeight, HermesRenderer renderer) {
+    protected void drawMarker(float x, float y, float markerWidth, float totalHeight, HtmlRenderer renderer) {
         x = x + style.getBlockquoteStyle().getSpacingLeft();
         renderer.fill(
                 x + style.getBlockquoteStyle().getBlockWidth(),
@@ -27,7 +27,7 @@ public class HtmlBlockQuote extends ChildMovingElement<HermesStyle, HermesRender
                 markerWidth - style.getBlockquoteStyle().getSpacingRight(),
                 totalHeight,
                 Objects.requireNonNullElse(
-                        layoutStyle.get(AttributesGlobal.BACKGROUND_COLOR),
+                        layoutStyle.get(GlobalAttributesElement.BACKGROUND_COLOR),
                         style.getBlockquoteStyle().getBackgroundColor()
                 ).getRGB()
         );
@@ -36,26 +36,26 @@ public class HtmlBlockQuote extends ChildMovingElement<HermesStyle, HermesRender
                 style.getBlockquoteStyle().getBlockWidth(),
                 totalHeight,
                 Objects.requireNonNullElse(
-                        layoutStyle.get(AttributesGlobal.BORDER_COLOR),
+                        layoutStyle.get(GlobalAttributesElement.BORDER_COLOR),
                         style.getBlockquoteStyle().getBlockColor()
                 ).getRGB()
         );
     }
 
     @Override
-    protected float getMarkerWidth(LayoutData layoutData, HermesRenderer renderer) {
+    protected float getMarkerWidth(LayoutData layoutData, HtmlRenderer renderer) {
         return style.getBlockquoteStyle().getSpacingLeft()
                 + style.getBlockquoteStyle().getBlockWidth()
                 + style.getBlockquoteStyle().getSpacingRight();
     }
 
     @Override
-    protected float getOutsidePadding(LayoutData layoutData, HermesRenderer renderData) {
+    protected float getOutsidePadding(LayoutData layoutData, HtmlRenderer renderData) {
         return style.getBlockquoteStyle().getPadding();
     }
 
     @Override
-    protected float getInsidePadding(LayoutData layoutData, HermesRenderer renderData) {
+    protected float getInsidePadding(LayoutData layoutData, HtmlRenderer renderData) {
         return style.getBlockquoteStyle().getPadding() + style.getBlockquoteStyle().getSpacingLeft();
     }
 

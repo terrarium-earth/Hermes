@@ -1,0 +1,16 @@
+modLoader = "lowcode"
+loaderVersion = "[1,)"
+license = "MIT"
+
+[[mods]]
+    modId = "hermessvg"
+    version = "${version}"
+    displayName = "Hermes Svg"
+    description = "A simple SVG renderer for Hermes"
+
+[[dependencies.hermessvg]]
+    modId = "hermes"
+    mandatory = true
+    versionRange = "[2.0.0,)"
+    ordering = "NONE"
+    side = "BOTH"
