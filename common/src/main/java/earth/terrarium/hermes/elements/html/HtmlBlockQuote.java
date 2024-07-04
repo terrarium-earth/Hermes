@@ -4,25 +4,18 @@ import dev.dediamondpro.minemark.LayoutData;
 import dev.dediamondpro.minemark.LayoutStyle;
 import dev.dediamondpro.minemark.elements.ChildMovingElement;
 import dev.dediamondpro.minemark.elements.Element;
-import dev.dediamondpro.minemark.utils.ColorFactory;
 import earth.terrarium.hermes.renderer.HermesRenderer;
 import earth.terrarium.hermes.styles.HermesStyle;
-import net.minecraft.Optionull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.xml.sax.Attributes;
 
-import java.awt.*;
 import java.util.Objects;
 
 public class HtmlBlockQuote extends ChildMovingElement<HermesStyle, HermesRenderer> {
 
-    private final Color barColor;
-
     public HtmlBlockQuote(@NotNull HermesStyle style, @NotNull LayoutStyle layoutStyle, @Nullable Element<HermesStyle, HermesRenderer> parent, @NotNull String qName, @Nullable Attributes attributes) {
         super(style, layoutStyle, parent, qName, attributes);
-        assert attributes != null;
-        this.barColor = Optionull.map(attributes.getValue("color"), ColorFactory::web);
     }
 
     @Override
@@ -43,7 +36,7 @@ public class HtmlBlockQuote extends ChildMovingElement<HermesStyle, HermesRender
                 style.getBlockquoteStyle().getBlockWidth(),
                 totalHeight,
                 Objects.requireNonNullElse(
-                        layoutStyle.getOrDefault(AttributesGlobal.BORDER_COLOR, barColor),
+                        layoutStyle.get(AttributesGlobal.BORDER_COLOR),
                         style.getBlockquoteStyle().getBlockColor()
                 ).getRGB()
         );

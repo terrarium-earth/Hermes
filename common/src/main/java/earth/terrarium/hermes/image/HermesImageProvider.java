@@ -4,7 +4,6 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.Weigher;
 import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.logging.LogUtils;
 import com.teamresourceful.resourcefullib.common.utils.WebUtils;
 import dev.dediamondpro.minemark.providers.ImageProvider;
@@ -35,7 +34,7 @@ public final class HermesImageProvider implements ImageProvider<CustomImage> {
             BufferedImage bufferedImage = CACHE.getIfPresent(src);
             if (bufferedImage != null) {
                 try {
-                    load(src, bufferedImage, dimensionCallback, imageCallback);
+                    load(bufferedImage, dimensionCallback, imageCallback);
                 } catch (Exception e) {
                     LOGGER.error("Failed to load image from URL: {}", src, e);
                 }
@@ -47,7 +46,7 @@ public final class HermesImageProvider implements ImageProvider<CustomImage> {
                             try {
                                 BufferedImage image = ImageIO.read(response.body());
                                 CACHE.put(src, image);
-                                load(src, image, dimensionCallback, imageCallback);
+                                load(image, dimensionCallback, imageCallback);
                             } catch (Exception e) {
                                 LOGGER.error("Failed to load image from URL: {}", src, e);
                             }
@@ -65,27 +64,10 @@ public final class HermesImageProvider implements ImageProvider<CustomImage> {
         }
     }
 
-    private static void load(String url, BufferedImage image, Consumer<Dimension> dimensionCallback, Consumer<CustomImage> imageCallback) {
-        try {
-            NativeImage nativeImage = fromBuffered(image);
-            Dimension dimension = new Dimension(nativeImage.getWidth(), nativeImage.getHeight());
-            ExternalCustomImage customImage = new ExternalCustomImage(nativeImage);
-            dimensionCallback.accept(dimension);
-            imageCallback.accept(customImage);
-        } catch (Exception e) {
-            LOGGER.error("Failed to load image from URL: {}", url, e);
-        }
-    }
-
-    private static NativeImage fromBuffered(BufferedImage image) {
-        NativeImage nativeImage = new NativeImage(image.getWidth(), image.getHeight(), true);
-        for (int x = 0; x < image.getWidth(); x++) {
-            for (int y = 0; y < image.getHeight(); y++) {
-                int argb = image.getRGB(x, y);
-                int abgr = (argb & 0xFF00FF00) | ((argb & 0xFF) << 16) | ((argb >> 16) & 0xFF);
-                nativeImage.setPixelRGBA(x, y, abgr);
-            }
-        }
-        return nativeImage;
+    public static void load(BufferedImage image, Consumer<Dimension> dimensionCallback, Consumer<CustomImage> imageCallback) {
+        Dimension dimension = new Dimension(image.getWidth(), image.getHeight());
+        ExternalCustomImage customImage = new ExternalCustomImage(image);
+        dimensionCallback.accept(dimension);
+        imageCallback.accept(customImage);
     }
 }

@@ -26,14 +26,14 @@ public class CssParser {
     public static Color parseBackgroundColor(String css, String element) {
         if (css == null) {
             return switch (element) {
-                case "mark" -> Color.yellow;
+                case "mark" -> ColorFactory.YELLOW;
                 default -> null;
             };
         }
         try {
             return ColorFactory.web(css);
         } catch (Exception e) {
-            return ColorFactory.TRANSPARENT;
+            return ColorFactory.BLACK;
         }
     }
 

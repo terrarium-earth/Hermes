@@ -8,13 +8,15 @@ plugins {
     id("maven-publish")
     id("dev.architectury.loom") version "1.6-SNAPSHOT" apply false
     id("architectury-plugin") version "3.4-SNAPSHOT"
-    id("com.github.johnrengelman.shadow") version "7.1.2" apply false
+    id("com.github.johnrengelman.shadow") version "8.1.1" apply false
 }
 
 architectury {
     val minecraftVersion: String by project
     minecraft = minecraftVersion
 }
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 subprojects {
     apply(plugin = "maven-publish")
@@ -110,7 +112,7 @@ subprojects {
         tasks {
             "shadowJar"(ShadowJar::class) {
                 archiveClassifier.set("dev-shadow")
-                configurations = listOf(shadowCommon)
+                configurations = listOf(shadowCommon, shade)
 
                 exclude("architectury.common.json")
             }
