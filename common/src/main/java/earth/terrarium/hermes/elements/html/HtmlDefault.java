@@ -8,13 +8,12 @@ import dev.dediamondpro.minemark.elements.Inline;
 import dev.dediamondpro.minemark.elements.creators.ElementCreator;
 import earth.terrarium.hermes.api.rendering.HtmlRenderer;
 import earth.terrarium.hermes.api.rendering.HtmlStyle;
+import earth.terrarium.hermes.impl.HermesRenderer;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.xml.sax.Attributes;
-
-import java.awt.*;
 
 public class HtmlDefault extends ChildMovingElement<HtmlStyle, HtmlRenderer> implements Inline {
 
@@ -49,18 +48,7 @@ public class HtmlDefault extends ChildMovingElement<HtmlStyle, HtmlRenderer> imp
 
     @Override
     protected void drawMarker(float x, float y, float markerWidth, float totalHeight, HtmlRenderer renderer) {
-        Color backgroundColor = this.layoutStyle.get(GlobalAttributesElement.BACKGROUND_COLOR);
-        Color borderColor = this.layoutStyle.get(GlobalAttributesElement.BORDER_COLOR);
-
-        if (backgroundColor != null) {
-            renderer.fill(x, y, markerWidth, totalHeight, backgroundColor.getRGB());
-        }
-        if (borderColor != null) {
-            renderer.fill(x, y, markerWidth, 2, borderColor.getRGB());
-            renderer.fill(x, y + totalHeight - 2, markerWidth, 2, borderColor.getRGB());
-            renderer.fill(x, y + 2, 2, totalHeight - 4, borderColor.getRGB());
-            renderer.fill(x + markerWidth - 2, y + 2, 2, totalHeight - 4, borderColor.getRGB());
-        }
+        HermesRenderer.drawDefault(x, y, markerWidth, totalHeight, this.layoutStyle, renderer);
     }
 
     @Override
@@ -70,8 +58,7 @@ public class HtmlDefault extends ChildMovingElement<HtmlStyle, HtmlRenderer> imp
 
     @Override
     protected float getInsidePadding(LayoutData layoutData, HtmlRenderer renderer) {
-        Color borderColor = this.layoutStyle.get(GlobalAttributesElement.BORDER_COLOR);
-        return borderColor != null ? 4 : 0;
+        return this.layoutStyle.getOrDefault(GlobalAttributesElement.PADDING, 0f);
     }
 
     @Override

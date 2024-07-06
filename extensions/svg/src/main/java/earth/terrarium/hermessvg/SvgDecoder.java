@@ -7,6 +7,7 @@ import com.mojang.logging.LogUtils;
 import dev.dediamondpro.minemark.providers.ImageProvider;
 import earth.terrarium.hermes.api.image.CustomImage;
 import earth.terrarium.hermes.impl.image.HermesImageProvider;
+import net.minecraft.Util;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.TranscodingHints;
@@ -15,6 +16,7 @@ import org.slf4j.Logger;
 
 import java.awt.image.BufferedImage;
 import java.io.StringReader;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 public class SvgDecoder {
@@ -41,26 +43,28 @@ public class SvgDecoder {
             return;
         }
 
-        try (var reader = new StringReader(data)) {
-            ImageTranscoder transcoder = new BufferedImageTranscoder(
-                    image -> {
-                        CACHE.put(data, image);
-                        HermesImageProvider.load(image, dimensionCallback, imageCallback);
-                    }
-            );
-            TranscodingHints hints = transcoder.getTranscodingHints();
-            if (width > 0 && height > 0) {
-                hints.put(ImageTranscoder.KEY_WIDTH, width * 4f);
-                hints.put(ImageTranscoder.KEY_HEIGHT, height * 4f);
+        CompletableFuture.runAsync(() -> {
+            try (var reader = new StringReader(data)) {
+                ImageTranscoder transcoder = new BufferedImageTranscoder(
+                        image -> {
+                            CACHE.put(data, image);
+                            HermesImageProvider.load(image, dimensionCallback, imageCallback);
+                        }
+                );
+                TranscodingHints hints = transcoder.getTranscodingHints();
+                if (width > 0 && height > 0) {
+                    hints.put(ImageTranscoder.KEY_WIDTH, width * 4f);
+                    hints.put(ImageTranscoder.KEY_HEIGHT, height * 4f);
+                }
+                hints.put(ImageTranscoder.KEY_PIXEL_UNIT_TO_MILLIMETER, 0.352777778f);
+                hints.put(ImageTranscoder.KEY_ALLOWED_SCRIPT_TYPES, "");
+                hints.put(ImageTranscoder.KEY_ALLOW_EXTERNAL_RESOURCES, false);
+                transcoder.setTranscodingHints(hints);
+                transcoder.transcode(new TranscoderInput(reader), null);
+            } catch (Exception e) {
+                LOGGER.error("Failed to load image from svg: {}", data, e);
             }
-            hints.put(ImageTranscoder.KEY_PIXEL_UNIT_TO_MILLIMETER, 0.352777778f);
-            hints.put(ImageTranscoder.KEY_ALLOWED_SCRIPT_TYPES, "");
-            hints.put(ImageTranscoder.KEY_ALLOW_EXTERNAL_RESOURCES, false);
-            transcoder.setTranscodingHints(hints);
-            transcoder.transcode(new TranscoderInput(reader), null);
-        } catch (Exception e) {
-            LOGGER.error("Failed to load image from svg: {}", data, e);
-        }
+        }, Util.ioPool());
     }
 
     private static class BufferedImageTranscoder extends ImageTranscoder {

@@ -6,6 +6,8 @@ import dev.dediamondpro.minemark.elements.ChildMovingElement;
 import dev.dediamondpro.minemark.elements.Element;
 import earth.terrarium.hermes.api.rendering.HtmlRenderer;
 import earth.terrarium.hermes.api.rendering.HtmlStyle;
+import earth.terrarium.hermes.utils.CssBorder;
+import net.minecraft.Optionull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.xml.sax.Attributes;
@@ -35,10 +37,11 @@ public class HtmlBlockQuote extends ChildMovingElement<HtmlStyle, HtmlRenderer> 
                 x, y,
                 style.getBlockquoteStyle().getBlockWidth(),
                 totalHeight,
-                Objects.requireNonNullElse(
-                        layoutStyle.get(GlobalAttributesElement.BORDER_COLOR),
-                        style.getBlockquoteStyle().getBlockColor()
-                ).getRGB()
+                Optionull.mapOrDefault(
+                        layoutStyle.get(GlobalAttributesElement.BORDER),
+                        CssBorder::getColor,
+                        style.getBlockquoteStyle().getBlockColor().getRGB()
+                )
         );
     }
 

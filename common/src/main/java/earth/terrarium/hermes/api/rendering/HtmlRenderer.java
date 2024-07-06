@@ -5,6 +5,8 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.Nullable;
+import org.joml.Vector4f;
 
 public interface HtmlRenderer {
 
@@ -12,9 +14,17 @@ public interface HtmlRenderer {
 
     void drawString(String text, float x, float y, float scale, int color, boolean shadow);
 
-    void fill(float x, float y, float width, float height, int color);
+    void fill(float x, float y, float width, float height, int backgroundColor, int borderColor, float borderWidth, @Nullable Vector4f borderRadius);
 
-    void blit(ResourceLocation texture, float x, float y, float width, float height);
+    default void fill(float x, float y, float width, float height, int color) {
+        fill(x, y, width, height, color, color, 0, null);
+    }
+
+    void blit(ResourceLocation texture, float x, float y, float width, float height, Vector4f borderRadius);
+
+    default void blit(ResourceLocation texture, float x, float y, float width, float height) {
+        blit(texture, x, y, width, height, null);
+    }
 
     Font getFont();
 

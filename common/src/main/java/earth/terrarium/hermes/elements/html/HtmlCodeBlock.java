@@ -5,6 +5,7 @@ import dev.dediamondpro.minemark.elements.Element;
 import dev.dediamondpro.minemark.elements.impl.CodeBlockElement;
 import earth.terrarium.hermes.api.rendering.HtmlRenderer;
 import earth.terrarium.hermes.api.rendering.HtmlStyle;
+import earth.terrarium.hermes.impl.HermesRenderer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.xml.sax.Attributes;
@@ -19,6 +20,6 @@ public class HtmlCodeBlock extends CodeBlockElement<HtmlStyle, HtmlRenderer> {
 
     @Override
     protected void drawBlock(float x, float y, float width, float height, Color color, HtmlRenderer renderer) {
-        renderer.fill(x, y, width, height, color.getRGB());
+        HermesRenderer.drawDefault(x, y, width, height, color, this.layoutStyle, renderer);
     }
 }

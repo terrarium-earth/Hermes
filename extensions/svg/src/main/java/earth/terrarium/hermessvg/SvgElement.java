@@ -86,7 +86,7 @@ public class SvgElement extends BasicElement<HtmlStyle, HtmlRenderer> {
     protected void drawElement(float x, float y, float width, float height, HtmlRenderer renderer) {
         if (failed) return;
         if (image == null) return;
-        image.drawImage(x, y, width, height, renderer);
+        image.drawImage(x, y, width, height, null, renderer);
     }
 
     @Override

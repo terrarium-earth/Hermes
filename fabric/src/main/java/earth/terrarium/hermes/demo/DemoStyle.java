@@ -22,7 +22,7 @@ public final class DemoStyle {
             new HeadingLevelStyleConfig(1.33f, 8f),
             new HeadingLevelStyleConfig(1f, 6f),
             new HeadingLevelStyleConfig(0.7f, 4f),
-            new HeadingLevelStyleConfig(0.7f, 4f)
+            new HeadingLevelStyleConfig(0.5f, 4f)
     );
     public static final HorizontalRuleStyleConfig HR_STYLE = new HorizontalRuleStyleConfig(2f, 4f, LINE_COLOR);
     public static final ImageStyleConfig IMAGE_STYLE = new ImageStyleConfig(HermesImageProvider.INSTANCE);

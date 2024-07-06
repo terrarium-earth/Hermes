@@ -1,16 +1,14 @@
 package earth.terrarium.hermes.impl.image;
 
 import com.mojang.blaze3d.platform.NativeImage;
-import earth.terrarium.hermes.api.image.CustomImage;
-import earth.terrarium.hermes.api.rendering.HtmlRenderer;
+import earth.terrarium.hermes.api.image.SimpleCustomImage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.ResourceLocation;
 
 import java.awt.image.BufferedImage;
-import java.io.Closeable;
 
-public record ExternalCustomImage(ResourceLocation texture) implements CustomImage, Closeable {
+public record ExternalCustomImage(ResourceLocation texture) implements SimpleCustomImage {
 
     public ExternalCustomImage(BufferedImage image) {
         this(Minecraft.getInstance().getTextureManager().register(
@@ -29,11 +27,6 @@ public record ExternalCustomImage(ResourceLocation texture) implements CustomIma
             }
         }
         return nativeImage;
-    }
-
-    @Override
-    public void drawImage(float x, float y, float width, float height, HtmlRenderer renderer) {
-        renderer.blit(texture, x, y, width, height);
     }
 
     @Override

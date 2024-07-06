@@ -5,11 +5,10 @@ import dev.dediamondpro.minemark.LayoutStyle;
 import dev.dediamondpro.minemark.elements.Element;
 import dev.dediamondpro.minemark.elements.formatting.FormattingElement;
 import dev.dediamondpro.minemark.style.Style;
-import dev.dediamondpro.minemark.utils.ColorFactory;
 import dev.dediamondpro.minemark.utils.StyleType;
+import earth.terrarium.hermes.utils.CssBorder;
 import earth.terrarium.hermes.utils.CssParser;
 import earth.terrarium.hermes.utils.types.VerticalAlignment;
-import net.minecraft.Optionull;
 import net.minecraft.Util;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,7 +22,8 @@ import java.util.function.Consumer;
 public class GlobalAttributesElement<S extends Style, R> implements FormattingElement<S, R> {
 
     public static final StyleType<Color> BACKGROUND_COLOR = new StyleType<>("hermes:background_color", Color.class);
-    public static final StyleType<Color> BORDER_COLOR = new StyleType<>("hermes:border_color", Color.class);
+    public static final StyleType<CssBorder> BORDER = new StyleType<>("hermes:border", CssBorder.class);
+    public static final StyleType<Float> PADDING = new StyleType<>("hermes:padding", Float.class);
     public static final StyleType<String> TITLE = new StyleType<>("hermes:title", String.class);
     public static final StyleType<VerticalAlignment> VERTICAL_ALIGNMENT = new StyleType<>("hermes:vertical_alignment", VerticalAlignment.class);
     public static final StyleType<CursorScreen.Cursor> CURSOR = new StyleType<>("hermes:cursor", CursorScreen.Cursor.class);
@@ -53,14 +53,17 @@ public class GlobalAttributesElement<S extends Style, R> implements FormattingEl
 
     @Override
     public void applyStyle(@NotNull S style, @NotNull LayoutStyle layoutStyle, @Nullable Element<S, R> parent, @NotNull String qName, @NotNull Attributes attributes) {
-        layoutStyle.put(TITLE, attributes.getValue("title"));
+        Applicator applicator = new Applicator(layoutStyle);
+
+        applicator.put(TITLE, attributes.getValue("title"));
 
         var css = CssParser.parseInlineCss(attributes.getValue("style"));
 
-        layoutStyle.put(BACKGROUND_COLOR, CssParser.parseBackgroundColor(css.get("background-color"), qName));
-        layoutStyle.put(BORDER_COLOR, Optionull.map(css.get("border-color"), ColorFactory::web));
-        layoutStyle.put(VERTICAL_ALIGNMENT, VerticalAlignment.from(css.get("vertical-align"), qName));
-        layoutStyle.put(CURSOR, CssParser.parseCursor(css.get("cursor"), qName));
+        applicator.put(BACKGROUND_COLOR, CssParser.parseBackgroundColor(css.get("background-color"), qName));
+        applicator.put(VERTICAL_ALIGNMENT, VerticalAlignment.from(css.get("vertical-align"), qName));
+        applicator.put(CURSOR, CssParser.parseCursor(css.get("cursor"), qName));
+        applicator.put(BORDER, CssBorder.parseBorder(css));
+        applicator.put(PADDING, CssParser.parsePadding(css.get("padding")));
 
         DEFAULT_STYLE.getOrDefault(qName, s -> {}).accept(layoutStyle);
     }
@@ -68,5 +71,16 @@ public class GlobalAttributesElement<S extends Style, R> implements FormattingEl
     @Override
     public boolean appliesTo(S style, LayoutStyle layoutStyle, @NotNull Element<S, R> parent, @NotNull String qName, @NotNull Attributes attributes) {
         return true;
+    }
+
+    public record Applicator(LayoutStyle style) {
+
+        public <T> void put(StyleType<T> type, T value) {
+            if (value != null) {
+                style.put(type, value);
+            } else {
+                style.remove(type);
+            }
+        }
     }
 }

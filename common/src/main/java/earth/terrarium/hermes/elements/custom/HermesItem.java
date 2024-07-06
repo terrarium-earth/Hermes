@@ -8,6 +8,7 @@ import dev.dediamondpro.minemark.elements.Element;
 import dev.dediamondpro.minemark.elements.Inline;
 import earth.terrarium.hermes.api.rendering.HtmlRenderer;
 import earth.terrarium.hermes.api.rendering.HtmlStyle;
+import earth.terrarium.hermes.impl.HermesRenderer;
 import earth.terrarium.hermes.utils.AttributeParser;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -29,6 +30,7 @@ public class HermesItem extends BasicElement<HtmlStyle, HtmlRenderer> implements
 
     @Override
     protected void drawElement(float x, float y, float width, float height, HtmlRenderer renderer) {
+        HermesRenderer.drawDefault(x, y, width, height, this.layoutStyle, renderer);
         try (var stack = new CloseablePoseStack(renderer.getGraphics())) {
             stack.scale(this.scale, this.scale, 1f);
             renderer.getGraphics().renderFakeItem(

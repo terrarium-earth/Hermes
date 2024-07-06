@@ -37,6 +37,15 @@ public class CssParser {
         }
     }
 
+    public static float parsePadding(String css) {
+        if (css == null) return 0;
+        try {
+            return new Unit(css).getValue(0);
+        }catch (Exception e) {
+            return 0;
+        }
+    }
+
     public static CursorScreen.Cursor parseCursor(String css, String element) {
         if (css == null) {
             return switch (element) {
