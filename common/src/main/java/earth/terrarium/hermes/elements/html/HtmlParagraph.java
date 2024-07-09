@@ -7,6 +7,7 @@ import dev.dediamondpro.minemark.elements.impl.TextElement;
 import earth.terrarium.hermes.api.rendering.HtmlRenderer;
 import earth.terrarium.hermes.api.rendering.HtmlStyle;
 import earth.terrarium.hermes.css.FontFamily;
+import earth.terrarium.hermes.css.TextDirection;
 import earth.terrarium.hermes.css.VerticalAlignment;
 import earth.terrarium.hermes.elements.custom.HermesText;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +19,14 @@ import java.awt.*;
 public class HtmlParagraph extends TextElement<HtmlStyle, HtmlRenderer> {
 
     public HtmlParagraph(@NotNull String text, @NotNull HtmlStyle style, @NotNull LayoutStyle layoutStyle, @Nullable Element<HtmlStyle, HtmlRenderer> parent, @NotNull String qName, @Nullable Attributes attributes) {
-        super(text, style, layoutStyle, parent, qName, attributes);
+        super(format(text, layoutStyle), style, layoutStyle, parent, qName, attributes);
+    }
+
+    private static String format(String text, LayoutStyle style) {
+        if (style.getOrDefault(GlobalAttributesElement.DIRECTION, TextDirection.LEFT_TO_RIGHT) == TextDirection.RIGHT_TO_LEFT) {
+            return new StringBuilder(text).reverse().toString();
+        }
+        return text;
     }
 
     @Override

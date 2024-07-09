@@ -6,9 +6,7 @@ import dev.dediamondpro.minemark.elements.Element;
 import dev.dediamondpro.minemark.elements.formatting.FormattingElement;
 import dev.dediamondpro.minemark.style.Style;
 import dev.dediamondpro.minemark.utils.StyleType;
-import earth.terrarium.hermes.css.Border;
-import earth.terrarium.hermes.css.FontFamily;
-import earth.terrarium.hermes.css.VerticalAlignment;
+import earth.terrarium.hermes.css.*;
 import earth.terrarium.hermes.utils.CssParser;
 import net.minecraft.Util;
 import org.jetbrains.annotations.NotNull;
@@ -26,11 +24,12 @@ public class GlobalAttributesElement<S extends Style, R> implements FormattingEl
 
     public static final StyleType<Color> BACKGROUND_COLOR = new StyleType<>("hermes:background_color", Color.class);
     public static final StyleType<Border> BORDER = new StyleType<>("hermes:border", Border.class);
-    public static final StyleType<Float> PADDING = new StyleType<>("hermes:padding", Float.class);
-    public static final StyleType<Float> MARGIN = new StyleType<>("hermes:margin", Float.class);
+    public static final StyleType<Unit> PADDING = new StyleType<>("hermes:padding", Unit.class);
+    public static final StyleType<Unit> MARGIN = new StyleType<>("hermes:margin", Unit.class);
     public static final StyleType<String> TITLE = new StyleType<>("hermes:title", String.class);
     public static final StyleType<VerticalAlignment> VERTICAL_ALIGNMENT = new StyleType<>("hermes:vertical_alignment", VerticalAlignment.class);
     public static final StyleType<CursorScreen.Cursor> CURSOR = new StyleType<>("hermes:cursor", CursorScreen.Cursor.class);
+    public static final StyleType<TextDirection> DIRECTION = new StyleType<>("hermes:direction", TextDirection.class);
 
     private static final Map<String, Consumer<LayoutStyle>> DEFAULT_STYLE = Util.make(new HashMap<>(), map -> {
         map.put("big", style -> style.setFontSize(1.2f));
@@ -74,6 +73,7 @@ public class GlobalAttributesElement<S extends Style, R> implements FormattingEl
         applicator.put(BORDER, Border.fromCss(css));
         applicator.set(FONT_FAMILY, FontFamily.fromCss(css, qName));
         applicator.set(VERTICAL_ALIGNMENT, VerticalAlignment.fromCss(css, qName));
+        applicator.set(DIRECTION, TextDirection.fromCss(css, attributes::getValue, qName));
     }
 
     @Override

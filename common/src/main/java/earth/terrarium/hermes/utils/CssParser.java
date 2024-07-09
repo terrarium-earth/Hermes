@@ -25,12 +25,7 @@ public class CssParser {
     }
 
     public static Color parseBackgroundColor(String css, String tag) {
-        if (css == null) {
-            return switch (tag) {
-                case "mark" -> ColorFactory.DARKKHAKI;
-                default -> null;
-            };
-        }
+        if (css == null) return "mark".equals(tag) ? ColorFactory.DARKKHAKI : null;
         try {
             return ColorFactory.web(css);
         } catch (Exception e) {
@@ -38,22 +33,17 @@ public class CssParser {
         }
     }
 
-    public static float parseUnit(String css) {
-        if (css == null) return 0;
+    public static Unit parseUnit(String css) {
+        if (css == null) return Unit.ZERO;
         try {
-            return new Unit(css).getValue(0);
+            return new Unit(css);
         }catch (Exception e) {
-            return 0;
+            return Unit.ZERO;
         }
     }
 
     public static CursorScreen.Cursor parseCursor(String css, String element) {
-        if (css == null) {
-            return switch (element) {
-                case "a" -> CursorScreen.Cursor.POINTER;
-                default -> null;
-            };
-        }
+        if (css == null) return "a".equals(element) ? CursorScreen.Cursor.POINTER : null;
         return switch (css) {
             case "all-scroll", "col-resize", "move", "row-resize" -> CursorScreen.Cursor.RESIZE_ALL;
             case "e-resize", "ew-resize", "w-resize" -> CursorScreen.Cursor.RESIZE_EW;

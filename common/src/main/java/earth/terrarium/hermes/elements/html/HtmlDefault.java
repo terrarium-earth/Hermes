@@ -8,6 +8,7 @@ import dev.dediamondpro.minemark.elements.Inline;
 import dev.dediamondpro.minemark.elements.creators.ElementCreator;
 import earth.terrarium.hermes.api.rendering.HtmlRenderer;
 import earth.terrarium.hermes.api.rendering.HtmlStyle;
+import earth.terrarium.hermes.css.Unit;
 import earth.terrarium.hermes.impl.HermesRenderer;
 import earth.terrarium.hermes.utils.MarkdownPositions;
 import net.minecraft.network.chat.Component;
@@ -62,12 +63,12 @@ public class HtmlDefault extends ChildMovingElement<HtmlStyle, HtmlRenderer> imp
 
     @Override
     protected float getOutsidePadding(LayoutData layoutData, HtmlRenderer renderer) {
-        return this.layoutStyle.getOrDefault(GlobalAttributesElement.MARGIN, 0f);
+        return this.layoutStyle.getOrDefault(GlobalAttributesElement.MARGIN, Unit.ZERO).getValue(0f);
     }
 
     @Override
     protected float getInsidePadding(LayoutData layoutData, HtmlRenderer renderer) {
-        return this.layoutStyle.getOrDefault(GlobalAttributesElement.PADDING, 0f);
+        return this.layoutStyle.getOrDefault(GlobalAttributesElement.PADDING, Unit.ZERO).getValue(0f);
     }
 
     @Override
