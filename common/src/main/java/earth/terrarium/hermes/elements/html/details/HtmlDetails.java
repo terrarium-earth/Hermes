@@ -2,10 +2,10 @@ package earth.terrarium.hermes.elements.html.details;
 
 import dev.dediamondpro.minemark.LayoutData;
 import dev.dediamondpro.minemark.LayoutStyle;
-import dev.dediamondpro.minemark.elements.ChildBasedElement;
 import dev.dediamondpro.minemark.elements.Element;
 import earth.terrarium.hermes.api.rendering.HtmlRenderer;
 import earth.terrarium.hermes.api.rendering.HtmlStyle;
+import earth.terrarium.hermes.elements.html.HtmlDefault;
 import earth.terrarium.hermes.elements.html.HtmlParagraph;
 import earth.terrarium.hermes.utils.AttributeParser;
 import earth.terrarium.hermes.utils.Utils;
@@ -17,7 +17,7 @@ import org.xml.sax.helpers.AttributesImpl;
 import java.util.List;
 import java.util.Objects;
 
-public class HtmlDetails extends ChildBasedElement<HtmlStyle, HtmlRenderer> {
+public class HtmlDetails extends HtmlDefault {
 
     private boolean open;
     private List<Element<HtmlStyle, HtmlRenderer>> copy = null;
@@ -77,5 +77,10 @@ public class HtmlDetails extends ChildBasedElement<HtmlStyle, HtmlRenderer> {
     public void toggle() {
         this.open = !this.open;
         this.regenerateLayout();
+    }
+
+    @Override
+    protected MarkerType getMarkerType() {
+        return MarkerType.FULL;
     }
 }

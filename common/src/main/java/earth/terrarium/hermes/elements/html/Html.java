@@ -7,7 +7,8 @@ public class Html {
     public static final Set<String> BLOCK = Set.of(
             "address", "article", "aside", "button", "canvas",
             "div", "figcaption", "figure", "footer", "header",
-            "hgroup", "main", "nav", "search", "section", "menu"
+            "hgroup", "main", "nav", "search", "section", "menu", "pre",
+             "details"
     );
 
     public static final Set<String> NO_DISPLAY = Set.of(

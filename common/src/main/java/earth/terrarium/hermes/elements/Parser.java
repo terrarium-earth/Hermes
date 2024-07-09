@@ -69,6 +69,7 @@ public class Parser {
             builder.addElement("summary", HtmlSummary::new);
 
             builder.addElement("figure", HtmlFigure::new);
+            builder.addElement("q", HtmlQuote::new);
 
             builder.addElement(Elements.CODE_BLOCK, HtmlCodeBlock::new);
             builder.addElement(Elements.BLOCKQUOTE, HtmlBlockQuote::new);
@@ -109,7 +110,7 @@ public class Parser {
     public MineMarkElement<HtmlStyle, HtmlRenderer> parse(String text) {
         try {
             text = PREFIX_PATTERN.matcher(text).replaceAll("<");
-            text = SUFFIX_PATTERN.matcher(text).replaceAll(">");
+            text = SUFFIX_PATTERN.matcher(text).replaceAll("> ");
             this.style.onStart();
             return core.parse(this.style, text);
         } catch (Exception e) {

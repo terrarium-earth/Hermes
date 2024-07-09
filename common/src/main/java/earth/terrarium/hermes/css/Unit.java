@@ -1,6 +1,8 @@
-package earth.terrarium.hermes.utils;
+package earth.terrarium.hermes.css;
 
-public class Unit {
+public final class Unit {
+
+    public static final Unit ZERO = new Unit(0, false);
 
     private final boolean percent;
     private final float value;

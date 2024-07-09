@@ -9,9 +9,11 @@ import dev.dediamondpro.minemark.LayoutStyle;
 import dev.dediamondpro.minemark.utils.ColorFactory;
 import earth.terrarium.hermes.api.rendering.HtmlRenderer;
 import earth.terrarium.hermes.elements.html.GlobalAttributesElement;
+import earth.terrarium.hermes.mixin.FontManagerAccessor;
+import earth.terrarium.hermes.mixin.MinecraftAccessor;
 import earth.terrarium.hermes.shader.impl.RoundedRectShader;
 import earth.terrarium.hermes.shader.impl.RoundedTextureShader;
-import earth.terrarium.hermes.utils.CssBorder;
+import earth.terrarium.hermes.css.Border;
 import earth.terrarium.hermes.utils.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -29,6 +31,12 @@ import java.util.function.Consumer;
 
 public final class HermesRenderer implements HtmlRenderer {
 
+    private static final Font MONOSPACED = new Font(
+            id -> ((FontManagerAccessor) ((MinecraftAccessor) Minecraft.getInstance()).getFontManager())
+                    .getFontSets().get(ResourceLocation.fromNamespaceAndPath("hermes", "monospaced")),
+            false
+    );
+
     private final Font font;
     private final GuiGraphics graphics;
     private final Consumer<CursorScreen.Cursor> cursorSetter;
@@ -42,16 +50,17 @@ public final class HermesRenderer implements HtmlRenderer {
     }
 
     @Override
-    public float width(String text, float scale) {
+    public float width(String text, float scale, boolean monospaced) {
+        if (monospaced) return MONOSPACED.width(text) * scale;
         return this.font.width(text) * scale;
     }
 
     @Override
-    public void drawString(String text, float x, float y, float scale, int color, boolean shadow) {
+    public void drawString(String text, float x, float y, float scale, int color, boolean shadow, boolean monospaced) {
         try (var stack = new CloseablePoseStack(graphics)) {
             stack.scale(scale, scale, 1f);
             this.graphics.drawString(
-                    this.font,
+                    monospaced ? MONOSPACED : this.font,
                     text,
                     (int) (x / scale),
                     (int) (y / scale),
@@ -160,6 +169,11 @@ public final class HermesRenderer implements HtmlRenderer {
     }
 
     @Override
+    public Font getMonospacedFont() {
+        return MONOSPACED;
+    }
+
+    @Override
     public GuiGraphics getGraphics() {
         return graphics;
     }
@@ -184,7 +198,7 @@ public final class HermesRenderer implements HtmlRenderer {
     }
 
     public static void drawDefault(float x, float y, float width, float height, Color borderFallback, LayoutStyle style, HtmlRenderer renderer) {
-        CssBorder border = style.getOrDefault(GlobalAttributesElement.BORDER, CssBorder.NONE);
+        Border border = style.getOrDefault(GlobalAttributesElement.BORDER, Border.NONE);
         Color backgroundColor = style.getOrDefault(GlobalAttributesElement.BACKGROUND_COLOR, ColorFactory.TRANSPARENT);
 
         renderer.fill(

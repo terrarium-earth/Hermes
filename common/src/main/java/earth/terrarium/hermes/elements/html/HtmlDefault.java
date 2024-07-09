@@ -9,6 +9,7 @@ import dev.dediamondpro.minemark.elements.creators.ElementCreator;
 import earth.terrarium.hermes.api.rendering.HtmlRenderer;
 import earth.terrarium.hermes.api.rendering.HtmlStyle;
 import earth.terrarium.hermes.impl.HermesRenderer;
+import earth.terrarium.hermes.utils.MarkdownPositions;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -19,6 +20,8 @@ public class HtmlDefault extends ChildMovingElement<HtmlStyle, HtmlRenderer> imp
 
     public static final ElementCreator<HtmlStyle, HtmlRenderer> CREATOR = new Creator();
 
+    private final MarkdownPositions positions = new MarkdownPositions();
+
     public HtmlDefault(@NotNull HtmlStyle style, @NotNull LayoutStyle layoutStyle, @Nullable Element<HtmlStyle, HtmlRenderer> parent, @NotNull String qName, @Nullable Attributes attributes) {
         super(style, layoutStyle, parent, qName, attributes);
     }
@@ -27,15 +30,15 @@ public class HtmlDefault extends ChildMovingElement<HtmlStyle, HtmlRenderer> imp
     @ApiStatus.Internal
     public void generateLayout(LayoutData layoutData, HtmlRenderer renderer) {
         if (Html.BLOCK.contains(qName)) {
-            super.generateLayout(layoutData, renderer);
+            this.positions.init(layoutData, renderer, super::generateLayout);
         } else {
-            generateNewLayout(layoutData, renderer);
+            this.positions.init(layoutData, renderer, this::generateNewLayout);
         }
     }
 
     @Override
     public void drawInternal(float xOffset, float yOffset, float mouseX, float mouseY, HtmlRenderer renderer) {
-        if (this.marker != null && this.marker.isInside(mouseX - xOffset, mouseY - yOffset)) {
+        if (this.positions.isAnyInside(mouseX, mouseY) ) {
             if (this.layoutStyle.get(GlobalAttributesElement.TITLE) != null) {
                 renderer.setTooltip(Component.literal(this.layoutStyle.get(GlobalAttributesElement.TITLE)));
             }
@@ -43,17 +46,23 @@ public class HtmlDefault extends ChildMovingElement<HtmlStyle, HtmlRenderer> imp
                 renderer.setCursor(this.layoutStyle.get(GlobalAttributesElement.CURSOR));
             }
         }
+
+        HermesRenderer.drawDefault(
+                this.positions.x() + xOffset, this.positions.y() + yOffset,
+                this.positions.width(), this.positions.height(),
+                this.layoutStyle, renderer
+        );
         super.drawInternal(xOffset, yOffset, mouseX, mouseY, renderer);
     }
 
     @Override
     protected void drawMarker(float x, float y, float markerWidth, float totalHeight, HtmlRenderer renderer) {
-        HermesRenderer.drawDefault(x, y, markerWidth, totalHeight, this.layoutStyle, renderer);
+
     }
 
     @Override
     protected float getOutsidePadding(LayoutData layoutData, HtmlRenderer renderer) {
-        return super.getOutsidePadding(layoutData, renderer);
+        return this.layoutStyle.getOrDefault(GlobalAttributesElement.MARGIN, 0f);
     }
 
     @Override

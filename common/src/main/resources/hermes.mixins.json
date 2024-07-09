@@ -1,0 +1,13 @@
+{
+    "required": true,
+    "minVersion": "0.8",
+    "package": "earth.terrarium.hermes.mixin",
+    "compatibilityLevel": "JAVA_21",
+    "client": [
+        "FontManagerAccessor",
+        "MinecraftAccessor"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}

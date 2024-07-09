@@ -18,7 +18,7 @@ public final class DemoStyle {
     public static final LinkStyleConfig LINK_STYLE = new LinkStyleConfig(new Color(65, 105, 225), Util.getPlatform()::openUri);
     public static final HeadingStyleConfig HEADING_STYLE = new HeadingStyleConfig(
             new HeadingLevelStyleConfig(2f, 12f, true, LINE_COLOR, 2f, 5f),
-            new HeadingLevelStyleConfig(1.66f, 10f, true, LINE_COLOR, 2f, 5f),
+            new HeadingLevelStyleConfig(1.66f, 10f),
             new HeadingLevelStyleConfig(1.33f, 8f),
             new HeadingLevelStyleConfig(1f, 6f),
             new HeadingLevelStyleConfig(0.7f, 4f),

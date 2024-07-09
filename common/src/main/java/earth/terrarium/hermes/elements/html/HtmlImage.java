@@ -10,7 +10,7 @@ import earth.terrarium.hermes.api.rendering.HtmlRenderer;
 import earth.terrarium.hermes.api.rendering.HtmlStyle;
 import earth.terrarium.hermes.impl.map.ImageMap;
 import earth.terrarium.hermes.impl.map.MapArea;
-import earth.terrarium.hermes.utils.CssBorder;
+import earth.terrarium.hermes.css.Border;
 import net.minecraft.Optionull;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -103,7 +103,7 @@ public class HtmlImage extends ImageElement<HtmlStyle, HtmlRenderer, CustomImage
 
     @Override
     public void drawImage(CustomImage image, float x, float y, float width, float height, HtmlRenderer renderer) {
-        CssBorder border = this.layoutStyle.getOrDefault(GlobalAttributesElement.BORDER, CssBorder.NONE);
+        Border border = this.layoutStyle.getOrDefault(GlobalAttributesElement.BORDER, Border.NONE);
         image.drawImage(x, y, width, height, border.getRadius(width, height), renderer);
     }
 

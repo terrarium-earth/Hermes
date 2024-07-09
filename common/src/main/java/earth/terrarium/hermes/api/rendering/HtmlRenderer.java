@@ -10,9 +10,17 @@ import org.joml.Vector4f;
 
 public interface HtmlRenderer {
 
-    float width(String text, float scale);
+    float width(String text, float scale, boolean monospaced);
 
-    void drawString(String text, float x, float y, float scale, int color, boolean shadow);
+    default float width(String text, float scale) {
+        return width(text, scale, false);
+    }
+
+    void drawString(String text, float x, float y, float scale, int color, boolean shadow, boolean monospaced);
+
+    default void drawString(String text, float x, float y, float scale, int color, boolean shadow) {
+        drawString(text, x, y, scale, color, shadow, false);
+    }
 
     void fill(float x, float y, float width, float height, int backgroundColor, int borderColor, float borderWidth, @Nullable Vector4f borderRadius);
 
@@ -27,6 +35,8 @@ public interface HtmlRenderer {
     }
 
     Font getFont();
+
+    Font getMonospacedFont();
 
     GuiGraphics getGraphics();
 

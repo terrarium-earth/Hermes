@@ -2,6 +2,7 @@ package earth.terrarium.hermes.utils;
 
 import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
 import dev.dediamondpro.minemark.utils.ColorFactory;
+import earth.terrarium.hermes.css.Unit;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -23,10 +24,10 @@ public class CssParser {
         return map;
     }
 
-    public static Color parseBackgroundColor(String css, String element) {
+    public static Color parseBackgroundColor(String css, String tag) {
         if (css == null) {
-            return switch (element) {
-                case "mark" -> ColorFactory.YELLOW;
+            return switch (tag) {
+                case "mark" -> ColorFactory.DARKKHAKI;
                 default -> null;
             };
         }
@@ -37,7 +38,7 @@ public class CssParser {
         }
     }
 
-    public static float parsePadding(String css) {
+    public static float parseUnit(String css) {
         if (css == null) return 0;
         try {
             return new Unit(css).getValue(0);

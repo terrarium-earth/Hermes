@@ -1,15 +1,14 @@
 package earth.terrarium.hermes.elements.html;
 
-import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 import dev.dediamondpro.minemark.LayoutData;
 import dev.dediamondpro.minemark.LayoutStyle;
 import dev.dediamondpro.minemark.elements.Element;
 import dev.dediamondpro.minemark.elements.impl.TextElement;
 import earth.terrarium.hermes.api.rendering.HtmlRenderer;
 import earth.terrarium.hermes.api.rendering.HtmlStyle;
+import earth.terrarium.hermes.css.FontFamily;
+import earth.terrarium.hermes.css.VerticalAlignment;
 import earth.terrarium.hermes.elements.custom.HermesText;
-import earth.terrarium.hermes.utils.types.VerticalAlignment;
-import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.xml.sax.Attributes;
@@ -30,36 +29,15 @@ public class HtmlParagraph extends TextElement<HtmlStyle, HtmlRenderer> {
             y = alignment.changeOffset(y, 8f * fontSize);
             fontSize = alignment.changeFontSize(fontSize);
         }
-
-        float width = renderer.width(text, fontSize);
-        if (layoutStyle.get(GlobalAttributesElement.BACKGROUND_COLOR) != null) {
-            try (var stack = new CloseablePoseStack(renderer.getGraphics())) {
-                stack.scale(fontSize, fontSize, 1f);
-                renderer.fill(
-                        (x - 1 * fontSize) / fontSize,
-                        (y - 1 * fontSize) / fontSize,
-                        width / fontSize + 1,
-                        9,
-                        layoutStyle.get(GlobalAttributesElement.BACKGROUND_COLOR).getRGB()
-                );
-            }
-        }
         renderer.drawString(
                 text,
                 x,
-                y,
+                y + 1,
                 fontSize,
                 color.getRGB(),
-                false
+                false,
+                layoutStyle.get(GlobalAttributesElement.FONT_FAMILY) == FontFamily.MONOSPACE
         );
-
-        if (this.layoutStyle.get(GlobalAttributesElement.TITLE) != null && hovered) {
-            renderer.setTooltip(Component.literal(this.layoutStyle.get(GlobalAttributesElement.TITLE)));
-        }
-
-        if (this.layoutStyle.get(GlobalAttributesElement.CURSOR) != null && hovered) {
-            renderer.setCursor(this.layoutStyle.get(GlobalAttributesElement.CURSOR));
-        }
     }
 
     @Override
@@ -69,11 +47,12 @@ public class HtmlParagraph extends TextElement<HtmlStyle, HtmlRenderer> {
 
     @Override
     protected float getTextWidth(@NotNull String text, float fontSize, HtmlRenderer renderer) {
+        text = getPrefix(false) + text;
         VerticalAlignment alignment = layoutStyle.get(GlobalAttributesElement.VERTICAL_ALIGNMENT);
         if (alignment != null) {
-            fontSize = alignment.changeFontSize(fontSize);
+            return renderer.width(text, alignment.changeFontSize(fontSize), layoutStyle.isPartOfCodeBlock()) + 1f;
         }
-        return renderer.width(getPrefix(false) + text, fontSize);
+        return renderer.width(text, fontSize, layoutStyle.isPartOfCodeBlock());
     }
 
     private String getPrefix(boolean hovered) {
@@ -88,6 +67,6 @@ public class HtmlParagraph extends TextElement<HtmlStyle, HtmlRenderer> {
 
     @Override
     protected float getBaselineHeight(float fontSize, HtmlRenderer renderData) {
-        return 8f * fontSize;
+        return 9f * fontSize;
     }
 }

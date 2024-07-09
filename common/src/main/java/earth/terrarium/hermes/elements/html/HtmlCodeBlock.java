@@ -16,6 +16,7 @@ public class HtmlCodeBlock extends CodeBlockElement<HtmlStyle, HtmlRenderer> {
 
     public HtmlCodeBlock(@NotNull HtmlStyle style, @NotNull LayoutStyle layoutStyle, @Nullable Element<HtmlStyle, HtmlRenderer> parent, @NotNull String qName, @Nullable Attributes attributes) {
         super(style, layoutStyle, parent, qName, attributes);
+        this.isInline = isInline();
     }
 
     @Override

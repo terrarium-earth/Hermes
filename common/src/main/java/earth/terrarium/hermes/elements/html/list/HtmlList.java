@@ -1,5 +1,6 @@
 package earth.terrarium.hermes.elements.html.list;
 
+import dev.dediamondpro.minemark.LayoutData;
 import dev.dediamondpro.minemark.LayoutStyle;
 import dev.dediamondpro.minemark.elements.Element;
 import dev.dediamondpro.minemark.elements.impl.list.ListHolderElement;
@@ -20,9 +21,11 @@ public class HtmlList extends ListHolderElement<HtmlStyle, HtmlRenderer> {
 
     public HtmlList(@NotNull HtmlStyle style, @NotNull LayoutStyle layoutStyle, @Nullable Element<HtmlStyle, HtmlRenderer> parent, @NotNull String qName, @NotNull Attributes attributes) {
         super(style, layoutStyle, parent, qName, attributes);
-        assert attributes != null;
 
         if (qName.equals("dl")) {
+            this.style = Style.NONE;
+            this.start = 1;
+        } else if (qName.equals("menu")) {
             this.style = Style.NONE;
             this.start = 1;
         } else {
@@ -46,6 +49,12 @@ public class HtmlList extends ListHolderElement<HtmlStyle, HtmlRenderer> {
 
             this.start = AttributeParser.parseInt(attributes, "start", 0);
         }
+    }
+
+    @Override
+    protected float getPadding(LayoutData layoutData, HtmlRenderer renderData) {
+        if (qName.equals("dl")) return 0;
+        return super.getPadding(layoutData, renderData);
     }
 
     public Style getStyle() {
