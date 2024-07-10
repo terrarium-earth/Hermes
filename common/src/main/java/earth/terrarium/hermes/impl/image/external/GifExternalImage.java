@@ -118,9 +118,9 @@ public class GifExternalImage implements ExternalImage {
                     break;
                 }
             }
-            return delay == 0 ? 66 : delay;
+            return delay == 0 ? 666 : delay;
         } catch (Exception e) {
-            return 66;
+            return 666;
         }
     }
 
@@ -129,7 +129,7 @@ public class GifExternalImage implements ExternalImage {
     private static class Image implements CustomImage {
 
         private final GifExternalImage gif;
-        private long start = System.currentTimeMillis();
+        private long start = System.currentTimeMillis() / 10;
         private int frame;
 
         public Image(GifExternalImage gif) {
@@ -138,10 +138,10 @@ public class GifExternalImage implements ExternalImage {
         }
 
         public int getFrame() {
-            long duration = System.currentTimeMillis() - start;
+            long duration = System.currentTimeMillis() / 10 - start;
             int delay = gif.frames[frame].delay;
             if (duration >= delay) {
-                start = System.currentTimeMillis();
+                start = System.currentTimeMillis() / 10;
                 frame++;
                 if (frame >= gif.frames.length) frame = 0;
             }
