@@ -63,5 +63,10 @@ public class Demo implements ClientModInitializer {
             super.onClose();
             if (this.widget != null) this.widget.close();
         }
+
+        @Override
+        public boolean isPauseScreen() {
+            return false;
+        }
     }
 }
