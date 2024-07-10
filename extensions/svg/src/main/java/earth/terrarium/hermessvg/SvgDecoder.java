@@ -6,7 +6,7 @@ import com.google.common.cache.Weigher;
 import com.mojang.logging.LogUtils;
 import dev.dediamondpro.minemark.providers.ImageProvider;
 import earth.terrarium.hermes.api.image.CustomImage;
-import earth.terrarium.hermes.impl.image.HermesImageProvider;
+import earth.terrarium.hermes.impl.image.external.PngExternalImage;
 import net.minecraft.Util;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
@@ -36,7 +36,7 @@ public class SvgDecoder {
         BufferedImage bufferedImage = CACHE.getIfPresent(data);
         if (bufferedImage != null) {
             try {
-                HermesImageProvider.load(bufferedImage, dimensionCallback, imageCallback);
+                PngExternalImage.of(bufferedImage).create(dimensionCallback, imageCallback);
             } catch (Exception e) {
                 LOGGER.error("Failed to load image from svg: {}", data, e);
             }
@@ -48,7 +48,7 @@ public class SvgDecoder {
                 ImageTranscoder transcoder = new BufferedImageTranscoder(
                         image -> {
                             CACHE.put(data, image);
-                            HermesImageProvider.load(image, dimensionCallback, imageCallback);
+                            PngExternalImage.of(image).create(dimensionCallback, imageCallback);
                         }
                 );
                 TranscodingHints hints = transcoder.getTranscodingHints();

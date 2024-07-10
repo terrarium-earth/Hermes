@@ -19,8 +19,6 @@ import java.util.function.Consumer;
 
 public class GifExternalImage implements ExternalImage {
 
-    private static final int MAX_SIZE = 8 * 1024;
-
     private final int width;
     private final int height;
     private final int sheetWidth;
@@ -49,16 +47,20 @@ public class GifExternalImage implements ExternalImage {
         var metadata = reader.getImageMetadata(0);
         int height = reader.getHeight(0);
         int width = reader.getWidth(0);
-        if (height > MAX_SIZE || width > MAX_SIZE) throw new IOException("Gif frames too large");
-        int maxWidth = (MAX_SIZE / width) * width;
-        int maxHeight = (MAX_SIZE / height) * height;
+        if (height > ExternalImageProvider.MAX_TEXTURE_SIZE || width > ExternalImageProvider.MAX_TEXTURE_SIZE) {
+            throw new IOException("Gif frames too large");
+        }
+        int maxWidth = (ExternalImageProvider.MAX_TEXTURE_SIZE / width) * width;
+        int maxHeight = (ExternalImageProvider.MAX_TEXTURE_SIZE / height) * height;
         int countPerSheet = (maxWidth / width) * (maxHeight / height);
         String formatName = metadata.getNativeMetadataFormatName();
 
         int frameCount = reader.getNumImages(true);
         Frame[] frames = new Frame[frameCount];
         BufferedImage[] images = new BufferedImage[Math.ceilDiv(frameCount, countPerSheet)];
-        for (int i = 0; i < images.length; i++) images[i] = new BufferedImage(maxWidth, maxHeight, BufferedImage.TYPE_4BYTE_ABGR);
+        for (int i = 0; i < images.length; i++) {
+            images[i] = new BufferedImage(maxWidth, maxHeight, BufferedImage.TYPE_INT_ARGB);
+        }
 
         int frame = 0;
         int u = 0;

@@ -16,11 +16,12 @@ public final class HermesImageProvider implements ImageProvider<CustomImage> {
 
     @Override
     public void getImage(String src, Consumer<Dimension> dimensionCallback, Consumer<CustomImage> imageCallback) {
-        if (src.startsWith("https://") || src.startsWith("http://")) {
+        if (src.startsWith("https://") || src.startsWith("http://") || src.startsWith("data:image/")) {
             ExternalImageProvider.INSTANCE.getImage(src, dimensionCallback, imageCallback);
         } else {
             ResourceLocation id = ResourceLocation.tryParse(src);
             if (id == null) return;
+            if (id.getNamespace().equals("minecraft") && !src.startsWith("minecraft:")) return;
             GlStateManager._bindTexture(Minecraft.getInstance().getTextureManager().getTexture(id).getId());
             dimensionCallback.accept(new Dimension(
                     GlStateManager._getTexLevelParameter(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH),
