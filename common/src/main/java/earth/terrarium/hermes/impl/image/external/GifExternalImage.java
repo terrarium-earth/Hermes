@@ -118,9 +118,9 @@ public class GifExternalImage implements ExternalImage {
                     break;
                 }
             }
-            return delay == 0 ? 666 : delay;
+            return delay == 0 ? 15 : delay;
         } catch (Exception e) {
-            return 666;
+            return 15;
         }
     }
 
