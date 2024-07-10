@@ -115,7 +115,13 @@ public final class HermesRenderer implements HtmlRenderer {
     }
 
     @Override
-    public void blit(ResourceLocation texture, float x, float y, float width, float height, Vector4f borderRadius) {
+    public void blit(
+            ResourceLocation texture,
+            float x, float y,
+            float u0, float v0, float u1, float v1,
+            float width, float height,
+            Vector4f borderRadius
+    ) {
         RenderSystem.enableBlend();
 
         if (borderRadius == null) {
@@ -149,10 +155,10 @@ public final class HermesRenderer implements HtmlRenderer {
 
         Matrix4f matrix = graphics.pose().last().pose();
         BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        buffer.addVertex(matrix, x, y, 0f).setUv(0f, 0f);
-        buffer.addVertex(matrix, x, y + height, 0f).setUv(0f, 1f);
-        buffer.addVertex(matrix, x + width, y + height, 0f).setUv(1f, 1f);
-        buffer.addVertex(matrix, x + width, y, 0f).setUv(1f, 0f);
+        buffer.addVertex(matrix, x, y, 0f).setUv(u0, v0);
+        buffer.addVertex(matrix, x, y + height, 0f).setUv(u0, v1);
+        buffer.addVertex(matrix, x + width, y + height, 0f).setUv(u1, v1);
+        buffer.addVertex(matrix, x + width, y, 0f).setUv(u1, v0);
 
         if (borderRadius == null) {
             BufferUploader.drawWithShader(buffer.buildOrThrow());
