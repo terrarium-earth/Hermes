@@ -4,6 +4,9 @@ import com.mojang.brigadier.StringReader;
 import net.minecraft.commands.arguments.item.ItemParser;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.TagParser;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import org.xml.sax.Attributes;
 
@@ -53,6 +56,22 @@ public class AttributeParser {
             return stack;
         } catch (Exception ignored) {
             return ItemStack.EMPTY;
+        }
+    }
+
+    public static EntityType<?> parseEntityType(Attributes attributes, String key, EntityType<?> defaultValue) {
+        var attribute = attributes.getValue(key);
+        if (attribute == null) return defaultValue;
+        return EntityType.byString(attribute).orElse(defaultValue);
+    }
+
+    public static CompoundTag parseNbt(Attributes attributes, String key, CompoundTag defaultValue) {
+        var attribute = attributes.getValue(key);
+        if (attribute == null) return defaultValue;
+        try {
+            return TagParser.parseTag(attribute);
+        } catch (Exception e) {
+            return defaultValue;
         }
     }
 }

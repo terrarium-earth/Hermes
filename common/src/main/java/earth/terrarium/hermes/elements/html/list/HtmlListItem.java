@@ -27,7 +27,7 @@ public class HtmlListItem extends ChildMovingElement<HtmlStyle, HtmlRenderer> {
             return;
         }
         this.elementIndex = list.getChildren().indexOf(this);
-        prefix = switch (list.getStyle()) {
+        prefix = switch (list.getListStyle()) {
             case LOWER_ALPHA -> Numerals.toAlpha(elementIndex + list.getStart() + 1, Numerals.Casing.LOWER) + ". ";
             case UPPER_ALPHA -> Numerals.toAlpha(elementIndex + list.getStart() + 1, Numerals.Casing.UPPER) + ". ";
             case LOWER_ROMAN -> Numerals.toRoman(elementIndex + list.getStart() + 1, Numerals.Casing.LOWER) + ". ";

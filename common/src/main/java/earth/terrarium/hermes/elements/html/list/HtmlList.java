@@ -57,7 +57,7 @@ public class HtmlList extends ListHolderElement<HtmlStyle, HtmlRenderer> {
         return super.getPadding(layoutData, renderData);
     }
 
-    public Style getStyle() {
+    public Style getListStyle() {
         return style;
     }
 

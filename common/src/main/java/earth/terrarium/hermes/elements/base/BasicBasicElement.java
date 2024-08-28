@@ -1,0 +1,49 @@
+package earth.terrarium.hermes.elements.base;
+
+import dev.dediamondpro.minemark.LayoutData;
+import dev.dediamondpro.minemark.LayoutStyle;
+import dev.dediamondpro.minemark.elements.Element;
+import dev.dediamondpro.minemark.style.Style;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.xml.sax.Attributes;
+
+public abstract class BasicBasicElement<S extends Style, R> extends Element<S, R> {
+    protected LayoutData.MarkDownElementPosition position;
+
+    public BasicBasicElement(@NotNull S style, @NotNull LayoutStyle layoutStyle, @Nullable Element<S, R> parent, @NotNull String qName, @Nullable Attributes attributes) {
+        super(style, layoutStyle, parent, qName, attributes);
+    }
+
+    @Override
+    public void drawInternal(float xOffset, float yOffset, float mouseX, float mouseY, R renderData) {
+        drawElement(
+                position.getX() + xOffset, position.getY() + yOffset,
+                position.getWidth(), position.getHeight(),
+                mouseX - (position.getX() + xOffset), mouseY - (position.getY() + yOffset),
+                renderData
+        );
+    }
+
+    @Override
+    public void generateLayout(LayoutData layoutData, R renderData) {
+        float width = getWidth(layoutData, renderData);
+        float height = getHeight(layoutData, renderData);
+        float padding = getPadding(layoutData, renderData);
+        if (layoutData.getX() + width > layoutData.getMaxWidth()) {
+            layoutData.nextLine();
+        }
+        layoutData.updatePadding(padding);
+        position = layoutData.addElement(layoutStyle.getAlignment(), width, height);
+    }
+
+    protected abstract void drawElement(float x, float y, float width, float height, float mouseX, float mouseY, R renderData);
+
+    protected abstract float getWidth(LayoutData layoutData, R renderData);
+
+    protected abstract float getHeight(LayoutData layoutData, R renderData);
+
+    protected float getPadding(LayoutData layoutData, R renderData) {
+        return 0f;
+    }
+}

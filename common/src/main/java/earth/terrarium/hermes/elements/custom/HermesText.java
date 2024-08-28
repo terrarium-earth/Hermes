@@ -59,7 +59,7 @@ public class HermesText<S extends Style, R> implements FormattingElement<S, R> {
             case UNDERLINE -> layoutStyle.setUnderlined(true);
             case ITALIC -> layoutStyle.setItalic(true);
             case OBFUSCATED -> layoutStyle.put(OBFUSCATED, true);
-            case null -> layoutStyle.setPreFormatted(true);
+            case null -> {}
             default -> layoutStyle.setTextColor(new Color(formatting.getColor()));
         }
     }
