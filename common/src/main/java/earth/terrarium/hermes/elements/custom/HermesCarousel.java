@@ -7,11 +7,8 @@ import dev.dediamondpro.minemark.elements.Element;
 import dev.dediamondpro.minemark.utils.MouseButton;
 import earth.terrarium.hermes.api.rendering.HtmlRenderer;
 import earth.terrarium.hermes.api.rendering.HtmlStyle;
-import earth.terrarium.hermes.elements.html.GlobalAttributesElement;
 import earth.terrarium.hermes.elements.html.HtmlDefault;
-import earth.terrarium.hermes.impl.HermesRenderer;
 import earth.terrarium.hermes.utils.AttributeParser;
-import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.xml.sax.Attributes;
@@ -60,20 +57,7 @@ public class HermesCarousel extends HtmlDefault {
 
     @Override
     public void drawInternal(float xOffset, float yOffset, float mouseX, float mouseY, HtmlRenderer renderer) {
-        if (this.positions.isAnyInside(mouseX, mouseY) ) {
-            if (this.layoutStyle.get(GlobalAttributesElement.TITLE) != null) {
-                renderer.setTooltip(Component.literal(this.layoutStyle.get(GlobalAttributesElement.TITLE)));
-            }
-            if (this.layoutStyle.get(GlobalAttributesElement.CURSOR) != null) {
-                renderer.setCursor(this.layoutStyle.get(GlobalAttributesElement.CURSOR));
-            }
-        }
-
-        HermesRenderer.drawDefault(
-                xOffset, yOffset,
-                currentWidth + BUTTON_WIDTH * 2, this.currentHeight,
-                this.layoutStyle, renderer
-        );
+        drawDefault(xOffset, yOffset, mouseX, mouseY, renderer);
         this.children.get(this.currentIndex).drawInternal(
                 xOffset + extraXOffset, yOffset + extraYOffset,
                 mouseX - extraXOffset, mouseY - extraYOffset,

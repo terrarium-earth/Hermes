@@ -10,7 +10,7 @@ public class Html {
             "hgroup", "main", "nav", "search", "section", "menu", "pre",
              "details",
 
-            "carousel-item" // Custom element
+            "carousel-item", "column" // Custom element
     );
 
     public static final Set<String> NO_DISPLAY = Set.of(

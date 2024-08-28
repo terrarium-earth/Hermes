@@ -37,8 +37,7 @@ public class HtmlDefault extends ChildMovingElement<HtmlStyle, HtmlRenderer> imp
         }
     }
 
-    @Override
-    public void drawInternal(float xOffset, float yOffset, float mouseX, float mouseY, HtmlRenderer renderer) {
+    public void drawDefault(float xOffset, float yOffset, float mouseX, float mouseY, HtmlRenderer renderer) {
         if (this.positions.isAnyInside(mouseX, mouseY) ) {
             if (this.layoutStyle.get(GlobalAttributesElement.TITLE) != null) {
                 renderer.setTooltip(Component.literal(this.layoutStyle.get(GlobalAttributesElement.TITLE)));
@@ -53,6 +52,11 @@ public class HtmlDefault extends ChildMovingElement<HtmlStyle, HtmlRenderer> imp
                 this.positions.width(), this.positions.height(),
                 this.layoutStyle, renderer
         );
+    }
+
+    @Override
+    public void drawInternal(float xOffset, float yOffset, float mouseX, float mouseY, HtmlRenderer renderer) {
+        drawDefault(xOffset, yOffset, mouseX, mouseY, renderer);
         super.drawInternal(xOffset, yOffset, mouseX, mouseY, renderer);
     }
 

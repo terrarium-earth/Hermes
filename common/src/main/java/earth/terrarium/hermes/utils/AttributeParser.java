@@ -39,6 +39,25 @@ public class AttributeParser {
         }
     }
 
+    public static float[] parseFloats(Attributes attributes, String key, float[] defaultValue) {
+        var attribute = attributes.getValue(key);
+        if (attribute == null) return defaultValue;
+        String[] split = attribute.split(" ");
+        float[] values = new float[split.length];
+        for (int i = 0; i < split.length; i++) {
+            try {
+                if (split[i].endsWith("%")) {
+                    values[i] = Float.parseFloat(split[i].substring(0, split[i].length() - 1)) / 100f;
+                } else {
+                    values[i] = Float.parseFloat(split[i]);
+                }
+            } catch (NumberFormatException e) {
+                return defaultValue;
+            }
+        }
+        return values;
+    }
+
     public static boolean parseBoolean(Attributes attributes, String key, boolean defaultValues) {
         var attribute = attributes.getValue(key);
         if (attribute == null) return defaultValues;
