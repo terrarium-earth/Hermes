@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
 import com.teamresourceful.resourcefullib.client.utils.ScreenUtils;
 import dev.dediamondpro.minemark.elements.MineMarkElement;
 import dev.dediamondpro.minemark.utils.MouseButton;
+import earth.terrarium.hermes.api.links.LinkHandler;
 import earth.terrarium.hermes.api.rendering.HtmlRenderer;
 import earth.terrarium.hermes.api.rendering.HtmlStyle;
 import earth.terrarium.hermes.impl.HermesRenderer;
@@ -17,6 +18,7 @@ import net.minecraft.network.chat.CommonComponents;
 import org.joml.Vector2f;
 
 import java.io.Closeable;
+import java.util.function.Supplier;
 
 public class HermesWidget extends AbstractWidget implements CursorWidget, Closeable {
 
@@ -49,48 +51,48 @@ public class HermesWidget extends AbstractWidget implements CursorWidget, Closea
         }
 
         this.scrollOffset = Math.max(-5, Math.min(this.scrollOffset, this.element.getHeight() - getHeight() + 5));
-         try {
-             graphics.enableScissor(getX(), getY(), getX() + getWidth(), getY() + getHeight());
-             this.cursor = CursorScreen.Cursor.DEFAULT;
-             HermesRenderer renderer = new HermesRenderer(
-                     Minecraft.getInstance().font,
-                     graphics,
-                     cursor -> this.cursor = cursor
-             );
+        try {
+            graphics.enableScissor(getX(), getY(), getX() + getWidth(), getY() + getHeight());
+            this.cursor = CursorScreen.Cursor.DEFAULT;
+            HermesRenderer renderer = new HermesRenderer(
+                    Minecraft.getInstance().font,
+                    graphics,
+                    cursor -> this.cursor = cursor
+            );
 
-             this.element.draw(
-                     this.getX(),
-                     this.getY() - this.scrollOffset,
-                     this.getWidth(),
-                     mouseX,
-                     mouseY,
-                     renderer
-             );
+            this.element.draw(
+                    this.getX(),
+                    this.getY() - this.scrollOffset,
+                    this.getWidth(),
+                    mouseX,
+                    mouseY,
+                    renderer
+            );
 
-             if (this.cursor == CursorScreen.Cursor.DEFAULT && this.autoScrollPosition != null) {
-                 this.cursor = CursorScreen.Cursor.RESIZE_NS;
-             }
+            if (this.cursor == CursorScreen.Cursor.DEFAULT && this.autoScrollPosition != null) {
+                this.cursor = CursorScreen.Cursor.RESIZE_NS;
+            }
 
-             if (renderer.getTooltip() != null) {
-                 ScreenUtils.setTooltip(renderer.getTooltip());
-             }
-         } catch (Exception e) {
-             if (!this.errored) {
-                 e.printStackTrace();
-                 this.errored = true;
-             }
-         } finally {
-             graphics.disableScissor();
-         }
-         if (this.errored) {
-             graphics.fill(getX(), getY(), getX() + getWidth(), getY() + getHeight(), 0x7F000000);
-             graphics.drawString(
-                     Minecraft.getInstance().font,
-                     "An error occurred while rendering this element",
-                     getX() + 5, getY() + 5,
-                     -1
-             );
-         }
+            if (renderer.getTooltip() != null) {
+                ScreenUtils.setTooltip(renderer.getTooltip());
+            }
+        } catch (Exception e) {
+            if (!this.errored) {
+                e.printStackTrace();
+                this.errored = true;
+            }
+        } finally {
+            graphics.disableScissor();
+        }
+        if (this.errored) {
+            graphics.fill(getX(), getY(), getX() + getWidth(), getY() + getHeight(), 0x7F000000);
+            graphics.drawString(
+                    Minecraft.getInstance().font,
+                    "An error occurred while rendering this element",
+                    getX() + 5, getY() + 5,
+                    -1
+            );
+        }
     }
 
     @Override
@@ -165,5 +167,24 @@ public class HermesWidget extends AbstractWidget implements CursorWidget, Closea
     @Override
     public void close() {
         this.element.close();
+    }
+
+    public record ProtocolHandler(Supplier<HermesWidget> widget) implements LinkHandler {
+
+        @Override
+        public int priority() {
+            return 0;
+        }
+
+        @Override
+        public boolean canHandle(String url) {
+            return url.equals("#");
+        }
+
+        @Override
+        public void handle(String url) {
+            widget.get().scrollOffset = 0;
+            widget.get().autoScrollPosition = null;
+        }
     }
 }

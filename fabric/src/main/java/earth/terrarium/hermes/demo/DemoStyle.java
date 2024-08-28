@@ -4,7 +4,6 @@ import dev.dediamondpro.minemark.style.*;
 import earth.terrarium.hermes.api.rendering.HtmlBlockquoteStyleConfig;
 import earth.terrarium.hermes.impl.image.HermesImageProvider;
 import earth.terrarium.hermes.impl.HermesStyle;
-import net.minecraft.Util;
 
 import java.awt.*;
 
@@ -15,7 +14,6 @@ public final class DemoStyle {
     // Defaults
     public static final TextStyleConfig TEXT_STYLE = new TextStyleConfig(1f, Color.WHITE, 2f, size -> size / 16f);
     public static final ParagraphStyleConfig PARAGRAPH_STYLE = new ParagraphStyleConfig(6f);
-    public static final LinkStyleConfig LINK_STYLE = new LinkStyleConfig(new Color(65, 105, 225), Util.getPlatform()::openUri);
     public static final HeadingStyleConfig HEADING_STYLE = new HeadingStyleConfig(
             new HeadingLevelStyleConfig(2f, 12f, true, LINE_COLOR, 2f, 5f),
             new HeadingLevelStyleConfig(1.66f, 10f),
@@ -43,7 +41,7 @@ public final class DemoStyle {
         return new HermesStyle(
                 TEXT_STYLE,
                 PARAGRAPH_STYLE,
-                LINK_STYLE,
+                new Color(65, 105, 225),
                 HEADING_STYLE,
                 HR_STYLE,
                 IMAGE_STYLE,

@@ -32,12 +32,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.regex.Pattern;
 
 public class Parser {
-
-    private static final Pattern PREFIX_PATTERN = Pattern.compile("^ +<", Pattern.MULTILINE);
-    private static final Pattern SUFFIX_PATTERN = Pattern.compile("> +$", Pattern.MULTILINE);
 
     private final MineMarkCore<HtmlStyle, HtmlRenderer> core;
     private final HtmlStyle style;
@@ -111,8 +107,6 @@ public class Parser {
     @Nullable
     public MineMarkElement<HtmlStyle, HtmlRenderer> parse(String text) {
         try {
-            text = PREFIX_PATTERN.matcher(text).replaceAll("<");
-            text = SUFFIX_PATTERN.matcher(text).replaceAll("> ");
             this.style.onStart();
             return core.parse(this.style, text);
         } catch (Exception e) {

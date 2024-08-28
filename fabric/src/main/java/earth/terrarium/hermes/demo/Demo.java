@@ -49,7 +49,9 @@ public class Demo implements ClientModInitializer {
 
         protected HermesDemoScreen(String text) {
             super(CommonComponents.EMPTY);
-            this.parsed = new Parser(DemoStyle.create()).parse(text);
+            HtmlStyle style = DemoStyle.create();
+            style.addLinkHandler(new HermesWidget.ProtocolHandler(() -> this.widget));
+            this.parsed = new Parser(style).parse(text);
         }
 
         @Override

@@ -1,10 +1,18 @@
 package earth.terrarium.hermes.impl;
 
 import dev.dediamondpro.minemark.style.*;
+import earth.terrarium.hermes.api.links.DefaultProtocolHandler;
+import earth.terrarium.hermes.api.links.LinkHandler;
 import earth.terrarium.hermes.api.rendering.HtmlBlockquoteStyleConfig;
 import earth.terrarium.hermes.api.rendering.HtmlStyle;
 
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
 public final class HermesStyle implements HtmlStyle {
+
+    private final List<LinkHandler> linkHandlers = new ArrayList<>();
 
     private final TextStyleConfig textStyle;
     private final ParagraphStyleConfig paragraphStyle;
@@ -19,10 +27,11 @@ public final class HermesStyle implements HtmlStyle {
 
     private final GlobalData globalData = new GlobalData();
 
-    public HermesStyle(TextStyleConfig textStyle, ParagraphStyleConfig paragraphStyle, LinkStyleConfig linkStyle, HeadingStyleConfig headingStyle, HorizontalRuleStyleConfig horizontalRuleStyle, ImageStyleConfig imageStyle, ListStyleConfig listStyle, HtmlBlockquoteStyleConfig blockquoteStyle, CodeBlockStyleConfig codeBlockStyle, TableStyleConfig tableStyle) {
+
+    public HermesStyle(TextStyleConfig textStyle, ParagraphStyleConfig paragraphStyle, Color linkColor, HeadingStyleConfig headingStyle, HorizontalRuleStyleConfig horizontalRuleStyle, ImageStyleConfig imageStyle, ListStyleConfig listStyle, HtmlBlockquoteStyleConfig blockquoteStyle, CodeBlockStyleConfig codeBlockStyle, TableStyleConfig tableStyle) {
         this.textStyle = textStyle;
         this.paragraphStyle = paragraphStyle;
-        this.linkStyle = linkStyle;
+        this.linkStyle = new LinkStyleConfig(linkColor, LinkHandler.tryHandle(linkHandlers)::accept);
         this.headingStyle = headingStyle;
         this.horizontalRuleStyle = horizontalRuleStyle;
         this.imageStyle = imageStyle;
@@ -30,6 +39,8 @@ public final class HermesStyle implements HtmlStyle {
         this.blockquoteStyle = blockquoteStyle;
         this.codeBlockStyle = codeBlockStyle;
         this.tableStyle = tableStyle;
+
+        addLinkHandler(DefaultProtocolHandler.INSTANCE);
     }
 
     @Override
@@ -90,5 +101,11 @@ public final class HermesStyle implements HtmlStyle {
     @Override
     public TableStyleConfig getTableStyle() {
         return tableStyle;
+    }
+
+    @Override
+    public void addLinkHandler(LinkHandler handler) {
+        this.linkHandlers.add(handler);
+        this.linkHandlers.sort((a, b) -> Integer.compare(b.priority(), a.priority()));
     }
 }
