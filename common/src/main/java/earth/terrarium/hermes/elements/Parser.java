@@ -13,6 +13,7 @@ import earth.terrarium.hermes.api.ElementExtension;
 import earth.terrarium.hermes.api.rendering.HtmlRenderer;
 import earth.terrarium.hermes.api.rendering.HtmlStyle;
 import earth.terrarium.hermes.elements.base.NoOpElement;
+import earth.terrarium.hermes.elements.custom.HermesCarousel;
 import earth.terrarium.hermes.elements.custom.HermesEntity;
 import earth.terrarium.hermes.elements.custom.HermesItem;
 import earth.terrarium.hermes.elements.custom.HermesText;
@@ -79,6 +80,7 @@ public class Parser {
 
             builder.addElement("item", HermesItem::new);
             builder.addElement("entity", HermesEntity::new);
+            builder.addElement("carousel", HermesCarousel::new);
 
             ElementExtension.EXTENSIONS.get().forEach(extension -> extension.addDefaultElements(builder));
 

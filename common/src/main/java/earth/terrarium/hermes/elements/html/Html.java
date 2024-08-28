@@ -8,7 +8,9 @@ public class Html {
             "address", "article", "aside", "button", "canvas",
             "div", "figcaption", "figure", "footer", "header",
             "hgroup", "main", "nav", "search", "section", "menu", "pre",
-             "details"
+             "details",
+
+            "carousel-item" // Custom element
     );
 
     public static final Set<String> NO_DISPLAY = Set.of(

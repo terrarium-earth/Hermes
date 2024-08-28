@@ -21,7 +21,7 @@ public class HtmlDefault extends ChildMovingElement<HtmlStyle, HtmlRenderer> imp
 
     public static final ElementCreator<HtmlStyle, HtmlRenderer> CREATOR = new Creator();
 
-    private final MarkdownPositions positions = new MarkdownPositions();
+    protected final MarkdownPositions positions = new MarkdownPositions();
 
     public HtmlDefault(@NotNull HtmlStyle style, @NotNull LayoutStyle layoutStyle, @Nullable Element<HtmlStyle, HtmlRenderer> parent, @NotNull String qName, @Nullable Attributes attributes) {
         super(style, layoutStyle, parent, qName, attributes);
