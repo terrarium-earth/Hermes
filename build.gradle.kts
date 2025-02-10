@@ -6,7 +6,7 @@ import net.fabricmc.loom.task.RemapJarTask
 plugins {
     java
     id("maven-publish")
-    id("dev.architectury.loom") version "1.6-SNAPSHOT" apply false
+    id("dev.architectury.loom") version "1.7-SNAPSHOT" apply false
     id("architectury-plugin") version "3.4-SNAPSHOT"
     id("com.github.johnrengelman.shadow") version "8.1.1" apply false
 }
@@ -48,6 +48,7 @@ subprojects {
         maven(url = "https://maven.neoforged.net/releases/")
         maven(url = "https://oss.sonatype.org/content/repositories/snapshots")
         maven(url = "https://maven.dediamondpro.dev/releases")
+        maven(url = "https://mcef-download.cinemamod.com/repositories/releases")
         mavenLocal()
     }
 
@@ -59,6 +60,7 @@ subprojects {
         val resourcefulLibVersion: String by project
         val mineMarkVersion: String by project
         val commonMarkVersion: String by project
+        val mcefVersion: String by project
 
         "minecraft"("::${minecraftVersion}")
 
@@ -79,10 +81,12 @@ subprojects {
             implementation("dev.dediamondpro:minemark-core:$mineMarkVersion")
             implementation("org.commonmark:commonmark-ext-gfm-strikethrough:$commonMarkVersion") { isTransitive = false }
             implementation("org.commonmark:commonmark-ext-gfm-tables:$commonMarkVersion") { isTransitive = false }
+            "modCompileOnly"(group = "com.cinemamod", name = "mcef", version = mcefVersion)
         } else {
             shade("dev.dediamondpro:minemark-core:$mineMarkVersion")
             shade("org.commonmark:commonmark-ext-gfm-strikethrough:$commonMarkVersion") { isTransitive = false }
             shade("org.commonmark:commonmark-ext-gfm-tables:$commonMarkVersion") { isTransitive = false }
+            "modRuntimeOnly"(group = "com.cinemamod", name = "mcef-$modLoader", version = mcefVersion)
         }
     }
 

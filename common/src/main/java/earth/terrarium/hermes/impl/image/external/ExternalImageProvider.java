@@ -26,7 +26,7 @@ public class ExternalImageProvider implements ImageProvider<CustomImage> {
 
     public static final ExternalImageProvider INSTANCE = new ExternalImageProvider();
 
-    public static final int MAX_TEXTURE_SIZE = RenderSystem.maxSupportedTextureSize();
+    public static final int MAX_TEXTURE_SIZE = Math.min(RenderSystem.maxSupportedTextureSize(), 8 * 1024);
 
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final Set<String> SUPPORTED_SCHEMES = Set.of("http", "https");
@@ -80,18 +80,19 @@ public class ExternalImageProvider implements ImageProvider<CustomImage> {
     }
 
     private ExternalImage load(InputStream is) throws IOException {
-        var stream = ImageIO.createImageInputStream(is);
-        var readers = ImageIO.getImageReaders(stream);
-        if (readers.hasNext()) {
-            var reader = readers.next();
-            reader.setInput(stream, false);
-            return switch (reader.getFormatName()) {
-                case "gif" -> GifExternalImage.of(reader);
-                case null -> null;
-                default -> PngExternalImage.of(reader.read(0));
-            };
+        try (var stream = ImageIO.createImageInputStream(is)) {
+            var readers = ImageIO.getImageReaders(stream);
+            if (readers.hasNext()) {
+                var reader = readers.next();
+                reader.setInput(stream, false);
+                return switch (reader.getFormatName()) {
+                    case "gif" -> GifExternalImage.of(reader);
+                    case null -> null;
+                    default -> PngExternalImage.of(reader.read(0));
+                };
+            }
+            return null;
         }
-        return null;
     }
 
     private static URI createURI(String url) {

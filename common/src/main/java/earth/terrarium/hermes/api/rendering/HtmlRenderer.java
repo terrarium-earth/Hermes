@@ -35,8 +35,18 @@ public interface HtmlRenderer {
             Vector4f borderRadius
     );
 
+    void blit(
+            int texture,
+            float x, float y, float u0, float v0, float u1, float v1,
+            float width, float height
+    );
+
     default void blit(ResourceLocation texture, float x, float y, float width, float height, @Nullable Vector4f borderRadius) {
         blit(texture, x, y, 0f, 0f, 1f, 1f, width, height, borderRadius);
+    }
+
+    default void blit(int texture, float x, float y, float width, float height) {
+        blit(texture, x, y, 0f, 0f, 1f, 1f, width, height);
     }
 
     default void blit(ResourceLocation texture, float x, float y, float width, float height) {

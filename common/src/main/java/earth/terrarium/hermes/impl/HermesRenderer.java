@@ -170,6 +170,24 @@ public final class HermesRenderer implements HtmlRenderer {
     }
 
     @Override
+    public void blit(int texture, float x, float y, float u0, float v0, float u1, float v1, float width, float height) {
+        RenderSystem.enableBlend();
+
+        RenderSystem.setShaderTexture(0, texture);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+
+        Matrix4f matrix = graphics.pose().last().pose();
+        BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        buffer.addVertex(matrix, x, y, 0f).setUv(u0, v0);
+        buffer.addVertex(matrix, x, y + height, 0f).setUv(u0, v1);
+        buffer.addVertex(matrix, x + width, y + height, 0f).setUv(u1, v1);
+        buffer.addVertex(matrix, x + width, y, 0f).setUv(u1, v0);
+
+        BufferUploader.drawWithShader(buffer.buildOrThrow());
+        RenderSystem.disableBlend();
+    }
+
+    @Override
     public Font getFont() {
         return font;
     }
