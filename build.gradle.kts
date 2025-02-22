@@ -78,7 +78,7 @@ subprojects {
         implementation("org.commonmark:commonmark:$commonMarkVersion")
 
         if (isCommon) {
-            implementation("dev.dediamondpro:minemark-core:$mineMarkVersion")
+            api("dev.dediamondpro:minemark-core:$mineMarkVersion")
             implementation("org.commonmark:commonmark-ext-gfm-strikethrough:$commonMarkVersion") { isTransitive = false }
             implementation("org.commonmark:commonmark-ext-gfm-tables:$commonMarkVersion") { isTransitive = false }
             "modCompileOnly"(group = "com.cinemamod", name = "mcef", version = mcefVersion)
