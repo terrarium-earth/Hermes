@@ -5,9 +5,8 @@ import net.fabricmc.loom.task.RemapJarTask
 
 plugins {
     java
-    `java-library`
     id("maven-publish")
-    id("dev.architectury.loom") version "1.9-SNAPSHOT" apply false
+    id("dev.architectury.loom") version "1.7-SNAPSHOT" apply false
     id("architectury-plugin") version "3.4-SNAPSHOT"
     id("com.github.johnrengelman.shadow") version "8.1.1" apply false
 }
@@ -24,15 +23,12 @@ subprojects {
     apply(plugin = "dev.architectury.loom")
     apply(plugin = "architectury-plugin")
     apply(plugin = "com.github.johnrengelman.shadow")
-    apply(plugin = "java-library")
 
     val isExtension = project.layout.projectDirectory.asFile.parentFile.name == "extensions"
     val minecraftVersion: String by project
     val modLoader = if (isExtension) "common" else project.name
     val modId = rootProject.name
     val isCommon = modLoader == rootProject.projects.common.name
-
-    val mcefVersion: String by project
 
     base {
         if (isExtension) {
@@ -64,6 +60,7 @@ subprojects {
         val resourcefulLibVersion: String by project
         val mineMarkVersion: String by project
         val commonMarkVersion: String by project
+        val mcefVersion: String by project
 
         "minecraft"("::${minecraftVersion}")
 
@@ -76,20 +73,20 @@ subprojects {
             parchment(create(group = "org.parchmentmc.data", name = "parchment-$minecraftVersion", version = parchmentVersion))
         })
 
-        "modApi"(group = "com.teamresourceful.resourcefullib", name = "resourcefullib-$modLoader-1.21", version = resourcefulLibVersion)
+        "modApi"(group = "com.teamresourceful.resourcefullib", name = "resourcefullib-$modLoader-$minecraftVersion", version = resourcefulLibVersion)
 
-        api("org.commonmark:commonmark:$commonMarkVersion")
-        api("dev.dediamondpro:minemark-core:$mineMarkVersion")
-        implementation("com.cinemamod:mcef:$mcefVersion-$minecraftVersion")
+        implementation("org.commonmark:commonmark:$commonMarkVersion")
 
         if (isCommon) {
+            api("dev.dediamondpro:minemark-core:$mineMarkVersion")
             implementation("org.commonmark:commonmark-ext-gfm-strikethrough:$commonMarkVersion") { isTransitive = false }
             implementation("org.commonmark:commonmark-ext-gfm-tables:$commonMarkVersion") { isTransitive = false }
+            "modCompileOnly"(group = "com.cinemamod", name = "mcef", version = mcefVersion)
         } else {
-            implementation("com.cinemamod:mcef-$modLoader:$mcefVersion-$minecraftVersion")
             shade("dev.dediamondpro:minemark-core:$mineMarkVersion")
             shade("org.commonmark:commonmark-ext-gfm-strikethrough:$commonMarkVersion") { isTransitive = false }
             shade("org.commonmark:commonmark-ext-gfm-tables:$commonMarkVersion") { isTransitive = false }
+            "modRuntimeOnly"(group = "com.cinemamod", name = "mcef-$modLoader", version = mcefVersion)
         }
     }
 
@@ -147,11 +144,7 @@ subprojects {
     publishing {
         publications {
             create<MavenPublication>("maven") {
-                if (isExtension) {
-                    artifactId = "$modId-${project.name}-$minecraftVersion"
-                } else {
-                    artifactId = "$modId-$modLoader-$minecraftVersion"
-                }
+                artifactId = "$modId-$modLoader-$minecraftVersion"
                 from(components["java"])
 
                 pom {
