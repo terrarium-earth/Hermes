@@ -81,13 +81,13 @@ subprojects {
         api("org.commonmark:commonmark:$commonMarkVersion")
         api("dev.dediamondpro:minemark-core:$mineMarkVersion")
         implementation("com.cinemamod:mcef:$mcefVersion-$minecraftVersion")
+        shade("dev.dediamondpro:minemark-core:$mineMarkVersion")
 
         if (isCommon) {
             implementation("org.commonmark:commonmark-ext-gfm-strikethrough:$commonMarkVersion") { isTransitive = false }
             implementation("org.commonmark:commonmark-ext-gfm-tables:$commonMarkVersion") { isTransitive = false }
         } else {
             implementation("com.cinemamod:mcef-$modLoader:$mcefVersion-$minecraftVersion")
-            shade("dev.dediamondpro:minemark-core:$mineMarkVersion")
             shade("org.commonmark:commonmark-ext-gfm-strikethrough:$commonMarkVersion") { isTransitive = false }
             shade("org.commonmark:commonmark-ext-gfm-tables:$commonMarkVersion") { isTransitive = false }
         }
@@ -113,30 +113,30 @@ subprojects {
         }
     }
 
-    if (!isCommon) {
-        if (!isExtension) {
-            configure<ArchitectPluginExtension> {
-                platformSetupLoomIde()
-            }
+    if (!isCommon && !isExtension) {
+        configure<ArchitectPluginExtension> {
+            platformSetupLoomIde()
         }
+    }
 
-        val shadowCommon by configurations.creating {
-            isCanBeConsumed = false
-            isCanBeResolved = true
+
+    val shadowCommon by configurations.creating {
+        isCanBeConsumed = false
+        isCanBeResolved = true
+    }
+
+    tasks {
+        "shadowJar"(ShadowJar::class) {
+            relocate("dev.dediamondpro.minemark", "earth.terrarium.hermes.libs.minemark")
+            relocate("org.commonmark", "earth.terrarium.hermes.libs.commonmark")
+            relocate("org.ccil.cowan.tagsoup", "earth.terrarium.hermes.libs.tagsoup")
+
+            archiveClassifier.set("dev-shadow")
+            configurations = listOf(shadowCommon, shade)
+
+            exclude("architectury.common.json")
         }
-
-        tasks {
-            "shadowJar"(ShadowJar::class) {
-                relocate("dev.dediamondpro.minemark", "earth.terrarium.hermes.libs.minemark")
-                relocate("org.commonmark", "earth.terrarium.hermes.libs.commonmark")
-                relocate("org.ccil.cowan.tagsoup", "earth.terrarium.hermes.libs.tagsoup")
-
-                archiveClassifier.set("dev-shadow")
-                configurations = listOf(shadowCommon, shade)
-
-                exclude("architectury.common.json")
-            }
-
+        afterEvaluate {
             "remapJar"(RemapJarTask::class) {
                 dependsOn("shadowJar")
                 inputFile.set(named<ShadowJar>("shadowJar").flatMap { it.archiveFile })
