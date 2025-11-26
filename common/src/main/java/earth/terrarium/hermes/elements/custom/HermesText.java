@@ -21,18 +21,18 @@ public class HermesText<S extends Style, R> implements FormattingElement<S, R> {
 
     private static final Map<String, ChatFormatting> FORMATTING = Util.make(new HashMap<>(), map -> {
         map.put("black", ChatFormatting.BLACK);
-        map.put("dark_blue", ChatFormatting.DARK_BLUE);
-        map.put("dark_aqua", ChatFormatting.DARK_AQUA);
-        map.put("dark_red", ChatFormatting.DARK_RED);
-        map.put("dark_purple", ChatFormatting.DARK_PURPLE);
+        map.put("dark-blue", ChatFormatting.DARK_BLUE);
+        map.put("dark-aqua", ChatFormatting.DARK_AQUA);
+        map.put("dark-red", ChatFormatting.DARK_RED);
+        map.put("dark-purple", ChatFormatting.DARK_PURPLE);
         map.put("gold", ChatFormatting.GOLD);
         map.put("gray", ChatFormatting.GRAY);
-        map.put("dark_gray", ChatFormatting.DARK_GRAY);
+        map.put("dark-gray", ChatFormatting.DARK_GRAY);
         map.put("blue", ChatFormatting.BLUE);
         map.put("green", ChatFormatting.GREEN);
         map.put("aqua", ChatFormatting.AQUA);
         map.put("red", ChatFormatting.RED);
-        map.put("light_purple", ChatFormatting.LIGHT_PURPLE);
+        map.put("light-purple", ChatFormatting.LIGHT_PURPLE);
         map.put("yellow", ChatFormatting.YELLOW);
         map.put("white", ChatFormatting.WHITE);
 

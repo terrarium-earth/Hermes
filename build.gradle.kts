@@ -87,7 +87,7 @@ subprojects {
             implementation("org.commonmark:commonmark-ext-gfm-strikethrough:$commonMarkVersion") { isTransitive = false }
             implementation("org.commonmark:commonmark-ext-gfm-tables:$commonMarkVersion") { isTransitive = false }
         } else {
-            implementation("com.cinemamod:mcef-$modLoader:$mcefVersion-$minecraftVersion")
+            "modImplementation"("com.cinemamod:mcef-$modLoader:$mcefVersion-$minecraftVersion")
             shade("org.commonmark:commonmark-ext-gfm-strikethrough:$commonMarkVersion") { isTransitive = false }
             shade("org.commonmark:commonmark-ext-gfm-tables:$commonMarkVersion") { isTransitive = false }
         }
